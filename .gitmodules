@@ -1,0 +1,33 @@
+[submodule "vim/pack/bundle/start/CRDispatcher"]
+	path = vim/pack/bundle/start/CRDispatcher
+	url = https://github.com/coot/CRDispatcher
+[submodule "vim/pack/bundle/start/delimitMate"]
+	path = vim/pack/bundle/start/delimitMate
+	url = https://github.com/Raimondi/delimitMate.git
+[submodule "vim/pack/bundle/start/EnchantedVim"]
+	path = vim/pack/bundle/start/EnchantedVim
+	url = https://github.com/coot/EnchantedVim.git
+[submodule "vim/pack/bundle/start/gundo.vim"]
+	path = vim/pack/bundle/start/gundo.vim
+	url = https://github.com/sjl/gundo.vim.git
+[submodule "vim/pack/bundle/start/jedi-vim"]
+	path = vim/pack/bundle/start/jedi-vim
+	url = https://github.com/davidhalter/jedi-vim.git
+[submodule "vim/pack/bundle/start/nerdcommenter"]
+	path = vim/pack/bundle/start/nerdcommenter
+	url = https://github.com/preservim/nerdcommenter.git
+[submodule "vim/pack/bundle/start/nerdtree"]
+	path = vim/pack/bundle/start/nerdtree
+	url = https://github.com/preservim/nerdtree.git
+[submodule "vim/pack/bundle/start/supertab"]
+	path = vim/pack/bundle/start/supertab
+	url = https://github.com/ervandew/supertab.git
+[submodule "vim/pack/bundle/start/tagbar"]
+	path = vim/pack/bundle/start/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+[submodule "vim/pack/bundle/start/vim-airline"]
+	path = vim/pack/bundle/start/vim-airline
+	url = https://github.com/vim-airline/vim-airline.git
+[submodule "vim/pack/bundle/start/vim-airline-themes"]
+	path = vim/pack/bundle/start/vim-airline-themes
+	url = https://github.com/vim-airline/vim-airline-themes.git
