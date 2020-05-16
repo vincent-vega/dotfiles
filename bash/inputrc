@@ -1,0 +1,13 @@
+"\e[A": history-search-backward
+"\e[B": history-search-forward
+set show-all-if-ambiguous on
+set completion-ignore-case on
+# append slash when autocomplete symlink
+set mark-symlinked-directories on
+# to accept 8-bit characters
+set input-meta on
+# to show 8-bit characters
+set output-meta on
+# to show it as character, not the octal representation
+set convert-meta off
+set editing-mode vi

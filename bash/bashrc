@@ -1,0 +1,474 @@
+# shellcheck shell=sh
+if [ -z "$PS1" ]; then
+   return
+fi
+
+# sudo autocompletion
+if [ "$PS1" ]; then
+    complete -cf sudo
+fi
+
+# enable bash completion in interactive shells
+if ! shopt -oq posix; then
+  if [ -f /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
+fi
+
+# Make bash check its window size after a process completes
+shopt -s checkwinsize
+
+case $TERM in
+    xterm* | aterm | rxvt | screen )
+        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\007"'
+        ;;
+    * )
+        ;;
+esac
+
+### Set
+#0 = default colour
+#1 = bold
+#2 = dim
+#4 = underlined
+#5 = flashing/blink text
+#7 = reverse field
+#8 = hidden (useful for passwords)
+
+### Foreground
+#30 = black
+#31 = red
+#32 = green
+#33 = orange
+#34 = blue
+#35 = purple
+#36 = cyan
+#37 = grey
+#39 = default foreground color
+#90 = dark grey
+#91 = light red
+#92 = light green
+#93 = yellow
+#94 = light blue
+#95 = light purple
+#96 = turquoise
+#97 = white
+
+### Background
+#40  = black background
+#41  = red background
+#42  = green background
+#43  = orange background
+#44  = blue background
+#45  = purple background
+#46  = cyan background
+#47  = grey background
+#49  = default background color
+#100 = dark grey background
+#101 = light red background
+#102 = light green background
+#103 = yellow background
+#104 = light blue background
+#105 = light purple background
+#106 = turquoise background
+#107 = white background
+
+ResetColor='\e[0m'
+
+# High Intensty
+IBlack='\e[0;49;90m'
+IRed='\e[0;49;91m'
+IGreen='\e[0;49;92m'
+IYellow='\e[0;49;93m'
+IBlue='\e[0;49;94m'
+IPurple='\e[0;49;95m'
+ICyan='\e[0;49;96m'
+IWhite='\e[0;49;97m'
+
+IDodgerBlue3='\e[0;38;5;26m'
+IPaleGreen3='\e[0;38;5;114m'
+
+# Bold High Intensty
+BIBlack='\e[1;49;90m'
+BIRed='\e[1;49;91m'
+BIGreen='\e[1;49;92m'
+BIYellow='\e[1;49;93m'
+BIBlue='\e[1;49;94m'
+BIPurple='\e[1;49;95m'
+BICyan='\e[1;49;96m'
+BIWhite='\e[1;49;97m'
+
+# Underline High Intensty
+UIBlack='\e[4;49;90m'
+UIRed='\e[4;49;91m'
+UIGreen='\e[4;49;92m'
+UIYellow='\e[4;49;93m'
+UIBlue='\e[4;49;94m'
+UIPurple='\e[4;49;95m'
+UICyan='\e[4;49;96m'
+UIWhite='\e[4;49;97m'
+
+PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
+\[${BIBlack}\][\[${IRed}\]\h\[${BIBlack}\]]\[${IWhite}\] \A\
+ \[${IPaleGreen3}\]\w\r\n\[${ResetColor}\]# "
+
+# High Intensty
+IBlack='0;90'
+IRed='0;91'
+IGreen='0;92'
+IYellow='0;93'
+IBlue='0;94'
+IPurple='0;95'
+ICyan='0;96'
+IWhite='0;97'
+
+IPaleGreen3='0;38;5;114'
+IKhaki1='0;38;5;228'
+ILightSkyBlue3='0;38;5;110'
+ISkyBlue3='0;38;5;74'
+
+# Bold High Intensty
+BIBlack='1;90'
+BIRed='1;91'
+BIGreen='1;92'
+BIYellow='1;93'
+BIBlue='1;94'
+BIPurple='1;95'
+BICyan='1;96'
+BIWhite='1;97'
+
+BIndianRed='1;38;5;167'
+
+# Underline High Intensty
+UIBlack='4;90'
+UIRed='4;91'
+UIGreen='4;92'
+UIYellow='4;93'
+UIBlue='4;94'
+UIPurple='4;95'
+UICyan='4;96'
+UIWhite='4;97'
+
+# Reversed High Intensty
+RIBlack='7;90'
+RIRed='7;91'
+RIGreen='7;92'
+RIYellow='7;93'
+RIBlue='7;94'
+RIPurple='7;95'
+RICyan='7;96'
+RIWhite='7;97'
+
+DIR=${IPaleGreen3}
+SYM_LINK=${ILightSkyBlue3}
+EXE=${BIndianRed}
+CHAR_SP=${BIYellow}
+BLOCK_SP=${BIYellow}
+STICKY_OW=${RICyan}
+MISSING_LN=${RIBlue}
+
+#bd = block (buffered) special file
+#cd = character (unbuffered) special file
+#di = directory
+#do = door
+#ec = endcode - Non-filename text
+#ex = file which is executable (ie. has 'x' set in permissions).
+#fi = file
+#lc = leftcode - Opening terminal code
+#ln = symbolic link
+#mi = non-existent file pointed to by a symbolic link (visible when you type ls -l)
+#no = normal
+#or = symbolic link pointing to a non-existent file (orphan)
+#ow = other writable - Directory that is other-writable (o+w) and not sticky
+#pi = fifo file (pipe)
+#rc = rightcode - Closing terminal code
+#sg = set gid - File that is setgid (g+s)
+#so = socket file
+#st = sticky - Directory with the sticky bit set (+t) and not other-writable
+#su = set uid - File that is setuid (u+s)
+#tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
+
+LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
+tw=${STICKY_OW}:mi=${MISSING_LN}"
+export LS_COLORS
+
+export GREP_COLORS='mt='${ISkyBlue3}':ms='${ISkyBlue3}':mc='${ISkyBlue3}':fn='${IKhaki1}
+export HISTFILESIZE=20000
+export HISTSIZE=10000
+export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:cd -:[bf]g:jobs:exit:history:make:make clean:vim:v'
+export HISTCONTROL=erasedups
+export http_proxy=
+export MAVEN_OPTS="-Djansi.passthrough=true $MAVEN_OPTS" #colorize maven output
+
+#export JAVA_HOME=/opt/java-jdk/jdk1.8.0_121_x64
+export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+export M2_HOME=/opt/apache-maven-3.6.0
+export M2=$M2_HOME/bin
+export PATH=~/dotfiles/python:$M2:$PATH
+export CATALINA_HOME=/opt/tomcat
+
+# -----------------------------------------------------------------------------
+
+# host-info
+
+# nslookup
+# host
+# dig
+
+# -----------------------------------------------------------------------------
+
+alias rm='rm -i'
+alias rmlink='find . -maxdepth 1 -type l -exec rm -f {} \;'
+alias mv='mv -i'
+alias cp='cp -i'
+
+alias df='df -Tkh'
+alias du='du -ch'
+
+alias ls='ls -h --color=auto --time-style="+%Y %b %e %H:%M"'
+alias la='ls -Al'
+alias ll='ls -l'
+alias lt='ls -lt'
+
+alias less='less -rMI'
+alias more='more -r'
+alias ncal='ncal -Mb'
+alias xmllint='xmllint --format'
+
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+alias .........='cd ../../../../../../../..'
+alias ..........='cd ../../../../../../../../..'
+alias ...........='cd ../../../../../../../../../..'
+
+# subversion
+alias sci='svn ci'
+
+# git
+alias gst='git status'
+alias gdiff='git diff'
+
+alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
+
+alias vd='vimdiff'
+alias view='vim -R'
+
+alias viewP12='openssl pkcs12 -info -in'
+alias viewPEM='openssl x509 -text -noout -inform PEM -in'
+alias viewDER='openssl x509 -text -noout -inform DER -in'
+alias viewNET='openssl x509 -text -noout -inform NET -in'
+alias viewPUBRSA='openssl rsa  -text -noout -pubin -in'
+alias viewPRIVRSA='openssl rsa -text -noout -in'
+alias viewPFX='certutil -dump'
+alias viewASN1PEM='openssl asn1parse -inform PEM -i -in'
+alias viewASN1DER='openssl asn1parse -inform DER -i -in'
+alias viewCRL='openssl crl -text -noout -inform DER -in'
+
+alias scroff='xset dpms force off'
+
+alias hexdump='hexdump -C'
+
+alias js="jq '.' <<<" # "here" document
+
+alias httpsforw='sudo iptables -t nat -A OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
+alias rmhttpsforw='sudo iptables -t nat -D OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
+
+alias cmatrix='cmatrix -b -s -u 6 -C magenta -s'
+
+# cygwin ----------------------------------------------------------------------
+
+# add cygwin context menu entry
+# chere -in -e "Open Bash window here" -t mintty
+
+#open() {
+    ##/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`;
+    #cygstart "$1";
+#}
+
+#flip() {
+    #printf '\n%s\n\n' "$1" | sed 's,\\,/,g' | sed 's, ,\\ ,g' | sed -r 's@^([a-zA-Z]):/@/cygdrive/\l\1\E/@g';
+#}
+
+# change Windows directory
+#cwd() {
+    #cd "`printf '%s' "$1" | tr '\\\' '/' | sed 's, ,\\ ,g' | sed -r 's@^([a-zA-Z]):/@/cygdrive/\l\1\E/@g'`";
+#}
+
+# -----------------------------------------------------------------------------
+
+sup() { svn up "$@"; }
+sst() { svn st "$@"; }
+sdiff() {
+    svn diff -x -w -x --ignore-eol-style "$@" | vim -R - +"file svn-diff" -c "set nowrap"
+}
+ssync() {
+    svn diff -r BASE:HEAD "$@" | vim -R - +"file svn-sync" -c "set nowrap"
+}
+
+open() {
+    local p="$(pwd)"
+    if [ "$#" -eq 1 ]; then
+        p="$1"
+    elif [ "$#" -gt 1 ]; then
+        echo "usage: ${FUNCNAME[0]} [PATH]"
+        return 1
+    fi
+    nautilus --browser "$p" > /dev/null 2>&1 &
+}
+
+ff() {
+    if [ "$#" -eq 0 ]; then
+        # current directory
+        find . -type f -exec ls -lh {} + | cat -n
+    elif [ "$#" -eq 1 ]; then
+        if [ -d "$1" ]; then
+            # directory
+            find "$1" -type f | cat -n
+        else
+            find . -type f -iname '*'"$1"'*' -exec ls -lh {} + | cat -n | grep -i "$1"
+        fi
+    elif [ "$#" -gt 1 ]; then
+        find "$1" -type f -iname '*'"$2"'*' -exec ls -lh {} + | cat -n | grep -i "$2"
+    fi
+}
+
+fd() {
+    if [ "$#" -eq 0 ]; then
+        find . -type d | cat -n
+    elif [ "$#" -eq 1 ]; then
+        find . -type d -iname '*'"$1"'*' | cat -n | grep -i "$1"
+    elif [ "$#" -gt 1 ]; then
+        find "$1" -type d -iname '*'"$2"'*' | cat -n | grep -i "$2"
+    fi
+}
+
+rmalljarsign() {
+    for file in *jar; do
+        echo $file
+        zip -d $file 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
+    done
+}
+
+rmjarsign() {
+    zip -d "$1" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
+}
+
+xml() {
+    xmllint --format $1 | pygmentize -l xml | less
+}
+
+colortest() {
+    for clbg in {40..47} {100..107} 49 ; do
+        #Foreground
+        for clfg in {30..37} {90..97} 39 ; do
+            #Formatting
+            for attr in 0 1 2 4 5 7 ; do
+                #Print the result
+                echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
+            done
+            echo #Newline
+        done
+    done
+}
+
+colortest256() {
+    for fgbg in 38 48 ; do #Foreground/Background
+        for color in {0..256} ; do #Colors
+            #Display the color
+            echo -en "\e[${fgbg};5;${color}m ${color}\t\e[0m"
+            #Display 10 colors per lines
+            if [ $(((color + 1) % 10)) == 0 ]; then
+                echo #New line
+            fi
+        done
+        echo #New line
+    done
+}
+
+diffrev() {
+    svn diff -c $1 $2 | colordiff
+}
+
+svnhistory() {
+    if [ "$#" -ne 1 ]; then
+        echo "usage: ${FUNCNAME[0]} [PATH]"
+        return 1
+    fi
+    url="$1"
+    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
+        local add="\o33\[0;38;5;110m"
+        local rem="\o33\[0;38;5;167m"
+        local head="\o33\[0;38;5;228m"
+        local rev="\o33\[1;38;5;244m"
+        local reset="\o33[0m"
+        # first revision as full text
+        read -r r
+        svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+        svn cat -r"$r" "$url"@HEAD
+        while read -r r; do
+            echo #Newline
+            svn log --diff -r"$r" "$url"@HEAD | \
+                sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                    s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                    s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                    s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+        done
+    }
+}
+
+svnhistoryr() {
+    if [ "$#" -ne 1 ]; then
+        echo "usage: ${FUNCNAME[0]} [PATH]"
+        return 1
+    fi
+    url="$1"
+    first=$(svn log -r 1:HEAD --limit 1 -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2-)
+    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
+        local add="\o33\[0;38;5;110m"
+        local rem="\o33\[0;38;5;167m"
+        local head="\o33\[0;38;5;228m"
+        local rev="\o33\[1;38;5;244m"
+        local reset="\o33[0m"
+        while read -r r; do
+            echo #Newline
+            if [ "$r" == "$first" ]; then
+                # first revision as full text
+                svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+                svn cat -r"$r" "$url"@HEAD
+            else
+                svn log --diff -r"$r" "$url"@HEAD | \
+                    sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                       s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                       s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                       s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+            fi
+        done
+    }
+}
+
+colordiff() {
+    local add="\o33\[0;38;5;74m"
+    local rem="\o33\[0;38;5;167m"
+    local head="\o33\[1;38;5;228m"
+    local rev="\o33\[1;38;5;244m"
+    local reset="\o33[0m"
+    local diff=""
+    while read -r r; do
+        diff="$diff\n$(echo "$r" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                                        s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                                        s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                                        s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/")"
+    done
+    echo -e "$diff"
+}
