@@ -2,6 +2,8 @@ bash_dir=${HOME}/dotfiles/bash
 dotfiles_dir=${HOME}/dotfiles/bash
 vim_dir=${HOME}/dotfiles/vim
 
+# test
+
 .PHONY: link
 
 link: bash vim
