@@ -1,0 +1,66 @@
+alias rm='rm -i'
+alias rmlink='find . -maxdepth 1 -type l -exec rm -f {} \;'
+alias mv='mv -i'
+alias cp='cp -i'
+
+alias df='df -Tkh'
+alias du='du -ch'
+
+alias ls='ls -h --color=auto --time-style="+%Y %b %e %H:%M"'
+alias la='ls -Al'
+alias ll='ls -l'
+alias lt='ls -lt'
+
+alias less='less -rMI'
+alias more='more -r'
+alias ncal='ncal -Mb'
+alias xmllint='xmllint --format'
+
+alias grep='grep --color=auto'
+alias egrep='egrep --color=auto'
+alias fgrep='fgrep --color=auto'
+
+alias ..='cd ..'
+alias ...='cd ../..'
+alias ....='cd ../../..'
+alias .....='cd ../../../..'
+alias ......='cd ../../../../..'
+alias .......='cd ../../../../../..'
+alias ........='cd ../../../../../../..'
+alias .........='cd ../../../../../../../..'
+alias ..........='cd ../../../../../../../../..'
+alias ...........='cd ../../../../../../../../../..'
+
+# subversion
+alias sci='svn ci'
+
+# git
+alias gst='git status'
+alias gdiff='git diff'
+
+alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
+
+alias vd='vimdiff'
+alias view='vim -R'
+
+alias viewP12='openssl pkcs12 -info -in'
+alias viewPEM='openssl x509 -text -noout -inform PEM -in'
+alias viewDER='openssl x509 -text -noout -inform DER -in'
+alias viewNET='openssl x509 -text -noout -inform NET -in'
+alias viewPUBRSA='openssl rsa  -text -noout -pubin -in'
+alias viewPRIVRSA='openssl rsa -text -noout -in'
+alias viewPFX='certutil -dump'
+alias viewASN1PEM='openssl asn1parse -inform PEM -i -in'
+alias viewASN1DER='openssl asn1parse -inform DER -i -in'
+alias viewCRL='openssl crl -text -noout -inform DER -in'
+
+alias scroff='xset dpms force off'
+
+alias hexdump='hexdump -C'
+
+alias js="jq '.' <<<" # "here" document
+
+alias httpsforw='sudo iptables -t nat -A OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
+alias rmhttpsforw='sudo iptables -t nat -D OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
+
+alias cmatrix='cmatrix -b -s -u 6 -C magenta -s'

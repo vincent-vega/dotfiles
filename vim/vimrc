@@ -185,8 +185,8 @@ if has('autocmd')
 	autocmd BufNewFile,BufRead *.txt setlocal wrap
 	autocmd filetype tex setlocal spell
 	autocmd filetype xsd,xsl,xslt,xml setlocal softtabstop=2 tabstop=2 shiftwidth=2
-	autocmd filetype css,javascript,jsp,java,php setlocal softtabstop=4 tabstop=4 shiftwidth=4
-	autocmd filetype python,sh setlocal expandtab softtabstop=4 tabstop=4 shiftwidth=4
+	autocmd filetype javascript,jsp,java,php setlocal softtabstop=4 tabstop=4 shiftwidth=4
+	autocmd filetype css,python,sh setlocal expandtab softtabstop=4 tabstop=4 shiftwidth=4
 	autocmd filetype html,htmldjango setlocal expandtab softtabstop=2 tabstop=2 shiftwidth=2
 	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 	" If doing a diff. Upon writing changes to file, automatically update
