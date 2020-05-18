@@ -197,21 +197,25 @@ MISSING_LN=${RIBlue}
 LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
 tw=${STICKY_OW}:mi=${MISSING_LN}"
 export LS_COLORS
-
 export GREP_COLORS='mt='${ISkyBlue3}':ms='${ISkyBlue3}':mc='${ISkyBlue3}':fn='${IKhaki1}
+
 export HISTFILESIZE=20000
 export HISTSIZE=10000
-export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:cd -:[bf]g:jobs:exit:history:make:make clean:vim:v'
+export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:cd -:[bf]g:jobs:exit:history:make:make clean:vim'
 export HISTCONTROL=erasedups
 export http_proxy=
+
 export MAVEN_OPTS="-Djansi.passthrough=true $MAVEN_OPTS" #colorize maven output
+export M2_HOME=/opt/apache-maven-3.6.0
+export M2=$M2_HOME/bin
 
 #export JAVA_HOME=/opt/java-jdk/jdk1.8.0_121_x64
 export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-export M2_HOME=/opt/apache-maven-3.6.0
-export M2=$M2_HOME/bin
-export PATH=~/dotfiles/python:$M2:$PATH
 export CATALINA_HOME=/opt/tomcat
+export PATH=$M2:$PATH
+
+export VISUAL=vim
+export EDITOR="$VISUAL"
 
 # -----------------------------------------------------------------------------
 
