@@ -20,11 +20,9 @@ set ofu=syntaxcomplete#Complete	" Turn ON omnicompletion
 "if !has ('gui_running')
 "set cursorline			" Highlight the screen line of the cursor
 "endif
-"set cursorcolumn		" Highlight the screen column of the cursor
 set ttyfast
 set ruler			" Show the cursor position
 set backspace=indent,eol,start	" More powerful backspacing
-set nonumber			" Hide absolute line numbers
 set number			" Show absolute line numbers
 set relativenumber		" Show relative line numbers
 set laststatus=2		" Always display the status line, even if only
@@ -212,7 +210,6 @@ nnoremap <silent> <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 " reselect the text that was just pasted
 nnoremap <leader>v V`]
 " clear search buffer
-nmap <silent> ,/ :nohlsearch<CR>
 " save file you didn't open with root privileges
 cmap w!! w !sudo tee % >/dev/null
 nnoremap <silent> Y y$

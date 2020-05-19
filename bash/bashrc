@@ -29,7 +29,7 @@ case $TERM in
 esac
 
 if [ -f ~/.bash_aliases ]; then
-   . ~/.bash_aliases
+    . ~/.bash_aliases
 fi
 
 ### Set
@@ -116,7 +116,8 @@ UIWhite='\e[4;49;97m'
 
 PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
 \[${BIBlack}\][\[${IRed}\]\h\[${BIBlack}\]]\[${IWhite}\] \A\
- \[${IPaleGreen3}\]\w\r\n\[${ResetColor}\]# "
+ \[${IPaleGreen3}\]\w\r\n\[${ResetColor}\]# \
+"
 
 # High Intensty
 IBlack='0;90'
@@ -201,7 +202,7 @@ export GREP_COLORS='mt='${ISkyBlue3}':ms='${ISkyBlue3}':mc='${ISkyBlue3}':fn='${
 
 export HISTFILESIZE=20000
 export HISTSIZE=10000
-export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:cd -:[bf]g:jobs:exit:history:make:make clean:vim'
+export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........:.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean:vim'
 export HISTCONTROL=erasedups
 export http_proxy=
 
@@ -233,15 +234,6 @@ export EDITOR="$VISUAL"
 #open() {
     ##/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`;
     #cygstart "$1";
-#}
-
-#flip() {
-    #printf '\n%s\n\n' "$1" | sed 's,\\,/,g' | sed 's, ,\\ ,g' | sed -r 's@^([a-zA-Z]):/@/cygdrive/\l\1\E/@g';
-#}
-
-# change Windows directory
-#cwd() {
-    #cd "`printf '%s' "$1" | tr '\\\' '/' | sed 's, ,\\ ,g' | sed -r 's@^([a-zA-Z]):/@/cygdrive/\l\1\E/@g'`";
 #}
 
 # -----------------------------------------------------------------------------
