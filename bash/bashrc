@@ -3,6 +3,12 @@ if [ -z "$PS1" ]; then
    return
 fi
 
+case $(uname -s) in
+    Linux*)    arch=Linux;;
+    CYGWIN*)   arch=Cygwin;;
+    *)         arch=Linux;;
+esac
+
 # sudo autocompletion
 if [ "$PS1" ]; then
     complete -cf sudo
@@ -226,37 +232,126 @@ export EDITOR="$VISUAL"
 # host
 # dig
 
-# cygwin ----------------------------------------------------------------------
+#if [ $arch = "Cygwin" ]; then
+    # add cygwin context menu entry
+    # chere -in -e "Open Bash window here" -t mintty
+#fi
 
-# add cygwin context menu entry
-# chere -in -e "Open Bash window here" -t mintty
+open() {
+    if [ $arch = "Cygwin" ]; then
+        #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
+        cygstart "$1"
+    elif [ $arch = "Linux" ]; then
+        local target="$(pwd)"
+        if [ "$#" -eq 1 ]; then
+            target="$1" # TODO check directory
+        elif [ "$#" -gt 1 ]; then
+            echo "usage: ${FUNCNAME[0]} [PATH]"
+            return 1
+        fi
+        nautilus --browser "$target" > /dev/null 2>&1 &
+    fi
+}
 
-#open() {
-    ##/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`;
-    #cygstart "$1";
-#}
-
-# -----------------------------------------------------------------------------
+# {{{ Subversion
 
 sup() { svn up "$@"; }
+
 sst() { svn st "$@"; }
+
 sdiff() {
     svn diff -x -w -x --ignore-eol-style "$@" | vim -R - +"file svn-diff" -c "set nowrap"
 }
+
 ssync() {
     svn diff -r BASE:HEAD "$@" | vim -R - +"file svn-sync" -c "set nowrap"
 }
 
-open() {
-    local p="$(pwd)"
-    if [ "$#" -eq 1 ]; then
-        p="$1"
-    elif [ "$#" -gt 1 ]; then
+svnsnapshot() {
+    if [ "$#" -ne 1 ]; then
+        echo "usage: ${FUNCNAME[0]} [PATCH_FILE]"
+        return 1
+    elif [ -f "$1" ]; then
+        echo "Patch file already exists"
+        # TODO overwrite
+        echo "usage: ${FUNCNAME[0]} [PATCH_FILE]"
+        return 2
+    elif [ -d "$1" ]; then
+        echo "Patch file cannot be a directory"
+        echo "usage: ${FUNCNAME[0]} [PATCH_FILE]"
+        return 3
+    fi
+    tmp_file=$(mktemp --tmpdir)
+    # logging unversioned files to ${tmp_file}
+    svn status | grep ^? | sed -r 's/^\? +//' > $tmp_file
+    # adding unversioned files
+    xargs -r -d '\n' svn add < $tmp_file
+    # creating the patch
+    svn diff > "$1"
+    # removing unversioned files
+    xargs -r -d '\n' svn rm --keep-local < $tmp_file
+    # cleaning
+    rm -f $tmp_file
+}
+
+svnhistory() {
+    if [ "$#" -ne 1 ]; then
         echo "usage: ${FUNCNAME[0]} [PATH]"
         return 1
     fi
-    nautilus --browser "$p" > /dev/null 2>&1 &
+    url="$1"
+    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
+        local add="\o33\[0;38;5;110m"
+        local rem="\o33\[0;38;5;167m"
+        local head="\o33\[0;38;5;228m"
+        local rev="\o33\[1;38;5;244m"
+        local reset="\o33[0m"
+        # first revision as full text
+        read -r r
+        svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+        svn cat -r"$r" "$url"@HEAD
+        while read -r r; do
+            echo #Newline
+            svn log --diff -r"$r" "$url"@HEAD | \
+                sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                    s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                    s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                    s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+        done
+    }
 }
+
+svnhistoryr() {
+    if [ "$#" -ne 1 ]; then
+        echo "usage: ${FUNCNAME[0]} [PATH]"
+        return 1
+    fi
+    url="$1"
+    first=$(svn log -r 1:HEAD --limit 1 -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2-)
+    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
+        local add="\o33\[0;38;5;110m"
+        local rem="\o33\[0;38;5;167m"
+        local head="\o33\[0;38;5;228m"
+        local rev="\o33\[1;38;5;244m"
+        local reset="\o33[0m"
+        while read -r r; do
+            echo #Newline
+            if [ "$r" == "$first" ]; then
+                # first revision as full text
+                svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+                svn cat -r"$r" "$url"@HEAD
+            else
+                svn log --diff -r"$r" "$url"@HEAD | \
+                    sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                       s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                       s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                       s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+            fi
+        done
+    }
+}
+
+# }}}
 
 ff() {
     if [ "$#" -eq 0 ]; then
@@ -325,67 +420,6 @@ colortest256() {
         done
         echo #New line
     done
-}
-
-diffrev() {
-    svn diff -c $1 $2 | colordiff
-}
-
-svnhistory() {
-    if [ "$#" -ne 1 ]; then
-        echo "usage: ${FUNCNAME[0]} [PATH]"
-        return 1
-    fi
-    url="$1"
-    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
-        local add="\o33\[0;38;5;110m"
-        local rem="\o33\[0;38;5;167m"
-        local head="\o33\[0;38;5;228m"
-        local rev="\o33\[1;38;5;244m"
-        local reset="\o33[0m"
-        # first revision as full text
-        read -r r
-        svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
-        svn cat -r"$r" "$url"@HEAD
-        while read -r r; do
-            echo #Newline
-            svn log --diff -r"$r" "$url"@HEAD | \
-                sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                    s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                    s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                    s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
-        done
-    }
-}
-
-svnhistoryr() {
-    if [ "$#" -ne 1 ]; then
-        echo "usage: ${FUNCNAME[0]} [PATH]"
-        return 1
-    fi
-    url="$1"
-    first=$(svn log -r 1:HEAD --limit 1 -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2-)
-    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
-        local add="\o33\[0;38;5;110m"
-        local rem="\o33\[0;38;5;167m"
-        local head="\o33\[0;38;5;228m"
-        local rev="\o33\[1;38;5;244m"
-        local reset="\o33[0m"
-        while read -r r; do
-            echo #Newline
-            if [ "$r" == "$first" ]; then
-                # first revision as full text
-                svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
-                svn cat -r"$r" "$url"@HEAD
-            else
-                svn log --diff -r"$r" "$url"@HEAD | \
-                    sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                       s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                       s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                       s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
-            fi
-        done
-    }
 }
 
 colordiff() {
