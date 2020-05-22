@@ -1,4 +1,4 @@
-# shellcheck shell=sh
+# shellcheck shell=bash
 if [ -z "$PS1" ]; then
    return
 fi
@@ -88,13 +88,13 @@ fi
 ResetColor='\e[0m'
 
 # High Intensty
-IBlack='\e[0;49;90m'
+#IBlack='\e[0;49;90m'
 IRed='\e[0;49;91m'
-IGreen='\e[0;49;92m'
-IYellow='\e[0;49;93m'
-IBlue='\e[0;49;94m'
-IPurple='\e[0;49;95m'
-ICyan='\e[0;49;96m'
+#IGreen='\e[0;49;92m'
+#IYellow='\e[0;49;93m'
+#IBlue='\e[0;49;94m'
+#IPurple='\e[0;49;95m'
+#ICyan='\e[0;49;96m'
 IWhite='\e[0;49;97m'
 
 IDodgerBlue3='\e[0;38;5;26m'
@@ -102,23 +102,23 @@ IPaleGreen3='\e[0;38;5;114m'
 
 # Bold High Intensty
 BIBlack='\e[1;49;90m'
-BIRed='\e[1;49;91m'
-BIGreen='\e[1;49;92m'
+#BIRed='\e[1;49;91m'
+#BIGreen='\e[1;49;92m'
 BIYellow='\e[1;49;93m'
-BIBlue='\e[1;49;94m'
-BIPurple='\e[1;49;95m'
-BICyan='\e[1;49;96m'
-BIWhite='\e[1;49;97m'
+#BIBlue='\e[1;49;94m'
+#BIPurple='\e[1;49;95m'
+#BICyan='\e[1;49;96m'
+#BIWhite='\e[1;49;97m'
 
 # Underline High Intensty
-UIBlack='\e[4;49;90m'
-UIRed='\e[4;49;91m'
-UIGreen='\e[4;49;92m'
-UIYellow='\e[4;49;93m'
-UIBlue='\e[4;49;94m'
-UIPurple='\e[4;49;95m'
-UICyan='\e[4;49;96m'
-UIWhite='\e[4;49;97m'
+#UIBlack='\e[4;49;90m'
+#UIRed='\e[4;49;91m'
+#UIGreen='\e[4;49;92m'
+#UIYellow='\e[4;49;93m'
+#UIBlue='\e[4;49;94m'
+#UIPurple='\e[4;49;95m'
+#UICyan='\e[4;49;96m'
+#UIWhite='\e[4;49;97m'
 
 PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
 \[${BIBlack}\][\[${IRed}\]\h\[${BIBlack}\]]\[${IWhite}\] \A\
@@ -126,13 +126,13 @@ PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
 "
 
 # High Intensty
-IBlack='0;90'
+#IBlack='0;90'
 IRed='0;91'
-IGreen='0;92'
-IYellow='0;93'
-IBlue='0;94'
-IPurple='0;95'
-ICyan='0;96'
+#IGreen='0;92'
+#IYellow='0;93'
+#IBlue='0;94'
+#IPurple='0;95'
+#ICyan='0;96'
 IWhite='0;97'
 
 IPaleGreen3='0;38;5;114'
@@ -142,35 +142,35 @@ ISkyBlue3='0;38;5;74'
 
 # Bold High Intensty
 BIBlack='1;90'
-BIRed='1;91'
-BIGreen='1;92'
+#BIRed='1;91'
+#BIGreen='1;92'
 BIYellow='1;93'
-BIBlue='1;94'
-BIPurple='1;95'
-BICyan='1;96'
-BIWhite='1;97'
+#BIBlue='1;94'
+#BIPurple='1;95'
+#BICyan='1;96'
+#BIWhite='1;97'
 
 BIndianRed='1;38;5;167'
 
 # Underline High Intensty
-UIBlack='4;90'
-UIRed='4;91'
-UIGreen='4;92'
-UIYellow='4;93'
-UIBlue='4;94'
-UIPurple='4;95'
-UICyan='4;96'
-UIWhite='4;97'
+#UIBlack='4;90'
+#UIRed='4;91'
+#UIGreen='4;92'
+#UIYellow='4;93'
+#UIBlue='4;94'
+#UIPurple='4;95'
+#UICyan='4;96'
+#UIWhite='4;97'
 
 # Reversed High Intensty
-RIBlack='7;90'
-RIRed='7;91'
-RIGreen='7;92'
-RIYellow='7;93'
+#RIBlack='7;90'
+#RIRed='7;91'
+#RIGreen='7;92'
+#RIYellow='7;93'
 RIBlue='7;94'
-RIPurple='7;95'
+#RIPurple='7;95'
 RICyan='7;96'
-RIWhite='7;97'
+#RIWhite='7;97'
 
 DIR=${IPaleGreen3}
 SYM_LINK=${ILightSkyBlue3}
@@ -242,12 +242,18 @@ open() {
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
         cygstart "$1"
     elif [ $arch = "Linux" ]; then
-        local target="$(pwd)"
+        local target
+        target="$(pwd)"
         if [ "$#" -eq 1 ]; then
-            target="$1" # TODO check directory
+            if [ ! -d "$1" ]; then
+                echo "Target path is not a directory"
+                echo "Usage: ${FUNCNAME[0]} [PATH]"
+                return 1
+            fi
+            target="$1"
         elif [ "$#" -gt 1 ]; then
-            echo "usage: ${FUNCNAME[0]} [PATH]"
-            return 1
+            echo "Usage: ${FUNCNAME[0]} [PATH]"
+            return 2
         fi
         nautilus --browser "$target" > /dev/null 2>&1 &
     fi
@@ -269,34 +275,38 @@ ssync() {
 
 svnsnapshot() {
     if [ "$#" -ne 1 ]; then
-        echo "usage: ${FUNCNAME[0]} [PATCH_FILE]"
+        echo "Usage: ${FUNCNAME[0]} [PATCH_FILE]"
         return 1
     elif [ -f "$1" ]; then
-        echo "Patch file already exists"
-        # TODO overwrite
-        echo "usage: ${FUNCNAME[0]} [PATCH_FILE]"
-        return 2
+        echo "The file already exists, do you wish to overwrite it?"
+        select yn in "Yes" "No"; do
+            case $yn in
+                Yes ) break;;
+                No ) echo "Aborting..."; return 2;;
+            esac
+        done
     elif [ -d "$1" ]; then
         echo "Patch file cannot be a directory"
-        echo "usage: ${FUNCNAME[0]} [PATCH_FILE]"
+        echo "Usage: ${FUNCNAME[0]} [PATCH_FILE]"
         return 3
     fi
+    local tmp_file
     tmp_file=$(mktemp --tmpdir)
-    # logging unversioned files to ${tmp_file}
-    svn status | grep ^? | sed -r 's/^\? +//' > $tmp_file
+    # logging unversioned files to tmp_file
+    svn status | grep "^?" | sed -r 's/^\? +//' > "$tmp_file"
     # adding unversioned files
-    xargs -r -d '\n' svn add < $tmp_file
+    xargs -r -d '\n' svn add < "$tmp_file"
     # creating the patch
     svn diff > "$1"
     # removing unversioned files
-    xargs -r -d '\n' svn rm --keep-local < $tmp_file
-    # cleaning
-    rm -f $tmp_file
+    xargs -r -d '\n' svn rm --keep-local < "$tmp_file"
+    # clean
+    rm -f "$tmp_file"
 }
 
 svnhistory() {
     if [ "$#" -ne 1 ]; then
-        echo "usage: ${FUNCNAME[0]} [PATH]"
+        echo "Usage: ${FUNCNAME[0]} [PATH]"
         return 1
     fi
     url="$1"
@@ -323,7 +333,7 @@ svnhistory() {
 
 svnhistoryr() {
     if [ "$#" -ne 1 ]; then
-        echo "usage: ${FUNCNAME[0]} [PATH]"
+        echo "Usage: ${FUNCNAME[0]} [PATH]"
         return 1
     fi
     url="$1"
@@ -381,8 +391,8 @@ fd() {
 
 rmalljarsign() {
     for file in *jar; do
-        echo $file
-        zip -d $file 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
+        echo "$file"
+        zip -d "$file" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
     done
 }
 
@@ -391,7 +401,7 @@ rmjarsign() {
 }
 
 xml() {
-    xmllint --format $1 | pygmentize -l xml | less
+    xmllint --format "$1" | pygmentize -l xml | less
 }
 
 colortest() {
@@ -415,10 +425,10 @@ colortest256() {
             echo -en "\e[${fgbg};5;${color}m ${color}\t\e[0m"
             #Display 10 colors per lines
             if [ $(((color + 1) % 10)) == 0 ]; then
-                echo #New line
+                echo
             fi
         done
-        echo #New line
+        echo
     done
 }
 
