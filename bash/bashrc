@@ -309,7 +309,7 @@ svnhistory() {
         echo "Usage: ${FUNCNAME[0]} [PATH]"
         return 1
     fi
-    url="$1"
+    local url="$1"
     svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
         local add="\o33\[0;38;5;110m"
         local rem="\o33\[0;38;5;167m"
@@ -321,7 +321,7 @@ svnhistory() {
         svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
         svn cat -r"$r" "$url"@HEAD
         while read -r r; do
-            echo #Newline
+            echo
             svn log --diff -r"$r" "$url"@HEAD | \
                 sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
                     s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
@@ -336,7 +336,7 @@ svnhistoryr() {
         echo "Usage: ${FUNCNAME[0]} [PATH]"
         return 1
     fi
-    url="$1"
+    local url="$1"
     first=$(svn log -r 1:HEAD --limit 1 -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2-)
     svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
         local add="\o33\[0;38;5;110m"
@@ -345,7 +345,7 @@ svnhistoryr() {
         local rev="\o33\[1;38;5;244m"
         local reset="\o33[0m"
         while read -r r; do
-            echo #Newline
+            echo
             if [ "$r" == "$first" ]; then
                 # first revision as full text
                 svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
@@ -397,7 +397,18 @@ rmalljarsign() {
 }
 
 rmjarsign() {
-    zip -d "$1" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
+    if [ "$#" -eq 0 ]; then
+        echo "Usage: ${FUNCNAME[0]} [JAR_FILE]..."
+        return 1
+    fi
+    for jarfile in "$@"
+    do
+        if [ ! -f "$jarfile" ]; then
+            echo "File $jarfile does not exist"
+            continue
+        fi
+        zip -d "$jarfile" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
+    done
 }
 
 xml() {
@@ -413,7 +424,7 @@ colortest() {
                 #Print the result
                 echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
             done
-            echo #Newline
+            echo
         done
     done
 }
