@@ -1,5 +1,5 @@
 alias rm='rm -i'
-alias rmlink='find . -maxdepth 1 -type l -exec rm -f {} \;'
+alias rmlinks='find . -maxdepth 1 -type l -exec rm -f {} \;'
 alias mv='mv -i'
 alias cp='cp -i'
 
@@ -31,12 +31,7 @@ alias .........='cd ../../../../../../../..'
 alias ..........='cd ../../../../../../../../..'
 alias ...........='cd ../../../../../../../../../..'
 
-# subversion
 alias sci='svn ci'
-
-# git
-alias gst='git status'
-alias gdiff='git diff'
 
 alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
 

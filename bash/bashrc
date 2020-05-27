@@ -104,7 +104,7 @@ IPaleGreen3='\e[0;38;5;114m'
 BIBlack='\e[1;49;90m'
 #BIRed='\e[1;49;91m'
 #BIGreen='\e[1;49;92m'
-BIYellow='\e[1;49;93m'
+#BIYellow='\e[1;49;93m'
 #BIBlue='\e[1;49;94m'
 #BIPurple='\e[1;49;95m'
 #BICyan='\e[1;49;96m'
@@ -127,13 +127,13 @@ PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
 
 # High Intensty
 #IBlack='0;90'
-IRed='0;91'
+#IRed='0;91'
 #IGreen='0;92'
 #IYellow='0;93'
 #IBlue='0;94'
 #IPurple='0;95'
 #ICyan='0;96'
-IWhite='0;97'
+#IWhite='0;97'
 
 IPaleGreen3='0;38;5;114'
 IKhaki1='0;38;5;228'
@@ -141,7 +141,7 @@ ILightSkyBlue3='0;38;5;110'
 ISkyBlue3='0;38;5;74'
 
 # Bold High Intensty
-BIBlack='1;90'
+#BIBlack='1;90'
 #BIRed='1;91'
 #BIGreen='1;92'
 BIYellow='1;93'
