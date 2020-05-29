@@ -1,0 +1,21 @@
+nnoremap ; :
+vnoremap ; :
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap Y y$
+nnoremap <C-j> :bprevious<CR>
+nnoremap <C-k> :bnext<CR>
+
+set list
+set ignorecase
+set smartcase
+set visualmouse
+set scrolloff=3
+set clipboard=unnamed
+set regexsearch
+set hlsearch
+set expandtab
+set tabstop=4
+set shiftwidth=4
