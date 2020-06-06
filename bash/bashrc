@@ -401,8 +401,7 @@ rmjarsign() {
         echo "Usage: ${FUNCNAME[0]} [JAR_FILE]..."
         return 1
     fi
-    for jarfile in "$@"
-    do
+    for jarfile in "$@"; do
         if [ ! -f "$jarfile" ]; then
             echo "File $jarfile does not exist"
             continue
