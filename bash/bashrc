@@ -35,6 +35,7 @@ case $TERM in
 esac
 
 if [ -f ~/.bash_aliases ]; then
+    # shellcheck source=dotfiles/bash/bash_aliases
     . ~/.bash_aliases
 fi
 
@@ -310,7 +311,7 @@ svnhistory() {
         return 1
     fi
     local url="$1"
-    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
+    svn log -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
         local add="\o33\[0;38;5;110m"
         local rem="\o33\[0;38;5;167m"
         local head="\o33\[0;38;5;228m"
@@ -337,8 +338,8 @@ svnhistoryr() {
         return 1
     fi
     local url="$1"
-    first=$(svn log -r 1:HEAD --limit 1 -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2-)
-    svn log -q "$url" | \grep -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
+    first=$(svn log -r 1:HEAD --limit 1 -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2-)
+    svn log -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
         local add="\o33\[0;38;5;110m"
         local rem="\o33\[0;38;5;167m"
         local head="\o33\[0;38;5;228m"
