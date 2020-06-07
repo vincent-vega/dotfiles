@@ -1,6 +1,4 @@
-﻿" Configuration file for Vim
-
-" Preamble -------------------------------------------------------------------
+﻿" Preamble -------------------------------------------------------------------
 
 filetype on
 filetype plugin on	" Use the file type plugins
@@ -74,10 +72,10 @@ colorscheme badwolf
 
 " Tabs, spaces, wrapping -----------------------------------------------------
 
-set tabstop=8				" The width of a TAB
-set shiftwidth=8			" Indents will have a width of 4
-set softtabstop=8			" Sets the number of columns for a TAB
-set noexpandtab
+set tabstop=4				" The width of a TAB
+set shiftwidth=4			" Indents will have a width of 4
+set softtabstop=4			" Sets the number of columns for a TAB
+set expandtab
 set nowrap
 set textwidth=80
 set formatoptions=qrn1
@@ -150,16 +148,6 @@ let g:tagbar_autoclose = 1			" automatically close when jump
 nnoremap <silent> <F6> :TagbarToggle<CR>
 
 " ----------------------------------------------------------------------------
-" AIRLINE
-" ----------------------------------------------------------------------------
-
-let g:airline#extensions#tabline#enabled = 1
-" https://github.com/vim-airline/vim-airline/wiki/Screenshots
-"let g:airline_theme='ubaryd'
-let g:airline_theme='deus'
-let g:airline_powerline_fonts = 1
-
-" ----------------------------------------------------------------------------
 " MAN PAGES
 " ----------------------------------------------------------------------------
 
@@ -183,9 +171,7 @@ if has('autocmd')
 	autocmd BufNewFile,BufRead *.txt setlocal wrap
 	autocmd filetype tex setlocal spell
 	autocmd filetype xsd,xsl,xslt,xml setlocal softtabstop=2 tabstop=2 shiftwidth=2
-	autocmd filetype javascript,jsp,java,php setlocal softtabstop=4 tabstop=4 shiftwidth=4
-	autocmd filetype css,python,sh setlocal expandtab softtabstop=4 tabstop=4 shiftwidth=4
-	autocmd filetype html,htmldjango setlocal expandtab softtabstop=2 tabstop=2 shiftwidth=2
+	autocmd filetype html,htmldjango setlocal softtabstop=2 tabstop=2 shiftwidth=2
 	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
 	" If doing a diff. Upon writing changes to file, automatically update
 	" the differences
@@ -395,11 +381,6 @@ endfunction
 
 command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()
 
-function! ShowTerm()
-    silent !read -sN 1
-    redraw!
-endfunction
-
 "au bufreadpost,filereadpost *.class setlocal filetype=java |  %!jad -noctor -f -ff -i -p %
 au bufreadpost,filereadpost *.class setlocal filetype=java |  %!cfr %
 
@@ -408,3 +389,5 @@ function! ClearFile()
 endfunction
 command! -nargs=0 D :call ClearFile()
 
+let g:ctrlp_use_caching = 0
+let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
