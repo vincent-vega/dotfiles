@@ -367,16 +367,16 @@ svnhistoryr() {
 ff() {
     if [ "$#" -eq 0 ]; then
         # current directory
-        find . -type f -exec ls -lh {} + | cat -n
+        find . -type f -exec sh -c 'ls -lh "$@"' -- {} + | cat -n
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
             find "$1" -type f | cat -n
         else
-            find . -type f -iname '*'"$1"'*' -exec ls -lh {} + | cat -n | grep -i "$1"
+            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- {} + | cat -n | grep -i "$1"
         fi
     elif [ "$#" -gt 1 ]; then
-        find "$1" -type f -iname '*'"$2"'*' -exec ls -lh {} + | cat -n | grep -i "$2"
+        find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- {} + | cat -n | grep -i "$2"
     fi
 }
 
