@@ -25,9 +25,12 @@
 [submodule "vim/pack/bundle/start/tagbar"]
 	path = vim/pack/bundle/start/tagbar
 	url = https://github.com/majutsushi/tagbar.git
-[submodule "vim/pack/bundle/start/vim-airline"]
-	path = vim/pack/bundle/start/vim-airline
-	url = https://github.com/vim-airline/vim-airline.git
-[submodule "vim/pack/bundle/start/vim-airline-themes"]
-	path = vim/pack/bundle/start/vim-airline-themes
-	url = https://github.com/vim-airline/vim-airline-themes.git
+[submodule "vim/pack/bundle/start/ale"]
+	path = vim/pack/bundle/start/ale
+	url = https://github.com/dense-analysis/ale.git
+[submodule "vim/pack/bundle/start/lightline.vim"]
+	path = vim/pack/bundle/start/lightline.vim
+	url = https://github.com/itchyny/lightline.vim
+[submodule "vim/pack/bundle/start/ctrlp.vim"]
+	path = vim/pack/bundle/start/ctrlp.vim
+	url = https://github.com/ctrlpvim/ctrlp.vim.git
