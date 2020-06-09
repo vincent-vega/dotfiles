@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+javadecompiler="cfr-0.149.jar"
+
 # get the script directory path
 source="${BASH_SOURCE[0]}"
 while [ -h "$source" ]; do # resolve $source until the file is no longer a symlink
@@ -10,10 +12,10 @@ done
 scriptdir="$( cd -P "$( dirname "$source" )" >/dev/null 2>&1 && pwd )"
 
 if [[ "$(uname -s)" == "CYGWIN"* ]]; then
-    jarpath=$(cygpath -w "$scriptdir/cfr-0.149.jar")
+    jarpath=$(cygpath -w "$scriptdir/$javadecompiler")
     classes=$(cygpath -w "$@")
 else
-    jarpath="$scriptdir/cfr-0.149.jar"
+    jarpath="$scriptdir/$javadecompiler"
     classes="$@"
 fi
 if [ ! -f $jarpath ]; then
