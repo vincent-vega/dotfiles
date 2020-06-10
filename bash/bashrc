@@ -274,40 +274,33 @@ ssync() {
     svn diff -r BASE:HEAD "$@" | vim -R - +"file svn-sync" -c "set nowrap"
 }
 
-svnsnapshot() {
-    if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} [PATCH_FILE]"
-        return 1
-    elif [ -f "$1" ]; then
-        echo "The file already exists, do you wish to overwrite it?"
-        select yn in "Yes" "No"; do
-            case $yn in
-                Yes ) break;;
-                No ) echo "Aborting..."; return 2;;
-            esac
-        done
-    elif [ -d "$1" ]; then
-        echo "Patch file cannot be a directory"
-        echo "Usage: ${FUNCNAME[0]} [PATCH_FILE]"
-        return 3
+svnstash() {
+    local unversioned
+    unversioned=$(svn status | grep "^?" | sed -r 's/^\? +//')
+
+    if [ -n "$unversioned" ]; then
+        local tmp_file
+        tmp_file=$(mktemp --tmpdir)
+        # logging unversioned files to tmp_file
+        echo $unversioned > "$tmp_file"
+        # adding unversioned files
+        xargs -r -d '\n' svn add < "$tmp_file"
     fi
-    local tmp_file
-    tmp_file=$(mktemp --tmpdir)
-    # logging unversioned files to tmp_file
-    svn status | grep "^?" | sed -r 's/^\? +//' > "$tmp_file"
-    # adding unversioned files
-    xargs -r -d '\n' svn add < "$tmp_file"
+
     # creating the patch
-    svn diff > "$1"
-    # removing unversioned files
-    xargs -r -d '\n' svn rm --keep-local < "$tmp_file"
-    # clean
-    rm -f "$tmp_file"
+    svn diff
+
+    if [ -n "$unversioned" ]; then
+        # removing unversioned files
+        xargs -r -d '\n' svn rm --keep-local < "$tmp_file"
+        # clean
+        rm -f "$tmp_file"
+    fi
 }
 
 svnhistory() {
     if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} [PATH]"
+        echo "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
     local url="$1"
@@ -334,7 +327,7 @@ svnhistory() {
 
 svnhistoryr() {
     if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} [PATH]"
+        echo "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
     local url="$1"
@@ -358,6 +351,34 @@ svnhistoryr() {
                        s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
                        s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
             fi
+        done
+    }
+}
+
+svnactivity() {
+    if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
+        echo "Usage: ${FUNCNAME[0]} USERNAME HISTORY_SIZE [PATH]"
+        return 1
+    fi
+    local committername="$1"
+    local numcommit="$2"
+    local svnpath=$(pwd)
+    if [ "$#" -eq 3 ]; then
+        svnpath="$3"
+    fi
+    # TODO print num commits found
+    svn log -l $numcommit $svnpath | grep $committername | egrep -o 'r[0-9]+' | {
+        local add="\o33\[0;38;5;110m"
+        local rem="\o33\[0;38;5;167m"
+        local head="\o33\[0;38;5;228m"
+        local rev="\o33\[1;38;5;244m"
+        local reset="\o33[0m"
+        while read -r ver; do
+            svn log -$ver --diff $svnpath | \
+                sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                    s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                    s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                    s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
         done
     }
 }
@@ -399,7 +420,7 @@ rmalljarsign() {
 
 rmjarsign() {
     if [ "$#" -eq 0 ]; then
-        echo "Usage: ${FUNCNAME[0]} [JAR_FILE]..."
+        echo "Usage: ${FUNCNAME[0]} JAR_FILE..."
         return 1
     fi
     for jarfile in "$@"; do
