@@ -275,20 +275,34 @@ ssync() {
 }
 
 svnstash() {
+    if [ "$#" -gt 1 ]; then
+        echo "Print current developments patch"
+        echo "Usage: ${FUNCNAME[0]} [PATH]"
+        return 1
+    fi
+    local svnpath
+    svnpath=$(pwd)
+    if [ -n "$1" ]; then
+        if [ ! -f "$1" ] && [ ! -d "$1" ]; then
+            echo "Invalid path"
+            return 1
+        fi
+        svnpath="$1"
+    fi
     local unversioned
-    unversioned=$(svn status | grep "^?" | sed -r 's/^\? +//')
+    unversioned=$(svn status "$svnpath" | grep "^?" | sed -r 's/^\? +//')
 
     if [ -n "$unversioned" ]; then
         local tmp_file
         tmp_file=$(mktemp --tmpdir)
         # logging unversioned files to tmp_file
-        echo $unversioned > "$tmp_file"
+        echo "$unversioned" > "$tmp_file"
         # adding unversioned files
         xargs -r -d '\n' svn add < "$tmp_file"
     fi
 
     # creating the patch
-    svn diff
+    svn diff "$svnpath"
 
     if [ -n "$unversioned" ]; then
         # removing unversioned files
@@ -303,7 +317,8 @@ svnhistory() {
         echo "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
-    local url="$1"
+    local url
+    url="$1"
     svn log -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
         local add="\o33\[0;38;5;110m"
         local rem="\o33\[0;38;5;167m"
@@ -330,7 +345,8 @@ svnhistoryr() {
         echo "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
-    local url="$1"
+    local url
+    url="$1"
     first=$(svn log -r 1:HEAD --limit 1 -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2-)
     svn log -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
         local add="\o33\[0;38;5;110m"
@@ -362,19 +378,20 @@ svnactivity() {
     fi
     local committername="$1"
     local numcommit="$2"
-    local svnpath=$(pwd)
+    local svnpath
+    svnpath=$(pwd)
     if [ "$#" -eq 3 ]; then
         svnpath="$3"
     fi
     # TODO print num commits found
-    svn log -l $numcommit $svnpath | grep $committername | egrep -o 'r[0-9]+' | {
+    svn log -l "$numcommit" "$svnpath" | grep "$committername" | grep -E -o 'r[0-9]+' | {
         local add="\o33\[0;38;5;110m"
         local rem="\o33\[0;38;5;167m"
         local head="\o33\[0;38;5;228m"
         local rev="\o33\[1;38;5;244m"
         local reset="\o33[0m"
         while read -r ver; do
-            svn log -$ver --diff $svnpath | \
+            svn log -"$ver" --diff "$svnpath" | \
                 sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
                     s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
                     s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
