@@ -284,6 +284,7 @@ svnstash() {
     svnpath=$(pwd)
     if [ -n "$1" ]; then
         if [ ! -f "$1" ] && [ ! -d "$1" ]; then
+            echo "Usage: ${FUNCNAME[0]} [PATH]"
             echo "Invalid path"
             return 1
         fi
@@ -383,8 +384,10 @@ svnactivity() {
     if [ "$#" -eq 3 ]; then
         svnpath="$3"
     fi
-    # TODO print num commits found
-    svn log -l "$numcommit" "$svnpath" | grep "$committername" | grep -E -o 'r[0-9]+' | {
+    local revisions
+    revisions=$(svn log -q -l "$numcommit" "$svnpath" | "grep" "$committername" | "grep" -E -o 'r[0-9]+')
+    echo "$(echo "$revisions" | wc -l) commits found"
+    echo "$revisions" | {
         local add="\o33\[0;38;5;110m"
         local rem="\o33\[0;38;5;167m"
         local head="\o33\[0;38;5;228m"
