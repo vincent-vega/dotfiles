@@ -107,6 +107,7 @@ export PATH=$M2:$PATH
 
 export VISUAL=vim
 export EDITOR="$VISUAL"
+export SVN_EDITOR="$VISUAL"
 
 # -----------------------------------------------------------------------------
 
@@ -169,40 +170,32 @@ ssync() {
 }
 
 svnstash() {
-    if [ "$#" -gt 1 ]; then
+    if [ "$#" -lt 1 ]; then
         echo "Print current developments patch"
-        echo "Usage: ${FUNCNAME[0]} [PATH]"
+        echo "Usage: ${FUNCNAME[0]} PATH..."
         return 1
     fi
-    local svnpath unversioned
-    svnpath=$(pwd)
-    if [ -n "$1" ]; then
-        if [ ! -f "$1" ] && [ ! -d "$1" ]; then
-            echo "Usage: ${FUNCNAME[0]} [PATH]"
-            echo "Invalid path"
-            return 1
-        fi
-        svnpath="$1"
-    fi
-    unversioned=$(svn status "$svnpath" | grep "^?" | sed -r 's/^\? +//')
+    unversioned=$(svn status "$@" | grep "^?" | sed -r 's/^\? +//')
 
     if [ -n "$unversioned" ]; then
         local tmp_file
         tmp_file=$(mktemp --tmpdir)
+        echo "Created temp file $tmp_file" 1>&2
         # logging unversioned files to tmp_file
         echo "$unversioned" > "$tmp_file"
         # adding unversioned files
-        xargs -r -d '\n' svn add < "$tmp_file"
+        xargs -r -d '\n' svn add < "$tmp_file" 1>&2
     fi
 
     # creating the patch
-    svn diff "$svnpath"
+    svn diff "$@"
 
     if [ -n "$unversioned" ]; then
         # removing unversioned files
-        xargs -r -d '\n' svn rm --keep-local < "$tmp_file"
+        xargs -r -d '\n' svn delete --keep-local < "$tmp_file" 1>&2
         # clean
         rm -f "$tmp_file"
+        echo "Temp file removed" 1>&2
     fi
 }
 
