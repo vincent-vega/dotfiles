@@ -1,48 +1,46 @@
 ﻿" Preamble -------------------------------------------------------------------
 
 filetype on
-filetype plugin on	" Use the file type plugins
-set nocompatible	" Use Vim defaults instead of 100% Vi compatibility
+filetype plugin on  " Use the file type plugins
+set nocompatible    " Use Vim defaults instead of 100% Vi compatibility
 
 " Basic options --------------------------------------------------------------
+
 set encoding=utf-8
-syntax on			" Syntax highlighting
-set modelines=0			" CVE-2007-2438
-set autoindent			" Always set autoindenting ON
+syntax on         " Syntax highlighting
+set modelines=0   " CVE-2007-2438
+set autoindent    " Always set autoindenting ON
 set showmode
 set showcmd
-set hidden			" Hide buffer instead of closing them
+set hidden        " Hide buffer instead of closing them
 set visualbell
-set noerrorbells		" Don't make noise
-set ofu=syntaxcomplete#Complete	" Turn ON omnicompletion
-"if !has ('gui_running')
-"set cursorline			" Highlight the screen line of the cursor
-"endif
+set noerrorbells  " Don't make noise
+set ofu=syntaxcomplete#Complete  " Turn ON omnicompletion
 set ttyfast
-set ruler			" Show the cursor position
-set backspace=indent,eol,start	" More powerful backspacing
-set number			" Show absolute line numbers
-set relativenumber		" Show relative line numbers
-set laststatus=2		" Always display the status line, even if only
-				" one window is displayed
-set history=1000		" Keep 1000 lines of history
+set ruler                       " Show the cursor position
+set backspace=indent,eol,start  " More powerful backspacing
+set number                      " Show absolute line numbers
+set relativenumber              " Show relative line numbers
+set laststatus=2                " Always display the status line, even if only
+                                " one window is displayed
+set history=1000                " Keep 1000 lines of history
 set list
 "set listchars=tab:»\ ,trail:∙,extends:#,nbsp:∙,eol:¶
 set listchars=tab:►\ ,trail:∙,extends:#,nbsp:∙,eol:¶
 set showbreak=┼
 set fillchars=diff:░
 set shell=/bin/bash
-set lazyredraw			" Do not redraw while running macros (faster)
-set matchtime=3			" Blink matching chars for 3 seconds
+set lazyredraw   " Do not redraw while running macros (faster)
+set matchtime=3  " Blink matching chars for 3 seconds
 set splitbelow
 set splitright
 set shiftround
 set autoread
-set title			" Change the terminal's title
-set dictionary=/usr/share/dict/words
-set backupskip=/tmp/*,/private/tmp/*	" Make Vim able to edit crontab files
-					" again
+set title  " Change the terminal's title
 set cm=blowfish2
+set dictionary=/usr/share/dict/words
+set backupskip=/tmp/*,/private/tmp/*  " Make Vim able to edit crontab files
+                    " again
 
 " Resize splits when the window is resized
 au VimResized * exe "normal! \<c-w>="
@@ -50,31 +48,31 @@ au VimResized * exe "normal! \<c-w>="
 let maplocalleader = "\\"
 let mapleader = " "
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
-set mousehide		" Hide the mouse cursor when typing
-set mouse=a		" Use mouse everywhere
-set tags=tags;/		" ctags, search recursively backwards
-set smarttab		" Insert tabs on the start of a line according to
-			" shiftwidth, not tabstop
-set copyindent		" Copy the previous indentation on autoindenting
-			" sensitive otherwise
-set switchbuf=useopen,usetab	" Jump to the first open window that
-				" contains the specified buffer (if there is
-				" one) & also consider windows in other tab
-				" pages
-" au BufRead,BufNewFile *.txt setlocal spell	" Turn on spell check for .txt
-						" files
+set mousehide    " Hide the mouse cursor when typing
+set mouse=a      " Use mouse everywhere
+set tags=tags;/  " ctags, search recursively backwards
+set smarttab     " Insert tabs on the start of a line according to
+                 " shiftwidth, not tabstop
+set copyindent   " Copy the previous indentation on autoindenting
+                 " sensitive otherwise
+set switchbuf=useopen,usetab  " Jump to the first open window that
+                              " contains the specified buffer (if there is
+                              " one) & also consider windows in other tab
+                              " pages
+" au BufRead,BufNewFile *.txt setlocal spell  " Turn on spell check for .txt
+                                              " files
 
 " Colors ---------------------------------------------------------------------
 
 set colorcolumn=80
-set t_Co=256 " Explicitly tell vim that the terminal supports 256 colors
+set t_Co=256  " Explicitly tell vim that the terminal supports 256 colors
 colorscheme badwolf
 
 " Tabs, spaces, wrapping -----------------------------------------------------
 
-set tabstop=4				" The width of a TAB
-set shiftwidth=4			" Indents will have a width of 4
-set softtabstop=4			" Sets the number of columns for a TAB
+set tabstop=4      " The width of a TAB
+set shiftwidth=4   " Indents will have a width of 4
+set softtabstop=4  " Sets the number of columns for a TAB
 set expandtab
 set nowrap
 set textwidth=80
@@ -85,40 +83,41 @@ set formatoptions=qrn1
 set wildmenu
 set wildmode=list:longest,full
 
-set wildignore+=.hg,.git,.svn				" Version control
-set wildignore+=*.aux,*.out,*.toc			" LaTeX intermediate
-							" files
-set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg		" Binary images
-set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest	" compiled object files
-set wildignore+=*.spl					" compiled spelling word
-							" lists
-set wildignore+=*.sw?					" Vim swap files
-set wildignore+=*.DS_Store				" OSX bullshit
-set wildignore+=*.luac					" Lua byte code
-set wildignore+=migrations				" Django migrations
-set wildignore+=*.pyc					" Python byte code
+set wildignore+=.hg,.git,.svn      " Version control
+set wildignore+=*.aux,*.out,*.toc  " LaTeX intermediate
+                                   " files
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg    " Binary images
+set wildignore+=*.o,*.obj,*.exe,*.dll,*.manifest  " compiled object files
+set wildignore+=*.spl                             " compiled spelling word
+                                                  " lists
+set wildignore+=*.sw?       " Vim swap files
+set wildignore+=*.DS_Store  " OSX bullshit
+set wildignore+=*.luac      " Lua byte code
+set wildignore+=migrations  " Django migrations
+set wildignore+=*.pyc       " Python byte code
 
 " Backups --------------------------------------------------------------------
 
 set undofile
 set swapfile
-set undoreload=10000		" Save whole buffer for undo when reloading it
+set undoreload=10000  " Save whole buffer for undo when reloading it
 set undodir=~/.vim/undodir
 set dir=~/dotfiles/vim/backup
 set backupdir=~/dotfiles/vim/backup
 
 " Searching and movement -----------------------------------------------------
 
-set ignorecase		" Ignore case when searching
-set wildignorecase	" When set case is ignored when completing file names
-			" and directories
-set smartcase		" Ignore case if search pattern is all lowercase
-set incsearch		" Show search matches as you type
+set ignorecase      " Ignore case when searching
+set wildignorecase  " When set case is ignored when completing file names
+                    " and directories
+
+set smartcase    " Ignore case if search pattern is all lowercase
+set incsearch    " Show search matches as you type
 set showmatch
-set hlsearch		" Highlight the last searched term
-set gdefault		" The substitute flag 'g' is default on
-set scrolloff=3		" Minimal number of screen lines to keep above and below
-			" the cursor
+set hlsearch     " Highlight the last searched term
+set gdefault     " The substitute flag 'g' is default on
+set scrolloff=3  " Minimal number of screen lines to keep above and below
+                 " the cursor
 nnoremap <silent> gD gDzt
 nnoremap <silent> [[ [[zt
 nnoremap <silent> ]] ]]zt
@@ -148,11 +147,11 @@ let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standar
 " TAGBAR
 " ----------------------------------------------------------------------------
 
-let g:tagbar_ctags_bin='/usr/bin/ctags'		" Proper Ctags locations
-let g:tagbar_width=30				" Default is 40, seems too wide
-let g:tagbar_left = 1				" Display panel on the left
-let g:tagbar_autofocus = 1			" Move the cursor to the Tagbar
-let g:tagbar_autoclose = 1			" automatically close when jump
+let g:tagbar_ctags_bin='/usr/bin/ctags'  " Proper Ctags locations
+let g:tagbar_width=30       " Default is 40, seems too wide
+let g:tagbar_left = 1       " Display panel on the left
+let g:tagbar_autofocus = 1  " Move the cursor to the Tagbar
+let g:tagbar_autoclose = 1  " automatically close when jump
 nnoremap <silent> <F6> :TagbarToggle<CR>
 
 " ----------------------------------------------------------------------------
@@ -167,24 +166,24 @@ nmap K :Man <cword><CR>
 " FOLDING SETTINGS
 " ----------------------------------------------------------------------------
 
-"set foldmethod=indent   "fold based on indent
-"set foldnestmax=10      "deepest fold is 10 levels
-"set nofoldenable        "dont fold by default
+"set foldmethod=indent  " fold based on indent
+"set foldnestmax=10     " deepest fold is 10 levels
+"set nofoldenable       " dont fold by default
 "set foldlevel=1
 
 " ----------------------------------------------------------------------------
 
 if has('autocmd')
-	autocmd BufNewFile,BufRead *.log,*.html,*.properties setlocal nowrap
-	autocmd BufNewFile,BufRead *.txt setlocal wrap
-	autocmd filetype tex setlocal spell
-	autocmd filetype xsd,xsl,xslt,xml setlocal softtabstop=2 tabstop=2 shiftwidth=2
-	autocmd filetype html,htmldjango setlocal softtabstop=2 tabstop=2 shiftwidth=2
-	autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-	" If doing a diff. Upon writing changes to file, automatically update
-	" the differences
-	autocmd BufWritePost * if &diff == 1 | diffupdate | endif
-	autocmd BufRead *.tag set syntax=jsp
+    autocmd BufNewFile,BufRead *.log,*.html,*.properties setlocal nowrap
+    autocmd BufNewFile,BufRead *.txt setlocal wrap
+    autocmd filetype tex setlocal spell
+    autocmd filetype xsd,xsl,xslt,xml setlocal softtabstop=2 tabstop=2 shiftwidth=2
+    autocmd filetype html,htmldjango setlocal softtabstop=2 tabstop=2 shiftwidth=2
+    autocmd InsertLeave * if pumvisible() == 0|pclose|endif
+    " If doing a diff. Upon writing changes to file, automatically update
+    " the differences
+    autocmd BufWritePost * if &diff == 1 | diffupdate | endif
+    autocmd BufRead *.tag set syntax=jsp
 endif
 set pastetoggle=<F2>
 " Use Q for formatting the current paragraph (or selection)
@@ -203,7 +202,6 @@ vnoremap ; :
 nnoremap <silent> <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 " reselect the text that was just pasted
 nnoremap <leader>v V`]
-" clear search buffer
 " save file you didn't open with root privileges
 cmap w!! w !sudo tee % >/dev/null
 nnoremap <silent> Y y$
@@ -221,7 +219,7 @@ nnoremap <silent> <C-L> 20zl
 " scroll 20 characters to the left
 nnoremap <silent> <C-H> 20zh
 
-nnoremap <leader>r :tag 
+nnoremap <leader>r :tag
 
 " replace word
 nnoremap <silent> <leader>s "_diwPb
@@ -252,11 +250,8 @@ nnoremap <silent> <leader>o :windo diffoff<CR>
 vnoremap < <gv
 vnoremap > >gv
 
-" Cygwin copy in clipboard  --------------------------------------------------
+" Clipboard management  ------------------------------------------------------
 
-" windows
-"vnoremap <silent> ,y :call Putclip(visualmode(), 1)<CR>
-"nnoremap <silent> ,y :call Putclip('n', 1)<CR>
 vnoremap <silent> ,y "+y
 nnoremap <silent> ,y "+y
 vnoremap <silent> ,p "+p
@@ -264,6 +259,9 @@ nnoremap <silent> ,p "+p
 vnoremap <silent> ,P "+P
 nnoremap <silent> ,P "+P
 
+" windows
+"vnoremap <silent> ,y :call Putclip(visualmode(), 1)<CR>
+"nnoremap <silent> ,y :call Putclip('n', 1)<CR>
 function! Putclip(type, ...) range
   let sel_save = &selection
   let &selection = "inclusive"
@@ -288,51 +286,51 @@ endfunction
 " Pulse ----------------------------------------------------------------------
 
 function! PulseCursorLine()
-	let current_window = winnr()
+    let current_window = winnr()
 
-	windo set nocursorline
-	execute current_window . 'wincmd w'
+    windo set nocursorline
+    execute current_window . 'wincmd w'
 
-	setlocal cursorline
+    setlocal cursorline
 
-	redir => old_hi
-	silent execute 'hi CursorLine'
-	redir END
-	let old_hi = split(old_hi, '\n')[0]
-	let old_hi = substitute(old_hi, 'xxx', '', '')
+    redir => old_hi
+    silent execute 'hi CursorLine'
+    redir END
+    let old_hi = split(old_hi, '\n')[0]
+    let old_hi = substitute(old_hi, 'xxx', '', '')
 
-	hi CursorLine guibg=#2a2a2a ctermbg=233
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#2a2a2a ctermbg=233
+    redraw
+    sleep 20m
 
-	hi CursorLine guibg=#333333 ctermbg=235
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#333333 ctermbg=235
+    redraw
+    sleep 20m
 
-	hi CursorLine guibg=#3a3a3a ctermbg=237
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#3a3a3a ctermbg=237
+    redraw
+    sleep 20m
 
-	hi CursorLine guibg=#444444 ctermbg=239
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#444444 ctermbg=239
+    redraw
+    sleep 20m
 
-	hi CursorLine guibg=#3a3a3a ctermbg=237
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#3a3a3a ctermbg=237
+    redraw
+    sleep 20m
 
-	hi CursorLine guibg=#333333 ctermbg=235
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#333333 ctermbg=235
+    redraw
+    sleep 20m
 
-	hi CursorLine guibg=#2a2a2a ctermbg=233
-	redraw
-	sleep 20m
+    hi CursorLine guibg=#2a2a2a ctermbg=233
+    redraw
+    sleep 20m
 
-	execute 'hi ' . old_hi
+    execute 'hi ' . old_hi
 
-	windo set nocursorline
-	execute current_window . 'wincmd w'
+    windo set nocursorline
+    execute current_window . 'wincmd w'
 endfunction
 
 " Find file in current directory and edit it ---------------------------------
