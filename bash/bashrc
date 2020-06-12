@@ -46,6 +46,7 @@ if [ -f ~/dotfiles/bash/ps1_colors ]; then
     . ~/dotfiles/bash/ps1_colors
 fi
 
+# shellcheck disable=SC2154
 PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
 \[${BIBlack}\][\[${IRed}\]\h\[${BIBlack}\]]\[${IWhite}\] \A\
  \[${IPaleGreen3}\]\w\r\n\[${ResetColor}\]# \
@@ -187,7 +188,6 @@ svnstash() {
         xargs -r -d '\n' svn add < "$tmp_file" 1>&2
     fi
 
-    # creating the patch
     svn diff "$@"
 
     if [ -n "$unversioned" ]; then
