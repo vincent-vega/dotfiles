@@ -121,6 +121,7 @@ let s:bwc.diffadd    = ['005f00', 74]
 
 let s:bwc.SkyBlue3   = ['5fafd7', 74]
 let s:bwc.IndianRed  = ['d75f5f', 167]
+let s:bwc.IndianRed1 = ['ff5f5f', 203]
 let s:bwc.Khaki1     = ['ffff87', 228]
 let s:bwc.Grey50     = ['808080', 244]
 
@@ -251,9 +252,9 @@ call s:HL('FoldColumn', 'mediumgravel', s:gutter)
 " }}}
 " Cursor {{{
 
-call s:HL('Cursor',  'coal', 'tardis', 'bold')
-call s:HL('vCursor', 'coal', 'tardis', 'bold')
-call s:HL('iCursor', 'coal', 'tardis', 'none')
+call s:HL('Cursor',  'coal', 'IndianRed1', 'bold')
+call s:HL('vCursor', 'coal', 'IndianRed1', 'bold')
+call s:HL('iCursor', 'coal', 'IndianRed1', 'none')
 
 " }}}
 " Syntax highlighting {{{
