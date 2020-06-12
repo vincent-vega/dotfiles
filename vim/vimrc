@@ -102,8 +102,8 @@ set undofile
 set swapfile
 set undoreload=10000  " Save whole buffer for undo when reloading it
 set undodir=~/.vim/undodir
-set dir=~/dotfiles/vim/backup
-set backupdir=~/dotfiles/vim/backup
+set dir=~/.vim/backup
+set backupdir=~/.vim/backup
 
 " Searching and movement -----------------------------------------------------
 
