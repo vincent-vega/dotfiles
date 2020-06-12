@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+
+# High Intensty
+#IBlack='0;90'
+#IRed='0;91'
+#IGreen='0;92'
+#IYellow='0;93'
+#IBlue='0;94'
+#IPurple='0;95'
+#ICyan='0;96'
+#IWhite='0;97'
+
+IPaleGreen3='0;38;5;114'
+IKhaki1='0;38;5;228'
+ILightSkyBlue3='0;38;5;110'
+ISkyBlue3='0;38;5;74'
+
+# Bold High Intensty
+#BIBlack='1;90'
+#BIRed='1;91'
+#BIGreen='1;92'
+BIYellow='1;93'
+#BIBlue='1;94'
+#BIPurple='1;95'
+#BICyan='1;96'
+#BIWhite='1;97'
+
+BIndianRed='1;38;5;167'
+
+# Underline High Intensty
+#UIBlack='4;90'
+#UIRed='4;91'
+#UIGreen='4;92'
+#UIYellow='4;93'
+#UIBlue='4;94'
+#UIPurple='4;95'
+#UICyan='4;96'
+#UIWhite='4;97'
+
+# Reversed High Intensty
+#RIBlack='7;90'
+#RIRed='7;91'
+#RIGreen='7;92'
+#RIYellow='7;93'
+RIBlue='7;94'
+#RIPurple='7;95'
+RICyan='7;96'
+#RIWhite='7;97'

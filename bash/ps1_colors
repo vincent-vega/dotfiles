@@ -1,0 +1,83 @@
+#!/usr/bin/env bash
+
+### Set
+#0 = default colour
+#1 = bold
+#2 = dim
+#4 = underlined
+#5 = flashing/blink text
+#7 = reverse field
+#8 = hidden (useful for passwords)
+
+### Foreground
+#30 = black
+#31 = red
+#32 = green
+#33 = orange
+#34 = blue
+#35 = purple
+#36 = cyan
+#37 = grey
+#39 = default foreground color
+#90 = dark grey
+#91 = light red
+#92 = light green
+#93 = yellow
+#94 = light blue
+#95 = light purple
+#96 = turquoise
+#97 = white
+
+### Background
+#40  = black background
+#41  = red background
+#42  = green background
+#43  = orange background
+#44  = blue background
+#45  = purple background
+#46  = cyan background
+#47  = grey background
+#49  = default background color
+#100 = dark grey background
+#101 = light red background
+#102 = light green background
+#103 = yellow background
+#104 = light blue background
+#105 = light purple background
+#106 = turquoise background
+#107 = white background
+
+ResetColor='\e[0m'
+
+# High Intensty
+#IBlack='\e[0;49;90m'
+IRed='\e[0;49;91m'
+#IGreen='\e[0;49;92m'
+#IYellow='\e[0;49;93m'
+#IBlue='\e[0;49;94m'
+#IPurple='\e[0;49;95m'
+#ICyan='\e[0;49;96m'
+IWhite='\e[0;49;97m'
+
+IDodgerBlue3='\e[0;38;5;26m'
+IPaleGreen3='\e[0;38;5;114m'
+
+# Bold High Intensty
+BIBlack='\e[1;49;90m'
+#BIRed='\e[1;49;91m'
+#BIGreen='\e[1;49;92m'
+#BIYellow='\e[1;49;93m'
+#BIBlue='\e[1;49;94m'
+#BIPurple='\e[1;49;95m'
+#BICyan='\e[1;49;96m'
+#BIWhite='\e[1;49;97m'
+
+# Underline High Intensty
+#UIBlack='\e[4;49;90m'
+#UIRed='\e[4;49;91m'
+#UIGreen='\e[4;49;92m'
+#UIYellow='\e[4;49;93m'
+#UIBlue='\e[4;49;94m'
+#UIPurple='\e[4;49;95m'
+#UICyan='\e[4;49;96m'
+#UIWhite='\e[4;49;97m'

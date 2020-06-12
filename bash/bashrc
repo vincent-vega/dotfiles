@@ -4,9 +4,9 @@ if [ -z "$PS1" ]; then
 fi
 
 case $(uname -s) in
-    Linux*)    arch=Linux;;
-    CYGWIN*)   arch=Cygwin;;
-    *)         arch=Linux;;
+    Linux*)  __arch=Linux;;
+    CYGWIN*) __arch=Cygwin;;
+    *)       __arch=Linux;;
 esac
 
 # sudo autocompletion
@@ -16,11 +16,13 @@ fi
 
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
-  if [ -f /usr/share/bash-completion/bash_completion ]; then
-    . /usr/share/bash-completion/bash_completion
-  elif [ -f /etc/bash_completion ]; then
-    . /etc/bash_completion
-  fi
+    if [ -f /usr/share/bash-completion/bash_completion ]; then
+        # shellcheck disable=SC1091
+        . /usr/share/bash-completion/bash_completion
+    elif [ -f /etc/bash_completion ]; then
+        # shellcheck disable=SC1091
+        . /etc/bash_completion
+    fi
 fi
 
 # Make bash check its window size after a process completes
@@ -35,151 +37,24 @@ case $TERM in
 esac
 
 if [ -f ~/.bash_aliases ]; then
-    # shellcheck source=dotfiles/bash/bash_aliases
+    # shellcheck disable=SC1090
     . ~/.bash_aliases
 fi
 
-### Set
-#0 = default colour
-#1 = bold
-#2 = dim
-#4 = underlined
-#5 = flashing/blink text
-#7 = reverse field
-#8 = hidden (useful for passwords)
-
-### Foreground
-#30 = black
-#31 = red
-#32 = green
-#33 = orange
-#34 = blue
-#35 = purple
-#36 = cyan
-#37 = grey
-#39 = default foreground color
-#90 = dark grey
-#91 = light red
-#92 = light green
-#93 = yellow
-#94 = light blue
-#95 = light purple
-#96 = turquoise
-#97 = white
-
-### Background
-#40  = black background
-#41  = red background
-#42  = green background
-#43  = orange background
-#44  = blue background
-#45  = purple background
-#46  = cyan background
-#47  = grey background
-#49  = default background color
-#100 = dark grey background
-#101 = light red background
-#102 = light green background
-#103 = yellow background
-#104 = light blue background
-#105 = light purple background
-#106 = turquoise background
-#107 = white background
-
-ResetColor='\e[0m'
-
-# High Intensty
-#IBlack='\e[0;49;90m'
-IRed='\e[0;49;91m'
-#IGreen='\e[0;49;92m'
-#IYellow='\e[0;49;93m'
-#IBlue='\e[0;49;94m'
-#IPurple='\e[0;49;95m'
-#ICyan='\e[0;49;96m'
-IWhite='\e[0;49;97m'
-
-IDodgerBlue3='\e[0;38;5;26m'
-IPaleGreen3='\e[0;38;5;114m'
-
-# Bold High Intensty
-BIBlack='\e[1;49;90m'
-#BIRed='\e[1;49;91m'
-#BIGreen='\e[1;49;92m'
-#BIYellow='\e[1;49;93m'
-#BIBlue='\e[1;49;94m'
-#BIPurple='\e[1;49;95m'
-#BICyan='\e[1;49;96m'
-#BIWhite='\e[1;49;97m'
-
-# Underline High Intensty
-#UIBlack='\e[4;49;90m'
-#UIRed='\e[4;49;91m'
-#UIGreen='\e[4;49;92m'
-#UIYellow='\e[4;49;93m'
-#UIBlue='\e[4;49;94m'
-#UIPurple='\e[4;49;95m'
-#UICyan='\e[4;49;96m'
-#UIWhite='\e[4;49;97m'
+if [ -f ~/dotfiles/bash/ps1_colors ]; then
+    # shellcheck disable=SC1090
+    . ~/dotfiles/bash/ps1_colors
+fi
 
 PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
 \[${BIBlack}\][\[${IRed}\]\h\[${BIBlack}\]]\[${IWhite}\] \A\
  \[${IPaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
-# High Intensty
-#IBlack='0;90'
-#IRed='0;91'
-#IGreen='0;92'
-#IYellow='0;93'
-#IBlue='0;94'
-#IPurple='0;95'
-#ICyan='0;96'
-#IWhite='0;97'
-
-IPaleGreen3='0;38;5;114'
-IKhaki1='0;38;5;228'
-ILightSkyBlue3='0;38;5;110'
-ISkyBlue3='0;38;5;74'
-
-# Bold High Intensty
-#BIBlack='1;90'
-#BIRed='1;91'
-#BIGreen='1;92'
-BIYellow='1;93'
-#BIBlue='1;94'
-#BIPurple='1;95'
-#BICyan='1;96'
-#BIWhite='1;97'
-
-BIndianRed='1;38;5;167'
-
-# Underline High Intensty
-#UIBlack='4;90'
-#UIRed='4;91'
-#UIGreen='4;92'
-#UIYellow='4;93'
-#UIBlue='4;94'
-#UIPurple='4;95'
-#UICyan='4;96'
-#UIWhite='4;97'
-
-# Reversed High Intensty
-#RIBlack='7;90'
-#RIRed='7;91'
-#RIGreen='7;92'
-#RIYellow='7;93'
-RIBlue='7;94'
-#RIPurple='7;95'
-RICyan='7;96'
-#RIWhite='7;97'
-
-DIR=${IPaleGreen3}
-SYM_LINK=${ILightSkyBlue3}
-EXE=${BIndianRed}
-CHAR_SP=${BIYellow}
-BLOCK_SP=${BIYellow}
-STICKY_OW=${RICyan}
-MISSING_LN=${RIBlue}
+if [ -f ~/dotfiles/bash/ls_colors ]; then
+    # shellcheck disable=SC1090
+    . ~/dotfiles/bash/ls_colors
+fi
 
 #bd = block (buffered) special file
 #cd = character (unbuffered) special file
@@ -201,6 +76,14 @@ MISSING_LN=${RIBlue}
 #st = sticky - Directory with the sticky bit set (+t) and not other-writable
 #su = set uid - File that is setuid (u+s)
 #tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
+
+DIR=${IPaleGreen3}
+SYM_LINK=${ILightSkyBlue3}
+EXE=${BIndianRed}
+CHAR_SP=${BIYellow}
+BLOCK_SP=${BIYellow}
+STICKY_OW=${RICyan}
+MISSING_LN=${RIBlue}
 
 LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
 tw=${STICKY_OW}:mi=${MISSING_LN}"
@@ -233,16 +116,27 @@ export EDITOR="$VISUAL"
 # host
 # dig
 
-#if [ $arch = "Cygwin" ]; then
+if [ $__arch = "Cygwin" ]; then
+
     # add cygwin context menu entry
     # chere -in -e "Open Bash window here" -t mintty
-#fi
+
+    __ssh_host_completion() {
+        local cur opts
+        cur="${COMP_WORDS[COMP_CWORD]}"
+        opts=$(grep '^Host' ~/.ssh/config ~/.ssh/config.d/* 2>/dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
+
+        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+        return 0
+    }
+    complete -F __ssh_host_completion ssh
+fi
 
 open() {
-    if [ $arch = "Cygwin" ]; then
+    if [ $__arch = "Cygwin" ]; then
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
         cygstart "$1"
-    elif [ $arch = "Linux" ]; then
+    elif [ $__arch = "Linux" ]; then
         local target
         target="$(pwd)"
         if [ "$#" -eq 1 ]; then
@@ -280,7 +174,7 @@ svnstash() {
         echo "Usage: ${FUNCNAME[0]} [PATH]"
         return 1
     fi
-    local svnpath
+    local svnpath unversioned
     svnpath=$(pwd)
     if [ -n "$1" ]; then
         if [ ! -f "$1" ] && [ ! -d "$1" ]; then
@@ -290,7 +184,6 @@ svnstash() {
         fi
         svnpath="$1"
     fi
-    local unversioned
     unversioned=$(svn status "$svnpath" | grep "^?" | sed -r 's/^\? +//')
 
     if [ -n "$unversioned" ]; then
@@ -379,12 +272,11 @@ svnactivity() {
     fi
     local committername="$1"
     local numcommit="$2"
-    local svnpath
+    local svnpath revisions
     svnpath=$(pwd)
     if [ "$#" -eq 3 ]; then
         svnpath="$3"
     fi
-    local revisions
     revisions=$(svn log -q -l "$numcommit" "$svnpath" | "grep" "$committername" | "grep" -E -o 'r[0-9]+')
     echo "$(echo "$revisions" | wc -l) commits found"
     echo "$revisions" | {
