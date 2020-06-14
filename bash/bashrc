@@ -1,6 +1,6 @@
 # shellcheck shell=bash
 if [ -z "$PS1" ]; then
-   return
+    return
 fi
 
 case $(uname -s) in
@@ -10,10 +10,7 @@ case $(uname -s) in
 esac
 
 # sudo autocompletion
-if [ "$PS1" ]; then
-    complete -cf sudo
-fi
-
+complete -cf sudo
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
@@ -127,7 +124,6 @@ if [ $__arch = "Cygwin" ]; then
         local cur opts
         cur="${COMP_WORDS[COMP_CWORD]}"
         opts=$(grep '^Host' ~/.ssh/config ~/.ssh/config.d/* 2>/dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
-
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return 0
     }
@@ -176,6 +172,7 @@ svnstash() {
         echo "Usage: ${FUNCNAME[0]} PATH..."
         return 1
     fi
+    local unversioned
     unversioned=$(svn status "$@" | grep "^?" | sed -r 's/^\? +//')
 
     if [ -n "$unversioned" ]; then

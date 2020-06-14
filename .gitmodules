@@ -1,12 +1,6 @@
-[submodule "vim/pack/bundle/start/CRDispatcher"]
-	path = vim/pack/bundle/start/CRDispatcher
-	url = https://github.com/coot/CRDispatcher
 [submodule "vim/pack/bundle/start/delimitMate"]
 	path = vim/pack/bundle/start/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
-[submodule "vim/pack/bundle/start/EnchantedVim"]
-	path = vim/pack/bundle/start/EnchantedVim
-	url = https://github.com/coot/EnchantedVim.git
 [submodule "vim/pack/bundle/start/gundo.vim"]
 	path = vim/pack/bundle/start/gundo.vim
 	url = https://github.com/sjl/gundo.vim.git
