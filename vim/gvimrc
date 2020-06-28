@@ -1,2 +1,5 @@
 set guioptions-=T
+set guioptions-=L
 set guicursor=a:blinkon0
+
+map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
