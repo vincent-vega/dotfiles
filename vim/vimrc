@@ -10,7 +10,7 @@ set encoding=utf-8
 syntax on         " Syntax highlighting
 set modelines=0   " CVE-2007-2438
 set autoindent    " Always set autoindenting ON
-set showmode
+set noshowmode
 set showcmd
 set hidden        " Hide buffer instead of closing them
 set visualbell
