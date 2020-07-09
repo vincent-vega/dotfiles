@@ -140,9 +140,9 @@ nnoremap <silent> <F5> :GundoToggle<CR>
 " CTRL-P
 " ----------------------------------------------------------------------------
 
-let g:ctrlp_use_caching = 0
 let g:ctrlp_max_files = 0
-let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files -co --exclude-standard']
+let g:ctrlp_use_caching = 0
+let g:ctrlp_user_command = 'find %s -type f'
 let g:ctrlp_working_path_mode = 0
 
 " ----------------------------------------------------------------------------
@@ -221,7 +221,7 @@ nnoremap <silent> <C-L> 20zl
 " scroll 20 characters to the left
 nnoremap <silent> <C-H> 20zh
 
-nnoremap <leader>r :tag
+nnoremap <leader>r :tag 
 
 " replace word
 nnoremap <silent> <leader>s "_diwPb
