@@ -44,9 +44,9 @@ if [ -f ~/dotfiles/bash/ps1_colors ]; then
 fi
 
 # shellcheck disable=SC2154
-PS1="\[${BIBlack}\][\[${IDodgerBlue3}\]\u\[${BIBlack}\]]\[${IWhite}\]@\
-\[${BIBlack}\][\[${IRed}\]\h\[${BIBlack}\]]\[${IWhite}\] \A\
- \[${IPaleGreen3}\]\w\r\n\[${ResetColor}\]# \
+PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
+\[${BGrey27}\][\[${Red}\]\h\[${BGrey27}\]]\[${White}\] \A\
+ \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
 if [ -f ~/dotfiles/bash/ls_colors ]; then
@@ -75,18 +75,18 @@ fi
 #su = set uid - File that is setuid (u+s)
 #tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
 
-DIR=${IPaleGreen3}
-SYM_LINK=${ILightSkyBlue3}
+DIR=${PaleGreen3}
+SYM_LINK=${LightSkyBlue3}
 EXE=${BIndianRed}
-CHAR_SP=${BIYellow}
-BLOCK_SP=${BIYellow}
-STICKY_OW=${RICyan}
-MISSING_LN=${RIBlue}
+CHAR_SP=${BYellow}
+BLOCK_SP=${BYellow}
+STICKY_OW=${RTurquoise2}
+MISSING_LN=${RIndianRed}
 
 LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
 tw=${STICKY_OW}:mi=${MISSING_LN}"
 export LS_COLORS
-export GREP_COLORS='mt='${ISkyBlue3}':ms='${ISkyBlue3}':mc='${ISkyBlue3}':fn='${IKhaki1}
+export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${Khaki1}
 
 export HISTFILESIZE=20000
 export HISTSIZE=10000
@@ -294,7 +294,7 @@ ff() {
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
-            echo "Listing file in dir $1"
+            echo "Listing files in dir $1"
             find "$1" -type f -exec sh -c 'ls -lh "$@"' -- {} + | cat -n
         else
             find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- {} + | cat -n | grep -i "$1"
