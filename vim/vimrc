@@ -221,7 +221,7 @@ nnoremap <silent> <C-L> 20zl
 " scroll 20 characters to the left
 nnoremap <silent> <C-H> 20zh
 
-nnoremap <leader>r :tag 
+nnoremap <leader>r :tag |
 
 " replace word
 nnoremap <silent> <leader>s "_diwPb
