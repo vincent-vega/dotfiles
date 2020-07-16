@@ -41,6 +41,8 @@ set cm=blowfish2
 set dictionary=/usr/share/dict/words
 set backupskip=/tmp/*,/private/tmp/*  " Make Vim able to edit crontab files
                     " again
+let &t_TI = "" " disable modifyOtherKeys
+let &t_TE = "" " disable modifyOtherKeys
 
 " Resize splits when the window is resized
 au VimResized * exe "normal! \<c-w>="
@@ -149,12 +151,14 @@ let g:ctrlp_working_path_mode = 0
 " TAGBAR
 " ----------------------------------------------------------------------------
 
-let g:tagbar_ctags_bin='/usr/bin/ctags'  " Proper Ctags locations
-let g:tagbar_width=30       " Default is 40, seems too wide
-let g:tagbar_left = 1       " Display panel on the left
-let g:tagbar_autofocus = 1  " Move the cursor to the Tagbar
-let g:tagbar_autoclose = 1  " automatically close when jump
-nnoremap <silent> <F6> :TagbarToggle<CR>
+if filereadable(glob('/usr/bin/ctags'))
+    let g:tagbar_ctags_bin='/usr/bin/ctags'  " Proper Ctags locations
+    let g:tagbar_width=30       " Default is 40, seems too wide
+    let g:tagbar_left = 1       " Display panel on the left
+    let g:tagbar_autofocus = 1  " Move the cursor to the Tagbar
+    let g:tagbar_autoclose = 1  " automatically close when jump
+    nnoremap <silent> <F6> :TagbarToggle<CR>
+endif
 
 " ----------------------------------------------------------------------------
 " MAN PAGES
@@ -170,7 +174,7 @@ nmap K :Man <cword><CR>
 
 "set foldmethod=indent  " fold based on indent
 "set foldnestmax=10     " deepest fold is 10 levels
-"set nofoldenable       " dont fold by default
+set nofoldenable       " don't fold by default
 "set foldlevel=1
 
 " ----------------------------------------------------------------------------
