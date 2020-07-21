@@ -7,6 +7,7 @@ nnoremap # #zz
 nnoremap Y y$
 nnoremap <C-j> :bprevious<CR>
 nnoremap <C-k> :bnext<CR>
+inoremap jj <Esc>
 
 set list
 set ignorecase
