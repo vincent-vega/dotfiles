@@ -369,7 +369,7 @@ colortest256() {
             #Display the color
             echo -en "\e[${fgbg};5;${color}m ${color}\t\e[0m"
             #Display 10 colors per lines
-            if [ $(((color + 1) % 10)) == 0 ]; then
+            if [ $(((color + 1) % 6)) == 0 ]; then
                 echo
             fi
         done
@@ -383,12 +383,12 @@ colordiff() {
     local head="\o33\[1;38;5;228m"
     local rev="\o33\[1;38;5;244m"
     local reset="\o33[0m"
-    local diff=""
-    while read -r r; do
-        diff="$diff\n$(echo "$r" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                                        s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                                        s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                                        s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/")"
+    local diff
+    while read -r line; do
+        diff="$diff\n$(echo "$line" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                                           s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                                           s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                                           s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/")"
     done
     echo -e "$diff"
 }
