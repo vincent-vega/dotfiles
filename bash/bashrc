@@ -152,6 +152,25 @@ open() {
     fi
 }
 
+echoline() {
+    if [ "$#" -ne 2 ]; then
+        echo 1>&2 "Echo specific file line"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} FILE LINE_NUM"
+        return 1
+    fi
+    if [ ! -f "$1" ]; then
+        echo 1>&2 "File not found: $1"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} FILE LINE_NUM"
+        return 1
+    fi
+    if [[ ! "$2" =~ ^[0-9]+$ ]]; then
+        echo 1>&2 "Invalid line number: $2"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} FILE LINE_NUM"
+        return 1
+    fi
+    head -n "$2" "$1" | tail -n +"$2"
+}
+
 # {{{ Subversion
 
 sup() { svn up "$@"; }
