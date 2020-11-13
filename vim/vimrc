@@ -216,8 +216,6 @@ nnoremap <silent> Y y$
 " buffer navigation
 nnoremap <silent> <C-J> :bprevious<CR>
 nnoremap <silent> <C-K> :bnext<CR>
-nnoremap <silent> <F12> :bdelete<CR>
-nnoremap <silent> <leader><F12> :bwipe<CR>
 nnoremap <silent> <leader>n :cnext<CR>
 nnoremap <silent> <leader>N :cprevious<CR>
 
@@ -293,6 +291,9 @@ endfunction
 " Pulse ----------------------------------------------------------------------
 
 function! PulseCursorLine()
+    if bufexists("[Command Line]")
+        return
+    endif
     let current_window = winnr()
 
     windo set nocursorline
