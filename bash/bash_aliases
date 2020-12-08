@@ -53,7 +53,11 @@ alias scroff='xset dpms force off'
 
 alias hexdump='hexdump -C'
 
-alias js="jq '.' <<<" # here-string
+if command -v jq &> /dev/null; then
+    alias js="jq '.' <<<" # here-string
+elif command -v python -m json.tool &> /dev/null; then
+    alias js="python -m json.tool"
+fi
 
 alias httpsforw='sudo iptables -t nat -A OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
 alias rmhttpsforw='sudo iptables -t nat -D OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
