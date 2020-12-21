@@ -54,7 +54,8 @@ alias scroff='xset dpms force off'
 alias hexdump='hexdump -C'
 
 if command -v jq &> /dev/null; then
-    alias js="jq '.'"
+    alias jq="jq -S"
+    alias js="jq -S '.'"
 elif command -v python -m json.tool &> /dev/null; then
     alias js="python -m json.tool"
 fi

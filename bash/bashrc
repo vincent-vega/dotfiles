@@ -33,9 +33,9 @@ case $TERM in
         ;;
 esac
 
-if [ -f ~/.bash_aliases ]; then
+if [ -f ~/dotfiles/bash/bash_aliases ]; then
     # shellcheck disable=SC1090
-    . ~/.bash_aliases
+    . ~/dotfiles/bash/bash_aliases
 fi
 
 if [ -f ~/dotfiles/bash/ps1_colors ]; then
