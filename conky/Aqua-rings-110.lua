@@ -13,7 +13,7 @@
 --  License : Distributed under the terms of GNU GPL version 2 or later
 --
 --  This version is a modification of seamod_rings.lua which is modification of
---  lunatico_rings.lua which is modification of conky_orange.lua 
+--  lunatico_rings.lua which is modification of conky_orange.lua
 --
 --  conky_orange.lua:    http://gnome-look.org/content/show.php?content=137503
 --  lunatico_rings.lua:  http://gnome-look.org/content/show.php?content=142884
@@ -364,7 +364,7 @@ function go_gauge_rings(display)
         value = tonumber(str)
         draw_gauge_ring(display, data, value)
     end
-    
+
     for i in pairs(gauge) do
         load_gauge_rings(display, gauge[i])
     end
@@ -373,16 +373,16 @@ end
 -------------------------------------------------------------------------------
 --                                                                         MAIN
 function conky_main()
-    if conky_window == nil then 
+    if conky_window == nil then
         return
     end
 
     local cs = cairo_xlib_surface_create(conky_window.display, conky_window.drawable, conky_window.visual, conky_window.width, conky_window.height)
     local display = cairo_create(cs)
-    
+
     local updates = conky_parse('${updates}')
     update_num = tonumber(updates)
-    
+
     if update_num > 5 then
         go_gauge_rings(display)
     end
