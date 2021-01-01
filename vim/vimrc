@@ -130,14 +130,16 @@ nnoremap <silent> n nzzzv:call PulseCursorLine()<CR>
 nnoremap <silent> N Nzzzv:call PulseCursorLine()<CR>
 
 " ----------------------------------------------------------------------------
-" GUNDO
+" UNDOTREE
 " ----------------------------------------------------------------------------
 
-if has('python3')
-    let g:gundo_prefer_python3 = 1
+nnoremap <silent> <F5> :UndotreeToggle<CR>
+if !exists('g:undotree_WindowLayout')
+    let g:undotree_WindowLayout = 2
 endif
-let g:gundo_preview_bottom = 1
-nnoremap <silent> <F5> :GundoToggle<CR>
+if !exists('g:undotree_SetFocusWhenToggle')
+    let g:undotree_SetFocusWhenToggle = 1
+endif
 
 " ----------------------------------------------------------------------------
 " CTRL-P
