@@ -128,10 +128,17 @@ nnoremap <silent> ]] ]]zt
 " moving to them
 nnoremap <silent> n nzzzv:call PulseCursorLine()<CR>
 nnoremap <silent> N Nzzzv:call PulseCursorLine()<CR>
+" search selected text
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " ----------------------------------------------------------------------------
-" UNDOTREE
+" PLUGINS
 " ----------------------------------------------------------------------------
+" {{{ Undotree
 
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 if !exists('g:undotree_WindowLayout')
@@ -141,18 +148,16 @@ if !exists('g:undotree_SetFocusWhenToggle')
     let g:undotree_SetFocusWhenToggle = 1
 endif
 
-" ----------------------------------------------------------------------------
-" CTRL-P
-" ----------------------------------------------------------------------------
+" }}}
+" {{{ Ctrl-p
 
 let g:ctrlp_max_files = 0
 let g:ctrlp_use_caching = 0
 let g:ctrlp_user_command = 'find %s -type f'
 let g:ctrlp_working_path_mode = 0
 
-" ----------------------------------------------------------------------------
-" TAGBAR
-" ----------------------------------------------------------------------------
+" }}}
+" {{{ Tagbar
 
 if filereadable(glob('/usr/bin/ctags'))
     let g:tagbar_ctags_bin='/usr/bin/ctags'  " Proper Ctags locations
@@ -163,6 +168,18 @@ if filereadable(glob('/usr/bin/ctags'))
     nnoremap <silent> <F6> :TagbarToggle<CR>
 endif
 
+" }}}
+" {{{ Supertab
+
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabContextDefaultCompletionType = "<c-n>"
+
+" }}}
+" {{{ Ale
+
+let g:ale_python_flake8_options = '--ignore=E201,E202,E501'
+
+" }}}
 " ----------------------------------------------------------------------------
 " MAN PAGES
 " ----------------------------------------------------------------------------
@@ -170,12 +187,6 @@ endif
 runtime ftplugin/man.vim
 " Open a man page for the word under the cursor
 nmap K :Man <cword><CR>
-
-" ----------------------------------------------------------------------------
-" ALE
-" ----------------------------------------------------------------------------
-
-let g:ale_python_flake8_options = '--ignore=E201,E202,E501'
 
 " ----------------------------------------------------------------------------
 " FOLDING SETTINGS
@@ -204,7 +215,6 @@ set pastetoggle=<F2>
 " Use Q for formatting the current paragraph (or selection)
 vnoremap <silent> Q gq
 nnoremap <silent> Q gqip
-let g:SuperTabDefaultCompletionType = "context"
 
 nnoremap ; :
 vnoremap ; :
@@ -242,13 +252,6 @@ inoremap <ScrollWheelUp> <Nop>
 inoremap <ScrollWheelDown> <Nop>
 
 inoremap jj <Esc>
-
-" search selected text
-vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " update and go to buffer end
 nnoremap <silent> <leader>u :e<CR>G
