@@ -14,9 +14,11 @@ alias lt='ls -lt'
 alias less='less -rMI'
 alias more='more -r'
 alias ncal='ncal -Mb'
+[ $__arch = "Cygwin" ] && alias cal='cal -m'
 alias xmllint='xmllint --format'
 
 alias grep='grep --color=auto'
+alias zgrep='zgrep --color=auto'
 alias egrep='grep -E --color=auto'
 alias fgrep='grep -F --color=auto'
 
