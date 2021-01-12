@@ -14,6 +14,7 @@ set noshowmode
 set showcmd
 set hidden        " Hide buffer instead of closing them
 set visualbell
+set t_vb=
 set noerrorbells  " Don't make noise
 set ofu=syntaxcomplete#Complete  " Turn ON omnicompletion
 set ttyfast

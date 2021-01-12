@@ -178,7 +178,7 @@ sup() { svn up "$@"; }
 sst() { svn st "$@"; }
 
 sdiff() {
-    svn diff -x -w -x --ignore-eol-style "$@" | vim -R - +"file svn-diff" -c "set nowrap"
+    svn diff -x -w -x --ignore-eol-style "$@" | vim -R -n - +"file svn-diff" -c "set nowrap"
 }
 
 ssync() {
@@ -320,15 +320,15 @@ ff() {
     local grep_pattern
     if [ "$#" -eq 0 ]; then
         # current directory
-        find . -type f -exec sh -c 'ls -lh "$@"' -- {} + | cat -n
+        find . -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
             echo "Listing files in dir $1"
-            find "$1" -type f -exec sh -c 'ls -lh "$@"' -- {} + | cat -n
+            find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
         else
             grep_pattern=$(echo "$1" | sed 's/*\+/*/g' | sed 's/*/.*/g')
-            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- {} + | cat -n | grep -E -i "$grep_pattern"
+            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
         fi
     elif [ "$#" -gt 1 ]; then
         if [ ! -d "$1" ]; then
@@ -336,7 +336,7 @@ ff() {
             return 1
         fi
         grep_pattern=$(echo "$2" | sed 's/*\+/*/g' | sed 's/*/.*/g')
-        find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- {} + | cat -n | grep -E -i "$grep_pattern"
+        find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
     fi
 }
 
