@@ -14,7 +14,11 @@ alias lt='ls -lt'
 alias less='less -rMI'
 alias more='more -r'
 alias ncal='ncal -Mb'
-[ $__arch = "Cygwin" ] && alias cal='cal -m'
+if [ $__arch = "Cygwin" ]; then
+    alias cal='cal -m'
+else
+    alias cal='ncal -Mb'
+fi
 alias xmllint='xmllint --format'
 
 alias grep='grep --color=auto'

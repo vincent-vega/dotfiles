@@ -1,7 +1,5 @@
 # shellcheck shell=bash
-if [ -z "$PS1" ]; then
-    return
-fi
+[ -z "$PS1" ] && return
 
 case $(uname -s) in
     Linux*)  __arch=Linux;;
@@ -91,18 +89,26 @@ export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${Kha
 export HISTFILESIZE=20000
 export HISTSIZE=10000
 export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........:.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean:vim'
-export HISTCONTROL=erasedups
+export HISTCONTROL="erasedups:ignoreboth"
+shopt -s histappend
 export http_proxy=
 
-export MAVEN_OPTS="-Djansi.passthrough=true $MAVEN_OPTS" #colorize maven output
-export M2_HOME=/opt/apache-maven-3.6.0
-export M2=$M2_HOME/bin
+# {{{ Maven
 
-#export JAVA_HOME=/opt/java-jdk/jdk1.8.0_121_x64
-export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-export CATALINA_HOME=/opt/tomcat
-export PATH=$M2:$PATH
+if [ -z "$M2" ] && [ -d "/opt/apache-maven-3.6.0" ]; then
+    export M2_HOME=/opt/apache-maven-3.6.0
+    export M2=$M2_HOME/bin
+    export PATH=$M2:$PATH
+fi
+[ -n "$M2" ] && export MAVEN_OPTS="-Djansi.passthrough=true $MAVEN_OPTS" #colorize maven output
 
+# }}}
+# {{{ Java
+
+[ -z "$JAVA_HOME" ] && [ -d "/usr/lib/jvm/java-8-openjdk-amd64" ] && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+[ -z "$CATALINA_HOME" ] && [ -d "/opt/tomcat" ] && export CATALINA_HOME=/opt/tomcat
+
+# }}}
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export SVN_EDITOR="$VISUAL"

@@ -143,42 +143,42 @@ vnoremap <silent> * :<C-U>
 
 nnoremap <silent> <F5> :UndotreeToggle<CR>
 if !exists('g:undotree_WindowLayout')
-    let g:undotree_WindowLayout = 2
+    let g:undotree_WindowLayout=2
 endif
 if !exists('g:undotree_SetFocusWhenToggle')
-    let g:undotree_SetFocusWhenToggle = 1
+    let g:undotree_SetFocusWhenToggle=1
 endif
 
 " }}}
 " {{{ Ctrl-p
 
-let g:ctrlp_max_files = 0
-let g:ctrlp_use_caching = 0
-let g:ctrlp_user_command = 'find %s -type f'
-let g:ctrlp_working_path_mode = 0
+let g:ctrlp_max_files=0
+let g:ctrlp_use_caching=0
+let g:ctrlp_user_command='find %s -type f'
+let g:ctrlp_working_path_mode=0
 
 " }}}
 " {{{ Tagbar
 
 if filereadable(glob('/usr/bin/ctags'))
     let g:tagbar_ctags_bin='/usr/bin/ctags'  " Proper Ctags locations
-    let g:tagbar_width=30       " Default is 40, seems too wide
-    let g:tagbar_left = 1       " Display panel on the left
-    let g:tagbar_autofocus = 1  " Move the cursor to the Tagbar
-    let g:tagbar_autoclose = 1  " automatically close when jump
+    let g:tagbar_width=30     " Default is 40, seems too wide
+    let g:tagbar_left=1       " Display panel on the left
+    let g:tagbar_autofocus=1  " Move the cursor to the Tagbar
+    let g:tagbar_autoclose=1  " automatically close when jump
     nnoremap <silent> <F6> :TagbarToggle<CR>
 endif
 
 " }}}
 " {{{ Supertab
 
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabContextDefaultCompletionType = "<c-n>"
+let g:SuperTabDefaultCompletionType="context"
+let g:SuperTabContextDefaultCompletionType="<c-n>"
 
 " }}}
 " {{{ Ale
 
-let g:ale_python_flake8_options = '--ignore=E201,E202,E501'
+let g:ale_python_flake8_options='--ignore=E201,E202,E501'
 
 " }}}
 " ----------------------------------------------------------------------------
@@ -212,7 +212,6 @@ if has('autocmd')
     autocmd BufWritePost * if &diff == 1 | diffupdate | endif
     autocmd BufRead *.tag set syntax=jsp
 endif
-set pastetoggle=<F2>
 " Use Q for formatting the current paragraph (or selection)
 vnoremap <silent> Q gq
 nnoremap <silent> Q gqip
