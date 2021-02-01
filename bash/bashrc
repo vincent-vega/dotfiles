@@ -88,7 +88,7 @@ export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${Kha
 
 export HISTFILESIZE=20000
 export HISTSIZE=10000
-export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........:.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean:vim'
+export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........:.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean:vim:view'
 export HISTCONTROL="erasedups:ignoreboth"
 shopt -s histappend
 export http_proxy=
@@ -98,7 +98,6 @@ export http_proxy=
 if [ -z "$M2" ] && [ -d "/opt/apache-maven-3.6.0" ]; then
     export M2_HOME=/opt/apache-maven-3.6.0
     export M2=$M2_HOME/bin
-    export PATH=$M2:$PATH
 fi
 [ -n "$M2" ] && export MAVEN_OPTS="-Djansi.passthrough=true $MAVEN_OPTS" #colorize maven output
 
@@ -229,24 +228,24 @@ svnhistory() {
     local url
     url="$1"
     svn log -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -n | {
-        local add="\o33\[0;38;5;110m"
-        local rem="\o33\[0;38;5;167m"
-        local head="\o33\[0;38;5;228m"
-        local rev="\o33\[1;38;5;244m"
-        local reset="\o33[0m"
         # first revision as full text
         read -r r
-        svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+        svn log -r"$r" "$url"@HEAD
         svn cat -r"$r" "$url"@HEAD
         while read -r r; do
             echo
-            svn log --diff -r"$r" "$url"@HEAD | \
-                sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                    s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                    s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                    s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+            svn log --diff -r"$r" "$url"@HEAD
         done
     }
+}
+
+ssvnhistory() {
+    local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
+          head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
+    svnhistory "$@" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                           s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                           s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                           s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
 }
 
 svnhistoryr() {
@@ -257,61 +256,76 @@ svnhistoryr() {
     local url
     url="$1"
     first=$(svn log -r 1:HEAD --limit 1 -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2-)
+    if [ ! "$first" ]; then
+        return 1
+    fi
     svn log -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2- | sort -rn | {
-        local add="\o33\[0;38;5;110m"
-        local rem="\o33\[0;38;5;167m"
-        local head="\o33\[0;38;5;228m"
-        local rev="\o33\[1;38;5;244m"
-        local reset="\o33[0m"
         while read -r r; do
             echo
             if [ "$r" == "$first" ]; then
                 # first revision as full text
-                svn log -r"$r" "$url"@HEAD | sed "s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+                svn log -r"$r" "$url"@HEAD
                 svn cat -r"$r" "$url"@HEAD
             else
-                svn log --diff -r"$r" "$url"@HEAD | \
-                    sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                       s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                       s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                       s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+                svn log --diff -r"$r" "$url"@HEAD
             fi
         done
     }
 }
 
+ssvnhistoryr() {
+    local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
+          head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
+    svnhistoryr "$@" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                            s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                            s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                            s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+}
+
 svnactivity() {
     if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
-        echo "Usage: ${FUNCNAME[0]} USERNAME HISTORY_SIZE [PATH]"
+        echo "Print the last NUM commits"
+        echo "Usage: ${FUNCNAME[0]} USERNAME NUM [PATH]"
         return 1
     fi
-    local committername="$1"
-    local numcommit="$2"
-    local svnpath revisions
+    local committername="$1" numcommit="$2" pagesize=200 svnpath revisions \
+          high low
     svnpath=$(pwd)
     if [ "$#" -eq 3 ]; then
         svnpath="$3"
     fi
-    revisions=$(svn log -q -l "$numcommit" "$svnpath" | "grep" "$committername" | "grep" -E -o '^r[0-9]+')
-    if [ "$revisions" == "" ]; then
-        echo "No commits found"
-        return 2
+    local -a commits
+    high=$(svn info "$svnpath" | "grep" "Last Changed Rev" | "grep" -E -o '[0-9]+')
+    if [ ! "$high" ]; then
+        return 1
     fi
-    echo "$(echo "$revisions" | wc -l) commits found"
-    echo "$revisions" | {
-        local add="\o33\[0;38;5;110m"
-        local rem="\o33\[0;38;5;167m"
-        local head="\o33\[0;38;5;228m"
-        local rev="\o33\[1;38;5;244m"
-        local reset="\o33[0m"
-        while read -r ver; do
-            svn log -"$ver" --diff "$svnpath" | \
-                sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                    s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                    s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                    s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+    while [ ${#commits[@]} -lt "$numcommit" ] && [ "$high" -ge 0 ]; do
+        low=$((high - pagesize))
+        if [ $low -lt 0 ]; then # TODO check lower than 0
+            low=0
+        fi
+        revisions=$(svn log -q -r "$high":"$low" "$svnpath" | "grep" "$committername" | "grep" -E -o '^r[0-9]+')
+        for r in $revisions; do
+            commits+=("$r")
         done
-    }
+        high=$((low - 1))
+    done
+    for i in $(seq "$numcommit" 1 ${#commits[@]}); do
+        unset "commits[$i]"
+    done
+    echo "Found commits: ${commits[*]}"
+    for c in ${commits[*]}; do
+        svn log -"$c" --diff "$svnpath"
+    done
+}
+
+ssvnactivity() {
+    local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
+          head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
+    svnactivity "$@" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
+                            s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
+                            s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
+                            s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
 }
 
 # }}}
@@ -414,12 +428,8 @@ colortest256() {
 }
 
 colordiff() {
-    local add="\o33\[0;38;5;74m"
-    local rem="\o33\[0;38;5;167m"
-    local head="\o33\[1;38;5;228m"
-    local rev="\o33\[1;38;5;244m"
-    local reset="\o33[0m"
-    local diff
+    local add="\o33\[0;38;5;74m" rem="\o33\[0;38;5;167m" \
+          head="\o33\[1;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m" diff
     while read -r line; do
         diff="$diff\n$(echo "$line" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
                                            s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
