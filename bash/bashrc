@@ -84,7 +84,7 @@ MISSING_LN=${RIndianRed}
 LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
 tw=${STICKY_OW}:mi=${MISSING_LN}"
 export LS_COLORS
-export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${Khaki1}
+export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
 
 export HISTFILESIZE=20000
 export HISTSIZE=10000
@@ -187,7 +187,7 @@ sdiff() {
 }
 
 ssync() {
-    svn diff -r BASE:HEAD "$@" | vim -R - +"file svn-sync" -c "set nowrap"
+    svn diff -r BASE:HEAD "$@" | vim -R -n - +"file svn-sync" -c "set nowrap"
 }
 
 svnstash() {
@@ -313,6 +313,7 @@ svnactivity() {
     for i in $(seq "$numcommit" 1 ${#commits[@]}); do
         unset "commits[$i]"
     done
+    # TODO reverse commit array
     echo "Found commits: ${commits[*]}"
     for c in ${commits[*]}; do
         svn log -"$c" --diff "$svnpath"

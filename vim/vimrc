@@ -228,7 +228,7 @@ nnoremap <silent> <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 " reselect the text that was just pasted
 nnoremap <leader>v V`]
 " save file you didn't open with root privileges
-cmap w!! w !sudo tee % >/dev/null
+cmap w!! w !sudo tee "%" >/dev/null
 nnoremap <silent> Y y$
 
 " buffer navigation

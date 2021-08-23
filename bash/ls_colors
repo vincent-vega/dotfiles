@@ -10,9 +10,10 @@
 #Cyan='0;96'
 #White='0;97'
 
-PaleGreen3='0;38;5;114'
-Khaki1='0;38;5;228'
+DeepPink3='0;38;5;162'
+#Khaki1='0;38;5;228'
 LightSkyBlue3='0;38;5;110'
+PaleGreen3='0;38;5;114'
 SkyBlue3='0;38;5;74'
 
 # Bold High Intensty
