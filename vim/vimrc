@@ -211,6 +211,7 @@ if has('autocmd')
     " the differences
     autocmd BufWritePost * if &diff == 1 | diffupdate | endif
     autocmd BufRead *.tag set syntax=jsp
+    autocmd BufEnter * silent! lcd %:p:h
 endif
 " Use Q for formatting the current paragraph (or selection)
 vnoremap <silent> Q gq
