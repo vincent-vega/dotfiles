@@ -87,9 +87,10 @@ export LS_COLORS
 export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
 
 export HISTFILESIZE=20000
-export HISTSIZE=10000
+export HISTSIZE=20000
 export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........:.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean:vim:view'
 export HISTCONTROL="erasedups:ignoreboth"
+export HISTTIMEFORMAT="%F %T "
 shopt -s histappend
 export http_proxy=
 
