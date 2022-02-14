@@ -2,6 +2,7 @@ bash_dir=${HOME}/dotfiles/bash
 conky_dir=${HOME}/dotfiles/conky
 dotfiles_dir=${HOME}/dotfiles
 vim_dir=${HOME}/dotfiles/vim
+conky_theme=Aqua-rings-110
 
 .PHONY: clean all bash vim others
 
@@ -19,9 +20,9 @@ vim: ${vim_dir} ${vim_dir}/gvimrc ${vim_dir}/vimrc ${vim_dir}/vrapperrc
 	@[ -e ${HOME}/.vimrc ]     || ln -s ${vim_dir}/vimrc     ${HOME}/.vimrc;
 	@[ -e ${HOME}/.vrapperrc ] || ln -s ${vim_dir}/vrapperrc ${HOME}/.vrapperrc;
 
-others: ${dotfiles_dir}/tmux.conf ${conky_dir}/conkyrc
-	@[ -e ${HOME}/.conkyrc ]   || ln -s ${conky_dir}/conkyrc      ${HOME}/.conkyrc;
-	@[ -e ${HOME}/.tmux.conf ] || ln -s ${dotfiles_dir}/tmux.conf ${HOME}/.tmux.conf;
+others: ${dotfiles_dir}/tmux.conf ${conky_dir}/${conky_theme}.conkyrc
+	@[ -e ${HOME}/.conkyrc ]   || ln -s ${conky_dir}/${conky_theme}.conkyrc ${HOME}/.conkyrc;
+	@[ -e ${HOME}/.tmux.conf ] || ln -s ${dotfiles_dir}/tmux.conf           ${HOME}/.tmux.conf;
 
 clean:
 	@[ -L ${HOME}/.bash_profile ] && rm -f ${HOME}/.bash_profile;

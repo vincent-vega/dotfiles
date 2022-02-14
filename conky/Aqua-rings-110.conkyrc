@@ -85,7 +85,7 @@ conky.config = {
 
 
 -- Loading lua script for drawing rings
-    lua_load = '/home/dev/dotfiles/conky/Aqua-rings-110.lua',
+    lua_load = '$HOME/dotfiles/conky/Aqua-rings-110.lua',
     lua_draw_hook_post = 'main',
 
 
