@@ -6,7 +6,11 @@ alias cp='cp -i'
 alias df='df -Tkh'
 alias du='du -ch'
 
-alias ls='ls -h --color=auto --time-style="+%Y %b %e %H:%M"'
+if [ $__arch = "Mac" ]; then
+    alias ls='ls -G -h -D "%Y %b %e %H:%M"'
+else
+    alias ls='ls -h --color=auto --time-style="+%Y %b %e %H:%M"'
+fi
 alias la='ls -Al'
 alias ll='ls -l'
 alias lt='ls -lt'

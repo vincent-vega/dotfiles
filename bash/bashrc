@@ -2,6 +2,7 @@
 [ -z "$PS1" ] && return
 
 case $(uname -s) in
+    Darwin*) __arch=Mac;;
     Linux*)  __arch=Linux;;
     CYGWIN*) __arch=Cygwin;;
     *)       __arch=Linux;;
@@ -335,6 +336,8 @@ ssvnactivity() {
 # {{{ Git
 
 gst() { git status "$@"; }
+
+gunstage() { git restore --staged "$@"; }
 
 # }}}
 
