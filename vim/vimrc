@@ -217,6 +217,7 @@ endif
 vnoremap <silent> Q gq
 nnoremap <silent> Q gqip
 
+nnoremap : ;
 nnoremap ; :
 vnoremap ; :
 

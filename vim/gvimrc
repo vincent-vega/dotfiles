@@ -1,4 +1,8 @@
 set guioptions=aegikmrt
 set guicursor=a:blinkon0
 
+if has("gui_macvim")
+    set guifont=Menlo:h15
+endif
+
 map <silent> <F11> :call system("wmctrl -ir " . v:windowid . " -b toggle,fullscreen")<CR>
