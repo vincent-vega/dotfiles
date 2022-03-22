@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
-from __future__ import print_function
 import os
 import re
 import sys
@@ -13,8 +12,8 @@ def err(*args, **kwargs):
 
 if len(sys.argv) > 2 or len(sys.argv) == 2 and sys.argv[1].lower() in ('-h', '--help'):
     err(f'USAGE: {sys.argv[0].split("/")[-1]} [PATH]')
-    err(f'       "{os.environ["HOME"]}/.bash_history" will be used if the PATH argument is not present.')
-    err(f'       The file will be edited in-place, you better create a backup before running this script.')
+    err(f'    "{os.environ["HOME"]}/.bash_history" will be used if the PATH argument is not present.')
+    err('    The file will be edited in-place, you better create a backup before running this script.')
     sys.exit(1)
 
 hist_file = f'{os.environ["HOME"]}/.bash_history' if len(sys.argv) == 1 else sys.argv[1]
