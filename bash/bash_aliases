@@ -18,10 +18,10 @@ alias lt='ls -lt'
 alias less='less -rMI'
 alias more='more -r'
 alias ncal='ncal -Mb'
-if [ $__arch = "Cygwin" ]; then
-    alias cal='cal -m'
-else
+if hash ncal &> /dev/null; then
     alias cal='ncal -Mb'
+else
+    alias cal='cal -m'
 fi
 alias xmllint='xmllint --format'
 
@@ -59,7 +59,11 @@ alias viewASN1PEM='openssl asn1parse -inform PEM -i -in'
 alias viewASN1DER='openssl asn1parse -inform DER -i -in'
 alias viewCRL='openssl crl -text -noout -inform DER -in'
 
-alias scroff='xset dpms force off'
+if [[ $(xset q) == *"Server does not have the DPMS Extension"* ]]; then
+    alias scroff='busctl --user call org.gnome.Shell /org/gnome/ScreenSaver org.gnome.ScreenSaver SetActive b true'
+else
+    alias scroff='xset dpms force off'
+fi
 
 alias hexdump='hexdump -C'
 
