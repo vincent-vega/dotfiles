@@ -19,8 +19,10 @@ alias less='less -rMI'
 alias more='more -r'
 alias ncal='ncal -Mb'
 if hash ncal &> /dev/null; then
-    alias cal='ncal -Mb'
-else
+    if ! [ $__arch = "Mac" ]; then
+        alias cal='ncal -Mb'
+    fi
+elif ! [ $__arch = "Mac" ]; then
     alias cal='cal -m'
 fi
 alias xmllint='xmllint --format'
