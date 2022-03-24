@@ -48,11 +48,6 @@ PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
-if [ -f ~/dotfiles/bash/ls_colors ]; then
-    # shellcheck disable=SC1090
-    . ~/dotfiles/bash/ls_colors
-fi
-
 #bd = block (buffered) special file
 #cd = character (unbuffered) special file
 #di = directory
@@ -74,18 +69,45 @@ fi
 #su = set uid - File that is setuid (u+s)
 #tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
 
-DIR=${PaleGreen3}
-SYM_LINK=${LightSkyBlue3}
-EXE=${BIndianRed}
-CHAR_SP=${BYellow}
-BLOCK_SP=${BYellow}
-STICKY_OW=${RTurquoise2}
-MISSING_LN=${RIndianRed}
+if [ $__arch = "Mac" ]; then
+    DIR="cx"
+    SYM_LINK="gx"
+    SOCKET="Dx"
+    PIPE="Dx"
+    EXE="Bx"
+    BLOCK_SP="Dx"
+    CHAR_SP="Dx"
+    EXE_SETUID="Bx"
+    EXE_SETGID="Bx"
+    DIR_W_O_STICKY="cx"
+    DIR_W_O_NO_STICKY="cx"
 
-LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
+    LSCOLORS="${DIR}${SYM_LINK}${SOCKET}${PIPE}${EXE}${BLOCK_SP}${CHAR_SP}\
+${EXE_SETUID}${EXE_SETGID}${DIR_W_O_STICKY}${DIR_W_O_NO_STICKY}"
+    export LSCOLORS
+
+    export GREP_COLOR='38;5;74'
+else
+    if [ -f ~/dotfiles/bash/ls_colors ]; then
+        # shellcheck disable=SC1090
+        . ~/dotfiles/bash/ls_colors
+    fi
+
+    DIR=${PaleGreen3}
+    SYM_LINK=${LightSkyBlue3}
+    EXE=${BIndianRed}
+    EXE=${BIndianRed}
+    CHAR_SP=${BYellow}
+    BLOCK_SP=${BYellow}
+    STICKY_OW=${RTurquoise2}
+    MISSING_LN=${RIndianRed}
+
+    LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
 tw=${STICKY_OW}:mi=${MISSING_LN}"
-export LS_COLORS
-export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
+    export LS_COLORS
+
+    export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
+fi
 
 export HISTFILESIZE=20000
 export HISTSIZE=20000
@@ -411,7 +433,13 @@ colortest() {
             #Formatting
             for attr in 0 1 2 4 5 7 ; do
                 #Print the result
-                echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
+                local modifier
+                if [ $__arch = "Mac" ]; then
+                    modifier="\033"
+                else
+                    modifier="\e"
+                fi
+                echo -en "${modifier}[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m ${modifier}[0m"
             done
             echo
         done
@@ -421,8 +449,14 @@ colortest() {
 colortest256() {
     for fgbg in 38 48 ; do #Foreground/Background
         for color in {0..256} ; do #Colors
+            local modifier
+            if [ $__arch = "Mac" ]; then
+                modifier="\033"
+            else
+                modifier="\e"
+            fi
             #Display the color
-            echo -en "\e[${fgbg};5;${color}m ${color}\t\e[0m"
+            echo -en "${modifier}[${fgbg};5;${color}m ${color}\t${modifier}[0m"
             #Display 10 colors per lines
             if [ $(((color + 1) % 6)) == 0 ]; then
                 echo
