@@ -1,34 +1,33 @@
---==============================================================================
+--============================================================================
 -- Aqua-rings-110.lua, based on sun_rings
---
+
 -- I just tweaked the cpu rings, and disc paths ;)
---
+
 -- by damo, July 2017 <damo@bunsenlabs.org>
---==============================================================================
+--============================================================================
 --                            sun_rings.lua
---
+
 --  Date    : 05 July 2017
 --  Author  : Sun For Miles
 --  Version : v0.41
 --  License : Distributed under the terms of GNU GPL version 2 or later
---
+
 --  This version is a modification of seamod_rings.lua which is modification of
 --  lunatico_rings.lua which is modification of conky_orange.lua
---
+
 --  conky_orange.lua:    http://gnome-look.org/content/show.php?content=137503
 --  lunatico_rings.lua:  http://gnome-look.org/content/show.php?content=142884
 --  seamod_rings.lua:    http://custom-linux.deviantart.com/art/Conky-Seamod-v0-1-283461046
---==============================================================================
+--============================================================================
 
 require 'cairo'
 
-
---------------------------------------------------------------------------------
---                                                                    gauge DATA
+------------------------------------------------------------------------------
+--                                                                  gauge DATA
 gauge = {
 {
     name='cpu',                    arg='cpu0',                  max_value=100,
-    x=100,                          y=150,
+    x=100,                         y=180,
     graph_radius=54,
     graph_thickness=4,
     graph_start_angle=180,
@@ -49,14 +48,14 @@ gauge = {
 },
 {
     name='cpu',                    arg='cpu1',                  max_value=100,
-    x=100,                          y=150,
+    x=100,                         y=180,
     graph_radius=48,
     graph_thickness=4,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
     graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
     graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,      hand_fg_alpha=1.0,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=40,
     txt_weight=0,                  txt_size=9.0,
     txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
@@ -70,7 +69,7 @@ gauge = {
 },
 {
     name='cpu',                    arg='cpu2',                  max_value=100,
-    x=100,                          y=150,
+    x=100,                         y=180,
     graph_radius=42,
     graph_thickness=4,
     graph_start_angle=180,
@@ -91,7 +90,7 @@ gauge = {
 },
 {
     name='cpu',                    arg='cpu3',                  max_value=100,
-    x=100,                          y=150,
+    x=100,                         y=180,
     graph_radius=36,
     graph_thickness=4,
     graph_start_angle=180,
@@ -111,15 +110,99 @@ gauge = {
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
 },
 {
+    name='cpu',                    arg='cpu4',                  max_value=100,
+    x=100,                         y=180,
+    graph_radius=30,
+    graph_thickness=4,
+    graph_start_angle=180,
+    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
+    txt_radius=4,
+    txt_weight=0,                  txt_size=9.0,
+    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
+    graduation_radius=28,
+    graduation_thickness=0,        graduation_mark_thickness=1,
+    graduation_unit_angle=27,
+    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
+    caption='',
+    caption_weight=1,              caption_size=9.0,
+    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
+},
+{
+    name='cpu',                    arg='cpu5',                  max_value=100,
+    x=100,                         y=180,
+    graph_radius=24,
+    graph_thickness=4,
+    graph_start_angle=180,
+    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
+    txt_radius=4,
+    txt_weight=0,                  txt_size=9.0,
+    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
+    graduation_radius=28,
+    graduation_thickness=0,        graduation_mark_thickness=1,
+    graduation_unit_angle=27,
+    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
+    caption='',
+    caption_weight=1,              caption_size=9.0,
+    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
+},
+{
+    name='cpu',                    arg='cpu6',                  max_value=100,
+    x=100,                         y=180,
+    graph_radius=18,
+    graph_thickness=4,
+    graph_start_angle=180,
+    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
+    txt_radius=4,
+    txt_weight=0,                  txt_size=9.0,
+    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
+    graduation_radius=28,
+    graduation_thickness=0,        graduation_mark_thickness=1,
+    graduation_unit_angle=27,
+    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
+    caption='',
+    caption_weight=1,              caption_size=9.0,
+    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
+},
+{
+    name='cpu',                    arg='cpu7',                  max_value=100,
+    x=100,                         y=180,
+    graph_radius=12,
+    graph_thickness=4,
+    graph_start_angle=180,
+    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
+    txt_radius=4,
+    txt_weight=0,                  txt_size=9.0,
+    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
+    graduation_radius=28,
+    graduation_thickness=0,        graduation_mark_thickness=1,
+    graduation_unit_angle=27,
+    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
+    caption='',
+    caption_weight=1,              caption_size=9.0,
+    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
+},
+{
     name='memperc',                arg='',                      max_value=100,
-    x=104,                          y=380,
+    x=100,                         y=390,
     graph_radius=54,
     graph_thickness=15,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
     graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
     graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,      hand_fg_alpha=1.0,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=42,
     txt_weight=0,                  txt_size=9.0,
     txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
@@ -132,15 +215,15 @@ gauge = {
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
 },
 {
-    name='fs_used_perc',           arg='/mnt/storage',                     max_value=100,
-    x=100,                          y=570,
+    name='fs_used_perc', arg='/mnt/storage', max_value=100,
+    x=100,                         y=600,
     graph_radius=54,
     graph_thickness=7,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
     graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
     graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,      hand_fg_alpha=1.0,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=64,
     txt_weight=0,                  txt_size=9.0,
     txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
@@ -149,19 +232,19 @@ gauge = {
     graduation_unit_angle=27,
     graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
     caption='Storage',
-    caption_weight=0.5,              caption_size=12.0,
+    caption_weight=0.5,            caption_size=12.0,
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
 },
 {
-    name='fs_used_perc',           arg='/home',                     max_value=100,
-    x=100,                          y=570,
+    name='fs_used_perc',           arg='/home',                 max_value=100,
+    x=100,                         y=600,
     graph_radius=42,
     graph_thickness=7,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
     graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
     graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,      hand_fg_alpha=1.0,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=32,
     txt_weight=0,                  txt_size=9.0,
     txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
@@ -170,19 +253,19 @@ gauge = {
     graduation_unit_angle=27,
     graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
     caption='Home',
-    caption_weight=0.5,              caption_size=12.0,
+    caption_weight=0.5,            caption_size=12.0,
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
 },
 {
     name='fs_used_perc',           arg='/',                     max_value=100,
-    x=100,                          y=570,
+    x=100,                         y=600,
     graph_radius=30,
     graph_thickness=7,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
     graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
     graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,      hand_fg_alpha=1.0,
+    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=22,
     txt_weight=0,                  txt_size=9.0,
     txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
@@ -191,75 +274,74 @@ gauge = {
     graduation_unit_angle=27,
     graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
     caption='Root',
-    caption_weight=0.5,              caption_size=12.0,
+    caption_weight=0.5,            caption_size=12.0,
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
 },
---{
---    name='downspeedf',           arg='wlan0',                     max_value=100,
---    x=70,                          y=660,
---    graph_radius=54,
---    graph_thickness=7,
---    graph_start_angle=180,
---    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
---    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
---    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
---    hand_fg_colour=0xEF5A29,       hand_fg_alpha=0,
---    txt_radius=64,
---    txt_weight=0,                  txt_size=9.0,
---    txt_fg_colour=0xEF5A29,        txt_fg_alpha=0,
---    graduation_radius=28,
---    graduation_thickness=0,        graduation_mark_thickness=1,
---    graduation_unit_angle=27,
---    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
---    caption='Down',
---    caption_weight=1,              caption_size=12.0,
---    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
---},
---{
---    name='upspeedf',           arg='wlan0',                     max_value=100,
---    x=70,                          y=660,
---    graph_radius=42,
---    graph_thickness=7,
---    graph_start_angle=180,
---    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
---    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
---    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
---    hand_fg_colour=0xEF5A29,       hand_fg_alpha=0,
---    txt_radius=30,
---    txt_weight=0,                  txt_size=9.0,
---    txt_fg_colour=0xEF5A29,        txt_fg_alpha=0,
---    graduation_radius=28,
---    graduation_thickness=0,        graduation_mark_thickness=1,
---    graduation_unit_angle=27,
---    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
---    caption='Up',
---    caption_weight=1,              caption_size=12.0,
---    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
---},
-}
+{
+    name='downspeedf',             arg='wlo1',                max_value=100,
+    x=90,                          y=760,
+    graph_radius=54,
+    graph_thickness=7,
+    graph_start_angle=180,
+    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    hand_fg_colour=0xEF5A29,       hand_fg_alpha=0,
+    txt_radius=64,
+    txt_weight=0,                  txt_size=9.0,
+    txt_fg_colour=0xEF5A29,        txt_fg_alpha=0,
+    graduation_radius=28,
+    graduation_thickness=0,        graduation_mark_thickness=1,
+    graduation_unit_angle=27,
+    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
+    caption='Down',
+    caption_weight=0.5,            caption_size=11.0,
+    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
+},
+{
+    name='upspeedf',               arg='wlo1',                max_value=100,
+    x=90,                          y=760,
+    graph_radius=42,
+    graph_thickness=7,
+    graph_start_angle=180,
+    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    hand_fg_colour=0xEF5A29,       hand_fg_alpha=0,
+    txt_radius=30,
+    txt_weight=0,                  txt_size=9.0,
+    txt_fg_colour=0xEF5A29,        txt_fg_alpha=0,
+    graduation_radius=28,
+    graduation_thickness=0,        graduation_mark_thickness=1,
+    graduation_unit_angle=27,
+    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
+    caption='Up',
+    caption_weight=0.5,            caption_size=11.0,
+    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
+}}
 
--------------------------------------------------------------------------------
---                                                                 rgb_to_r_g_b
+------------------------------------------------------------------------------
+--                                                                rgb_to_r_g_b
 -- converts color in hexa to decimal
---
+
 function rgb_to_r_g_b(colour, alpha)
     return ((colour / 0x10000) % 0x100) / 255., ((colour / 0x100) % 0x100) / 255., (colour % 0x100) / 255., alpha
 end
 
--------------------------------------------------------------------------------
---                                                            angle_to_position
+------------------------------------------------------------------------------
+--                                                           angle_to_position
 -- convert degree to rad and rotate (0 degree is top/north)
---
+
 function angle_to_position(start_angle, current_angle)
     local pos = current_angle + start_angle
     return ( ( pos * (2 * math.pi / 360) ) - (math.pi / 2) )
 end
 
 
--------------------------------------------------------------------------------
---                                                              draw_gauge_ring
+------------------------------------------------------------------------------
+--                                                             draw_gauge_ring
 -- displays gauges
---
+
 function draw_gauge_ring(display, data, value)
     local max_value = data['max_value']
     local x, y = data['x'], data['y']
@@ -326,12 +408,12 @@ function draw_gauge_ring(display, data, value)
     local txt_fg_colour, txt_fg_alpha = data['txt_fg_colour'], data['txt_fg_alpha']
     local movex = txt_radius * math.cos(angle_to_position(graph_start_angle, angle))
     local movey = txt_radius * math.sin(angle_to_position(graph_start_angle, angle))
-    cairo_select_font_face (display, "ubuntu", CAIRO_FONT_SLANT_NORMAL, txt_weight)
-    cairo_set_font_size (display, txt_size)
-    cairo_set_source_rgba (display, rgb_to_r_g_b(txt_fg_colour, txt_fg_alpha))
-    cairo_move_to (display, x + movex - (txt_size / 2), y + movey + 3)
-    cairo_show_text (display, value)
-    cairo_stroke (display)
+    cairo_select_font_face(display, "ubuntu", CAIRO_FONT_SLANT_NORMAL, txt_weight)
+    cairo_set_font_size(display, txt_size)
+    cairo_set_source_rgba(display, rgb_to_r_g_b(txt_fg_colour, txt_fg_alpha))
+    cairo_move_to(display, x + movex - (txt_size / 2), y + movey + 3)
+    cairo_show_text(display, value)
+    cairo_stroke(display)
 
     -- caption
     local caption = data['caption']
@@ -340,22 +422,22 @@ function draw_gauge_ring(display, data, value)
     local tox = graph_radius * (math.cos((graph_start_angle * 2 * math.pi / 360)-(math.pi/2)))
     local toy = graph_radius * (math.sin((graph_start_angle * 2 * math.pi / 360)-(math.pi/2)))
     cairo_select_font_face (display, "ubuntu", CAIRO_FONT_SLANT_NORMAL, caption_weight);
-    cairo_set_font_size (display, caption_size)
-    cairo_set_source_rgba (display, rgb_to_r_g_b(caption_fg_colour, caption_fg_alpha))
-    cairo_move_to (display, x + tox + 1, y + toy + 5)
+    cairo_set_font_size(display, caption_size)
+    cairo_set_source_rgba(display, rgb_to_r_g_b(caption_fg_colour, caption_fg_alpha))
+    cairo_move_to(display, x + tox + 1, y + toy + 5)
     -- bad hack but not enough time !
     if graph_start_angle < 105 then
-        cairo_move_to (display, x + tox - 30, y + toy + 1)
+        cairo_move_to(display, x + tox - 30, y + toy + 1)
     end
-    cairo_show_text (display, caption)
-    cairo_stroke (display)
+    cairo_show_text(display, caption)
+    cairo_stroke(display)
 end
 
 
--------------------------------------------------------------------------------
---                                                               go_gauge_rings
+------------------------------------------------------------------------------
+--                                                              go_gauge_rings
 -- loads data and displays gauges
---
+
 function go_gauge_rings(display)
     local function load_gauge_rings(display, data)
         local str, value = '', 0
@@ -370,8 +452,8 @@ function go_gauge_rings(display)
     end
 end
 
--------------------------------------------------------------------------------
---                                                                         MAIN
+------------------------------------------------------------------------------
+--                                                                        MAIN
 function conky_main()
     if conky_window == nil then
         return
