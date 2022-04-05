@@ -1,11 +1,11 @@
-# shellcheck shell=bash
+# shellcheck shell=bash disable=SC2154,SC1090,SC1091
 [ -z "$PS1" ] && return
 
 case $(uname -s) in
-    Darwin*) __arch=Mac;;
-    Linux*)  __arch=Linux;;
-    CYGWIN*) __arch=Cygwin;;
-    *)       __arch=Linux;;
+    Darwin*) __os_family=Mac;;
+    Linux*)  __os_family=Linux;;
+    CYGWIN*) __os_family=Cygwin;;
+    *)       __os_family=Linux;;
 esac
 
 # sudo autocompletion
@@ -13,10 +13,8 @@ complete -cf sudo
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
     if [ -f /usr/share/bash-completion/bash_completion ]; then
-        # shellcheck disable=SC1091
         . /usr/share/bash-completion/bash_completion
     elif [ -f /etc/bash_completion ]; then
-        # shellcheck disable=SC1091
         . /etc/bash_completion
     fi
 fi
@@ -33,16 +31,13 @@ case $TERM in
 esac
 
 if [ -f ~/dotfiles/bash/bash_aliases ]; then
-    # shellcheck disable=SC1090
     . ~/dotfiles/bash/bash_aliases
 fi
 
 if [ -f ~/dotfiles/bash/ps1_colors ]; then
-    # shellcheck disable=SC1090
     . ~/dotfiles/bash/ps1_colors
 fi
 
-# shellcheck disable=SC2154
 PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
 \[${BGrey27}\][\[${Red}\]\h\[${BGrey27}\]]\[${White}\] \A\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
@@ -69,7 +64,7 @@ PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
 #su = set uid - File that is setuid (u+s)
 #tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
 
-if [ $__arch = "Mac" ]; then
+if [ $__os_family = "Mac" ]; then
     DIR="cx"
     SYM_LINK="gx"
     SOCKET="Dx"
@@ -89,7 +84,6 @@ ${EXE_SETUID}${EXE_SETGID}${DIR_W_O_STICKY}${DIR_W_O_NO_STICKY}"
     export GREP_COLOR='38;5;74'
 else
     if [ -f ~/dotfiles/bash/ls_colors ]; then
-        # shellcheck disable=SC1090
         . ~/dotfiles/bash/ls_colors
     fi
 
@@ -144,7 +138,7 @@ export SVN_EDITOR="$VISUAL"
 # host
 # dig
 
-if [ $__arch = "Cygwin" ]; then
+if [ $__os_family = "Cygwin" ]; then
 
     # add cygwin context menu entry
     # chere -in -e "Open Bash window here" -t mintty
@@ -160,10 +154,10 @@ if [ $__arch = "Cygwin" ]; then
 fi
 
 open() {
-    if [ $__arch = "Cygwin" ]; then
+    if [ $__os_family = "Cygwin" ]; then
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
         cygstart "$1"
-    elif [ $__arch = "Linux" ]; then
+    elif [ $__os_family = "Linux" ]; then
         local target
         target="$(pwd)"
         if [ "$#" -eq 1 ]; then
@@ -434,7 +428,7 @@ colortest() {
             for attr in 0 1 2 4 5 7 ; do
                 #Print the result
                 local modifier
-                if [ $__arch = "Mac" ]; then
+                if [ $__os_family = "Mac" ]; then
                     modifier="\033"
                 else
                     modifier="\e"
@@ -450,7 +444,7 @@ colortest256() {
     for fgbg in 38 48 ; do #Foreground/Background
         for color in {0..256} ; do #Colors
             local modifier
-            if [ $__arch = "Mac" ]; then
+            if [ $__os_family = "Mac" ]; then
                 modifier="\033"
             else
                 modifier="\e"

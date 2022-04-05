@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+# shellcheck disable=SC2154
 alias rm='rm -i'
 alias rmlinks='find . -maxdepth 1 -type l -exec rm -f {} \;'
 alias mv='mv -i'
@@ -6,7 +8,7 @@ alias cp='cp -i'
 alias df='df -Tkh'
 alias du='du -ch'
 
-if [ $__arch = "Mac" ]; then
+if [ "$__os_family" = "Mac" ]; then
     alias ls='ls -G -h -D "%Y %b %e %H:%M"'
 else
     alias ls='ls -h --color=auto --time-style="+%Y %b %e %H:%M"'
@@ -19,10 +21,10 @@ alias less='less -rMI'
 alias more='more -r'
 alias ncal='ncal -Mb'
 if hash ncal &> /dev/null; then
-    if ! [ $__arch = "Mac" ]; then
+    if ! [ "$__os_family" = "Mac" ]; then
         alias cal='ncal -Mb'
     fi
-elif ! [ $__arch = "Mac" ]; then
+elif ! [ "$__os_family" = "Mac" ]; then
     alias cal='cal -m'
 fi
 alias xmllint='xmllint --format'
@@ -61,10 +63,12 @@ alias viewASN1PEM='openssl asn1parse -inform PEM -i -in'
 alias viewASN1DER='openssl asn1parse -inform DER -i -in'
 alias viewCRL='openssl crl -text -noout -inform DER -in'
 
-if [[ $(xset q) == *"Server does not have the DPMS Extension"* ]]; then
-    alias scroff='busctl --user call org.gnome.Shell /org/gnome/ScreenSaver org.gnome.ScreenSaver SetActive b true'
-else
-    alias scroff='xset dpms force off'
+if hash xset &> /dev/null; then
+    if [[ $(xset q) == *"Server does not have the DPMS Extension"* ]]; then
+        alias scroff='busctl --user call org.gnome.Shell /org/gnome/ScreenSaver org.gnome.ScreenSaver SetActive b true'
+    else
+        alias scroff='xset dpms force off'
+    fi
 fi
 
 alias hexdump='hexdump -C'
