@@ -76,7 +76,7 @@ conky.config = {
     color9 = '6B9083',
 
     -- Loading lua script for drawing rings
-    lua_load = '/home/davide/dotfiles/conky/manjaro/Aqua-rings-110.lua',
+    lua_load = '$HOME/dotfiles/conky/manjaro/Aqua-rings-110.lua',
     lua_draw_hook_post = 'main',
 };
 
@@ -108,9 +108,7 @@ conky.text = [[
     # Disks
     ${voffset 0}
     ${font Raleway:size=14:style=bold}${color4}${alignr}DISKS
-    ${font}${color1}${alignr} ${hwmon 0 temp 1}°C
-    ${alignr} ${hwmon 0 temp 2}°C
-    ${voffset -20}
+    ${voffset -5}
     ${alignr}${diskiograph 20,180 666666 68364B -t -l}
     ${offset 117}${font}${color1}Free: ${fs_free /} ${alignr}Used: ${fs_used /}
     ${offset 117}Free: ${fs_free /home} ${alignr}Used: ${fs_used /home}
@@ -119,14 +117,20 @@ conky.text = [[
     # Network
     ${voffset 0}
     ${font Raleway:size=14:style=bold}${color4}${alignr}NETWORK
-    ${voffset -20}
+    ${voffset -5}
     ${offset 71}${font}${color1}Down: ${downspeed enp3s0} ${alignr}Up: ${upspeed enp3s0}
     ${voffset -20}
     ${offset 80}${color4}${downspeedgraph enp3s0 50,100 } ${alignr}${upspeedgraph enp3s0 50,100 }
 
-    ${font}${color1}GPU ${hwmon 1 temp 1}°C
-    Core 0 ${hwmon 2 temp 2}°C
-    Core 1 ${hwmon 2 temp 3}°C
-    Core 2 ${hwmon 2 temp 4}°C
-    Core 3 ${hwmon 2 temp 5}°C
+    # Temp
+    ${voffset 0}
+    ${font Raleway:size=14:style=bold}${color4}${alignr}TEMP
+    ${voffset -15}
+    ${font Raleway:size=10:style=bold}${color1}${alignr}GPU:  ${font}${hwmon 1 temp 1}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 0:  ${font}${hwmon 2 temp 2}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${hwmon 2 temp 3}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${hwmon 2 temp 4}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${hwmon 2 temp 5}°C
+    ${alignr}${font Raleway:size=10:style=bold}SSD:  ${font}${hwmon 0 temp 1}°C
+    ${alignr}${font Raleway:size=10:style=bold}HDD:  ${font}${hwmon 0 temp 2}°C
 ]];
