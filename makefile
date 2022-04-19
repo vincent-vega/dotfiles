@@ -13,9 +13,9 @@ bash: ${bash_dir}/bash_profile ${bash_dir}/bashrc ${bash_dir}/inputrc
 	@[ -e ${HOME}/.inputrc ]      || ln -sf ${bash_dir}/inputrc      ${HOME}/.inputrc
 
 vim: ${vim_dir} ${vim_dir}/gvimrc ${vim_dir}/vimrc ${vim_dir}/vrapperrc
-	@[ -e ${HOME}/.vim ]       || ln -sf ${vim_dir}           ${HOME}/.vim
 	@[ -e ${HOME}/.gvimrc ]    || ln -sf ${vim_dir}/gvimrc    ${HOME}/.gvimrc
 	@[ -e ${HOME}/.ideavimrc ] || ln -sf ${vim_dir}/ideavimrc ${HOME}/.ideavimrc
+	@[ -e ${HOME}/.vim ]       || ln -sf ${vim_dir}           ${HOME}/.vim
 	@[ -e ${HOME}/.vimrc ]     || ln -sf ${vim_dir}/vimrc     ${HOME}/.vimrc
 	@[ -e ${HOME}/.vrapperrc ] || ln -sf ${vim_dir}/vrapperrc ${HOME}/.vrapperrc
 
