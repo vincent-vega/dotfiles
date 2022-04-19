@@ -123,13 +123,13 @@ conky.text = [[
     ${offset 80}${color4}${downspeedgraph wlo1 50,100 } ${alignr}${upspeedgraph wlo1 50,100 }
 
     # Temp
-    ${voffset 0}
+    ${voffset -5}
     ${font Raleway:size=14:style=bold}${color4}${alignr}TEMP
-    ${font}${color1}
-    ${alignr}Core 0:  ${execi 6 sensors | grep "Core 0" | cut -c 17-18}°C
-    ${alignr}Core 1:  ${execi 6 sensors | grep "Core 1" | cut -c 17-18}°C
-    ${alignr}Core 2:  ${execi 6 sensors | grep "Core 2" | cut -c 17-18}°C
-    ${alignr}Core 3:  ${execi 6 sensors | grep "Core 3" | cut -c 17-18}°C
-    ${alignr}HDD:  ${execi 6 sudo hddtemp /dev/sda | cut -c 55-}
-    ${alignr}NVME:  ${execi 6 sudo nvme smart-log /dev/nvme0n1 | grep temperature | cut -c 39-40}°C
+    ${voffset -15}
+    ${alignr}${font Raleway:size=10:style=bold}${color1}Core 0:  ${font}${execi 6 sensors | grep "Core 0" | cut -c 17-18}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${execi 6 sensors | grep "Core 1" | cut -c 17-18}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${execi 6 sensors | grep "Core 2" | cut -c 17-18}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${execi 6 sensors | grep "Core 3" | cut -c 17-18}°C
+    ${alignr}${font Raleway:size=10:style=bold}HDD:  ${font}${execi 6 sudo hddtemp /dev/sda | cut -c 55-}
+    ${alignr}${font Raleway:size=10:style=bold}NVME:  ${font}${execi 6 sudo nvme smart-log /dev/nvme0n1 | grep temperature | cut -c 39-40}°C
 ]];
