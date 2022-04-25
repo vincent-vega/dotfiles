@@ -120,7 +120,7 @@ conky.text = [[
     ${voffset -5}
     ${offset 71}${font}${color1}Down: ${downspeed enp3s0} ${alignr}Up: ${upspeed enp3s0}
     ${voffset -20}
-    ${offset 80}${color4}${downspeedgraph enp3s0 50,100 } ${alignr}${upspeedgraph enp3s0 50,100 }
+    ${offset 80}${color4}${downspeedgraph enp3s0 50,100} ${alignr}${upspeedgraph enp3s0 50,100}
 
     # Temp
     ${voffset 0}

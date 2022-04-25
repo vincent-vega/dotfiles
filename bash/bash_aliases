@@ -83,5 +83,3 @@ fi
 
 alias httpsforw='sudo iptables -t nat -A OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
 alias rmhttpsforw='sudo iptables -t nat -D OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
-
-alias cmatrix='cmatrix -b -s -u 6 -C magenta -s'
