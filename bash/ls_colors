@@ -10,11 +10,12 @@
 #Cyan='0;96'
 #White='0;97'
 
-DeepPink3='0;38;5;162'
-#Khaki1='0;38;5;228'
+SkyBlue3='0;38;5;74'
 LightSkyBlue3='0;38;5;110'
 PaleGreen3='0;38;5;114'
-SkyBlue3='0;38;5;74'
+DeepPink3='0;38;5;162'
+Plum2='0;38;5;183'
+#Khaki1='0;38;5;228'
 
 # Bold High Intensty
 #BBlack='1;90'
@@ -24,8 +25,9 @@ SkyBlue3='0;38;5;74'
 #BPurple='1;95'
 #BRed='1;91'
 #BWhite='1;97'
-BIndianRed='1;38;5;167'
 BYellow='1;38;5;11'
+BIndianRed='1;38;5;167'
+BGrey50='1;38;5;244'
 
 # Underline High Intensty
 #UBlack='4;90'
