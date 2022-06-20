@@ -47,6 +47,7 @@ alias ...........='cd ../../../../../../../../../..'
 
 alias sci='svn ci'
 alias gsl='git stash list'
+alias gcp='git commit; git push'
 
 alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
 
