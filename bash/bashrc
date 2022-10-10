@@ -148,11 +148,7 @@ export SVN_EDITOR="$VISUAL"
 # host
 # dig
 
-if [ $__os_family = "Cygwin" ]; then
-
-    # add cygwin context menu entry
-    # chere -in -e "Open Bash window here" -t mintty
-
+if [[ $__os_family != "Linux" ]]; then
     __ssh_host_completion() {
         local cur opts
         cur="${COMP_WORDS[COMP_CWORD]}"
