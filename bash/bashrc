@@ -19,8 +19,7 @@ if ! shopt -oq posix; then
     fi
 fi
 
-# Make bash check its window size after a process completes
-shopt -s checkwinsize
+shopt -s autocd cdspell checkwinsize histappend
 
 case $TERM in
     xterm* | aterm | rxvt | screen )
@@ -118,7 +117,6 @@ export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........\
 :vim:view'
 export HISTCONTROL="erasedups:ignoreboth"
 export HISTTIMEFORMAT="%F %T "
-shopt -s histappend
 export http_proxy=
 
 # {{{ Maven
