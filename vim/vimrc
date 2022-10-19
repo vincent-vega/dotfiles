@@ -409,7 +409,6 @@ endfunction
 
 command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()
 
-"au bufreadpost,filereadpost *.class setlocal filetype=java |  %!jad -noctor -f -ff -i -p %
 au bufreadpost,filereadpost *.class setlocal filetype=java |  %!cfr %
 
 function! ClearFile()

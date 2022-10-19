@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-javadecompiler="cfr-0.149.jar"
+javadecompiler="cfr-0.152.jar"
 
 # get the script directory path
 source="${BASH_SOURCE[0]}"
