@@ -112,7 +112,7 @@ JQ_OBJECTS="1;39"
 export JQ_COLORS="$JQ_NULL:$JQ_FALSE:$JQ_TRUE:$JQ_NUMBERS:$JQ_STRINGS:$JQ_ARRAYS:$JQ_OBJECTS"
 export HISTFILESIZE=20000
 export HISTSIZE=20000
-export HISTIGNORE='&:l[sla]:cd:..:...:....:.....:......:.......:........\
+export HISTIGNORE='&:l[slat]:cd:..:...:....:.....:......:.......:........\
 :.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean\
 :vim:view'
 export HISTCONTROL="erasedups:ignoreboth"

@@ -15,7 +15,7 @@ else
 fi
 alias la='ls -Al'
 alias ll='ls -l'
-alias lt='ls -lt'
+alias lt='ls -alrt'
 
 alias less='less -rMI'
 alias more='more -r'
@@ -48,6 +48,7 @@ alias ...........='cd ../../../../../../../../../..'
 alias sci='svn ci'
 alias gsl='git stash list'
 alias gcp='git pull; git commit; git push'
+alias glog='git log --stat --summary'
 
 alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
 
