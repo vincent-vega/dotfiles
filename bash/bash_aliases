@@ -15,7 +15,7 @@ else
 fi
 alias la='ls -Al'
 alias ll='ls -l'
-alias lt='ls -alrt'
+alias lt='ls -Alrt'
 
 alias less='less -rMI'
 alias more='more -r'
