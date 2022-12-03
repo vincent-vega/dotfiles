@@ -8,17 +8,6 @@ case $(uname -s) in
     *)       __os_family=Linux;;
 esac
 
-# sudo autocompletion
-complete -cf sudo
-# enable bash completion in interactive shells
-if ! shopt -oq posix; then
-    if [ -s /usr/share/bash-completion/bash_completion ]; then
-        . /usr/share/bash-completion/bash_completion
-    elif [ -s /etc/bash_completion ]; then
-        . /etc/bash_completion
-    fi
-fi
-
 shopt -s autocd cdspell checkwinsize histappend
 
 case $TERM in
@@ -29,12 +18,23 @@ case $TERM in
         ;;
 esac
 
-if [ -s ~/dotfiles/bash/bash_aliases ]; then
-    . ~/dotfiles/bash/bash_aliases
+# sudo autocompletion
+complete -cf sudo
+# enable bash completion in interactive shells
+if ! shopt -oq posix; then
+    if [ -s /usr/share/bash-completion/bash_completion ]; then
+        source /usr/share/bash-completion/bash_completion
+    elif [ -s /etc/bash_completion ]; then
+        source /etc/bash_completion
+    fi
 fi
 
-if [ -s ~/dotfiles/bash/ps1_colors ]; then
-    . ~/dotfiles/bash/ps1_colors
+if [ -s "$HOME"/dotfiles/bash/bash_aliases ]; then
+    source "$HOME"/dotfiles/bash/bash_aliases
+fi
+
+if [ -s "$HOME"/dotfiles/bash/ps1_colors ]; then
+    source "$HOME"/dotfiles/bash/ps1_colors
 fi
 
 PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
@@ -42,101 +42,16 @@ PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
-#bd = block (buffered) special file
-#cd = character (unbuffered) special file
-#di = directory
-#do = door
-#ec = endcode - Non-filename text
-#ex = file which is executable (ie. has 'x' set in permissions).
-#fi = file
-#lc = leftcode - Opening terminal code
-#ln = symbolic link
-#mi = non-existent file pointed to by a symbolic link (visible when you type ls -l)
-#no = normal
-#or = symbolic link pointing to a non-existent file (orphan)
-#ow = other writable - Directory that is other-writable (o+w) and not sticky
-#pi = fifo file (pipe)
-#rc = rightcode - Closing terminal code
-#sg = set gid - File that is setgid (g+s)
-#so = socket file
-#st = sticky - Directory with the sticky bit set (+t) and not other-writable
-#su = set uid - File that is setuid (u+s)
-#tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
 
-if [ $__os_family = "Mac" ]; then
-    DIR="cx"
-    SYM_LINK="gx"
-    SOCKET="Dx"
-    PIPE="Dx"
-    EXE="Bx"
-    BLOCK_SP="Dx"
-    CHAR_SP="Dx"
-    EXE_SETUID="Bx"
-    EXE_SETGID="Bx"
-    DIR_W_O_STICKY="cx"
-    DIR_W_O_NO_STICKY="cx"
-
-    LSCOLORS="${DIR}${SYM_LINK}${SOCKET}${PIPE}${EXE}${BLOCK_SP}${CHAR_SP}\
-${EXE_SETUID}${EXE_SETGID}${DIR_W_O_STICKY}${DIR_W_O_NO_STICKY}"
-    export LSCOLORS
-
-    export GREP_COLOR='38;5;74'
-else
-    if [ -s ~/dotfiles/bash/ls_colors ]; then
-        . ~/dotfiles/bash/ls_colors
-    fi
-
-    DIR=${PaleGreen3}
-    SYM_LINK=${LightSkyBlue3}
-    EXE=${BIndianRed}
-    EXE=${BIndianRed}
-    CHAR_SP=${BYellow}
-    BLOCK_SP=${BYellow}
-    STICKY_OW=${RTurquoise2}
-    MISSING_LN=${RIndianRed}
-
-    LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
-tw=${STICKY_OW}:mi=${MISSING_LN}"
-    export LS_COLORS
-
-    export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
+if [ -s "$HOME"/dotfiles/bash/env ]; then
+    source "$HOME"/dotfiles/bash/env
 fi
 
-[ $__os_family = "Mac" ] && JQ_NULL="1;30" || JQ_NULL=$BGrey50
-JQ_FALSE="0;39"
-JQ_TRUE="0;39"
-JQ_NUMBERS="0;39"
-[ $__os_family = "Mac" ] && JQ_STRINGS="0;35" || JQ_STRINGS=$Plum2
-JQ_ARRAYS="1;39"
-JQ_OBJECTS="1;39"
-export JQ_COLORS="$JQ_NULL:$JQ_FALSE:$JQ_TRUE:$JQ_NUMBERS:$JQ_STRINGS:$JQ_ARRAYS:$JQ_OBJECTS"
-export HISTFILESIZE=20000
-export HISTSIZE=20000
-export HISTIGNORE='&:l[slat]:cd:..:...:....:.....:......:.......:........\
-:.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean\
-:vim:view'
-export HISTCONTROL="erasedups:ignoreboth"
-export HISTTIMEFORMAT="%F %T "
-export http_proxy=
-
-# {{{ Maven
-
-if [ -z "$M2" ] && [ -d "/opt/apache-maven-3.6.0" ]; then
-    export M2_HOME=/opt/apache-maven-3.6.0
-    export M2=$M2_HOME/bin
+if [ -f "$HOME"/.fzf.bash ]; then
+    source "$HOME"/.fzf.bash
+    _fzf_setup_completion 'dir'  fd ff
+    _fzf_setup_completion 'path' la ll lt vd vimdiff
 fi
-[ -n "$M2" ] && export MAVEN_OPTS="-Djansi.passthrough=true $MAVEN_OPTS" #colorize maven output
-
-# }}}
-# {{{ Java
-
-[ -z "$JAVA_HOME" ] && [ -d "/usr/lib/jvm/java-8-openjdk-amd64" ] && export JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
-[ -z "$CATALINA_HOME" ] && [ -d "/opt/tomcat" ] && export CATALINA_HOME=/opt/tomcat
-
-# }}}
-export VISUAL=vim
-export EDITOR="$VISUAL"
-export SVN_EDITOR="$VISUAL"
 
 # -----------------------------------------------------------------------------
 
@@ -146,11 +61,11 @@ export SVN_EDITOR="$VISUAL"
 # host
 # dig
 
-if [[ $__os_family != "Linux" ]]; then
+if [ $__os_family = "Cygwin" ]; then
     __ssh_host_completion() {
         local cur opts
         cur="${COMP_WORDS[COMP_CWORD]}"
-        opts=$(grep '^Host' ~/.ssh/config ~/.ssh/config.d/* 2> /dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
+        opts=$(grep '^Host' "$HOME"/.ssh/config "$HOME"/.ssh/config.d/* 2> /dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
         COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         return 0
     }
