@@ -42,7 +42,6 @@ PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
-
 if [ -s "$HOME"/dotfiles/bash/env ]; then
     source "$HOME"/dotfiles/bash/env
 fi
@@ -54,12 +53,6 @@ if [ -f "$HOME"/.fzf.bash ]; then
 fi
 
 # -----------------------------------------------------------------------------
-
-# host-info
-
-# nslookup
-# host
-# dig
 
 if [ $__os_family = "Cygwin" ]; then
     __ssh_host_completion() {
