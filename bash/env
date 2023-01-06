@@ -80,7 +80,7 @@ export http_proxy=
 
 # {{{ Maven
 
-if [ -z "$M2" ] && [ -d "$HOME/.sdkman/candidates/maven/current" ]; then
+if [ -z "$M2" ] && [ -d /opt/apache-maven-3.6.0 ]; then
     export M2_HOME=/opt/apache-maven-3.6.0
     export M2=$M2_HOME/bin
 fi
@@ -101,5 +101,6 @@ fi
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export SVN_EDITOR="$VISUAL"
+export GIT_EDITOR="$VISUAL"
 
 export FZF_DEFAULT_OPTS='--layout=reverse --border'
