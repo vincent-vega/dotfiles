@@ -1,4 +1,4 @@
-# shellcheck shell=bash disable=SC2154,SC1090,SC1091
+# shellcheck shell=bash
 [ -z "$PS1" ] && return
 
 case $(uname -s) in
@@ -25,16 +25,17 @@ if ! shopt -oq posix; then
     if [ -s /usr/share/bash-completion/bash_completion ]; then
         source /usr/share/bash-completion/bash_completion
     elif [ -s /etc/bash_completion ]; then
+        # shellcheck source=/dev/null
         source /etc/bash_completion
     fi
 fi
 
-if [ -s "$HOME"/dotfiles/bash/bash_aliases ]; then
-    source "$HOME"/dotfiles/bash/bash_aliases
+if [ -s "$HOME/dotfiles/bash/bash_aliases" ]; then
+    source "$HOME/dotfiles/bash/bash_aliases"
 fi
 
-if [ -s "$HOME"/dotfiles/bash/ps1_colors ]; then
-    source "$HOME"/dotfiles/bash/ps1_colors
+if [ -s "$HOME/dotfiles/bash/ps1_colors" ]; then
+    source "$HOME/dotfiles/bash/ps1_colors"
 fi
 
 PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
@@ -42,12 +43,12 @@ PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
-if [ -s "$HOME"/dotfiles/bash/env ]; then
-    source "$HOME"/dotfiles/bash/env
+if [ -s "$HOME/dotfiles/bash/env" ]; then
+    source "$HOME/dotfiles/bash/env"
 fi
 
-if [ -f "$HOME"/.fzf.bash ]; then
-    source "$HOME"/.fzf.bash
+if [ -f "$HOME/.fzf.bash" ]; then
+    source "$HOME/.fzf.bash"
     _fzf_setup_completion 'dir'  fd ff
     _fzf_setup_completion 'path' la ll lt vd vimdiff
 fi
@@ -59,7 +60,8 @@ if [ $__os_family = "Cygwin" ]; then
         local cur opts
         cur="${COMP_WORDS[COMP_CWORD]}"
         opts=$(grep '^Host' "$HOME"/.ssh/config "$HOME"/.ssh/config.d/* 2> /dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
-        COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+        #COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
+        mapfile -t COMPREPLY < <( compgen -W "$opts" -- "$cur" )
         return 0
     }
     complete -F __ssh_host_completion ssh
@@ -245,6 +247,7 @@ svnactivity() {
     done
     # TODO reverse commit array
     echo "Found commits: ${commits[*]}"
+    # shellcheck disable=SC2048
     for c in ${commits[*]}; do
         svn log -"$c" --diff "$svnpath"
     done

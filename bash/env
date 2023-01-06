@@ -1,5 +1,6 @@
-# shellcheck shell=bash disable=SC2154,SC1090,SC1091
-if [ $__os_family = "Mac" ]; then
+#!/usr/bin/env bash
+# shellcheck shell=bash disable=SC2154
+if [ "$__os_family" = "Mac" ]; then
     DIR="cx"
     SYM_LINK="gx"
     SOCKET="Dx"
@@ -39,8 +40,9 @@ else
     #su = set uid - File that is setuid (u+s)
     #tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
 
-    if [ -s "$HOME"/dotfiles/bash/ls_colors ]; then
-        . "$HOME"/dotfiles/bash/ls_colors
+    if [ -s "$HOME/dotfiles/bash/ls_colors" ]; then
+        # shellcheck source=/dev/null
+        source "$HOME/dotfiles/bash/ls_colors"
     fi
 
     DIR=${PaleGreen3}
@@ -59,11 +61,11 @@ tw=${STICKY_OW}:mi=${MISSING_LN}"
     export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
 fi
 
-[ $__os_family = "Mac" ] && JQ_NULL="1;30" || JQ_NULL=$BGrey50
+[ "$__os_family" = "Mac" ] && JQ_NULL="1;30" || JQ_NULL=$BGrey50
 JQ_FALSE="0;39"
 JQ_TRUE="0;39"
 JQ_NUMBERS="0;39"
-[ $__os_family = "Mac" ] && JQ_STRINGS="0;35" || JQ_STRINGS=$Plum2
+[ "$__os_family" = "Mac" ] && JQ_STRINGS="0;35" || JQ_STRINGS=$Plum2
 JQ_ARRAYS="1;39"
 JQ_OBJECTS="1;39"
 export JQ_COLORS="$JQ_NULL:$JQ_FALSE:$JQ_TRUE:$JQ_NUMBERS:$JQ_STRINGS:$JQ_ARRAYS:$JQ_OBJECTS"

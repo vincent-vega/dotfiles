@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck disable=SC2154
+# shellcheck shell=bash disable=SC2154
 alias rm='rm -i'
 alias rmlinks='find . -maxdepth 1 -type l -exec rm -f {} \;'
 alias mv='mv -i'
