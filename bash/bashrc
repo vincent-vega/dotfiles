@@ -23,6 +23,7 @@ complete -cf sudo
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
     if [ -s /usr/share/bash-completion/bash_completion ]; then
+        # shellcheck source=/dev/null
         source /usr/share/bash-completion/bash_completion
     elif [ -s /etc/bash_completion ]; then
         # shellcheck source=/dev/null
@@ -68,10 +69,10 @@ if [ $__os_family = "Cygwin" ]; then
 fi
 
 open() {
-    if [ $__os_family = "Cygwin" ]; then
+    if [ "$__os_family" = "Cygwin" ]; then
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
         cygstart "$1"
-    elif [ $__os_family = "Linux" ]; then
+    elif [ "$__os_family" = "Linux" ]; then
         local target
         target="$(pwd)"
         if [ "$#" -eq 1 ]; then
@@ -343,7 +344,7 @@ colortest() {
             for attr in 0 1 2 4 5 7 ; do
                 #Print the result
                 local modifier
-                if [ $__os_family = "Mac" ]; then
+                if [ "$__os_family" = "Mac" ]; then
                     modifier="\033"
                 else
                     modifier="\e"
@@ -359,7 +360,7 @@ colortest256() {
     for fgbg in 38 48 ; do #Foreground/Background
         for color in {0..256} ; do #Colors
             local modifier
-            if [ $__os_family = "Mac" ]; then
+            if [ "$__os_family" = "Mac" ]; then
                 modifier="\033"
             else
                 modifier="\e"
