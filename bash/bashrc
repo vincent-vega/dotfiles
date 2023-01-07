@@ -56,7 +56,7 @@ fi
 
 # -----------------------------------------------------------------------------
 
-if [ $__os_family = "Cygwin" ]; then
+if [ "$__os_family" = "Cygwin" ]; then
     __ssh_host_completion() {
         local cur opts
         cur="${COMP_WORDS[COMP_CWORD]}"
