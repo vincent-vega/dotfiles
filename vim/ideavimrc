@@ -9,16 +9,17 @@ nnoremap Y y$
 inoremap jj <Esc>
 nnoremap <C-\> :vsp<CR>
 
-set list
-set ignorecase
-set smartcase
-set visualmouse
-set scrolloff=3
 set clipboard=unnamed
-set regexsearch
-set hlsearch
 set expandtab
-set tabstop=4
-set shiftwidth=4
+set gdefault
+set hlsearch
+set ignorecase
+set list
 set number
+set regexsearch
 set relativenumber
+set scrolloff=3
+set shiftwidth=4
+set smartcase
+set tabstop=4
+set visualmouse
