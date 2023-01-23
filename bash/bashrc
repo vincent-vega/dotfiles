@@ -48,13 +48,11 @@ if [ -s "$HOME/dotfiles/bash/env" ]; then
     source "$HOME/dotfiles/bash/env"
 fi
 
-if [ -f "$HOME/.fzf.bash" ]; then
+if [ -s "$HOME/.fzf.bash" ]; then
     source "$HOME/.fzf.bash"
     _fzf_setup_completion 'dir'  fd ff
     _fzf_setup_completion 'path' la ll lt vd vimdiff
 fi
-
-# -----------------------------------------------------------------------------
 
 if [ "$__os_family" = "Cygwin" ]; then
     __ssh_host_completion() {
