@@ -1,7 +1,5 @@
-ethernet
 userland
 NIC
 userspace
-checkings
 lantency
-netmap
+ethernet
