@@ -1,6 +1,7 @@
 dotfiles_dir=${HOME}/dotfiles
 bash_dir=${dotfiles_dir}/bash
 vim_dir=${dotfiles_dir}/vim
+conf_dir=${dotfiles_dir}/conf
 
 .PHONY: clean all bash vim others
 
@@ -19,8 +20,8 @@ vim: ${vim_dir} ${vim_dir}/gvimrc ${vim_dir}/vimrc ${vim_dir}/vrapperrc
 	@[ -e ${HOME}/.vimrc ]     || ln -sf ${vim_dir}/vimrc     ${HOME}/.vimrc
 	@[ -e ${HOME}/.vrapperrc ] || ln -sf ${vim_dir}/vrapperrc ${HOME}/.vrapperrc
 
-others: ${dotfiles_dir}/tmux.conf
-	@[ -s ${HOME}/.tmux.conf ] || ln -sf ${dotfiles_dir}/tmux.conf ${HOME}/.tmux.conf
+others: ${conf_dir}/tmux.conf
+	@[ -s ${HOME}/.tmux.conf ] || ln -sf ${conf_dir}/tmux.conf ${HOME}/.tmux.conf
 
 clean:
 	@ ! [ -e ${HOME}/.bash_profile ] || rm -f ${HOME}/.bash_profile
