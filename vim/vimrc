@@ -46,9 +46,6 @@ set path+=**
 let &t_TI = "" " disable modifyOtherKeys
 let &t_TE = "" " disable modifyOtherKeys
 
-" Resize splits when the window is resized
-au VimResized * exe "normal! \<c-w>="
-
 let maplocalleader = "\\"
 let mapleader = " "
 match ErrorMsg '^\(<\|=\|>\)\{7\}\([^=].\+\)\?$'
@@ -63,8 +60,7 @@ set switchbuf=useopen,usetab  " Jump to the first open window that
                               " contains the specified buffer (if there is
                               " one) & also consider windows in other tab
                               " pages
-" au BufRead,BufNewFile *.txt setlocal spell  " Turn on spell check for .txt
-                                              " files
+set spelllang=en,it
 
 " Colors ---------------------------------------------------------------------
 
@@ -122,19 +118,6 @@ set hlsearch     " Highlight the last searched term
 set gdefault     " The substitute flag 'g' is default on
 set scrolloff=3  " Minimal number of screen lines to keep above and below
                  " the cursor
-nnoremap <silent> gD gDzt
-nnoremap <silent> [[ [[zt
-nnoremap <silent> ]] ]]zt
-" Keep search matches in the middle of the window and pulse the line when
-" moving to them
-nnoremap <silent> n nzzzv:call PulseCursorLine()<CR>
-nnoremap <silent> N Nzzzv:call PulseCursorLine()<CR>
-" search selected text
-vnoremap <silent> * :<C-U>
-  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
-  \gvy/<C-R><C-R>=substitute(
-  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
-  \gV:call setreg('"', old_reg, old_regtype)<CR>
 
 " ----------------------------------------------------------------------------
 " PLUGINS
@@ -179,6 +162,9 @@ let g:SuperTabContextDefaultCompletionType="<c-n>"
 " }}}
 " {{{ Ale
 
+let g:ale_linters = {
+\    'python': ['flake8'],
+\}
 let g:ale_python_flake8_options='--ignore=E201,E202,E501'
 
 " }}}
@@ -194,9 +180,9 @@ nmap K :Man <cword><CR>
 " FOLDING SETTINGS
 " ----------------------------------------------------------------------------
 
+set nofoldenable       " don't fold by default
 "set foldmethod=indent  " fold based on indent
 "set foldnestmax=10     " deepest fold is 10 levels
-set nofoldenable       " don't fold by default
 "set foldlevel=1
 
 " ----------------------------------------------------------------------------
@@ -204,17 +190,40 @@ set nofoldenable       " don't fold by default
 if has('autocmd')
     autocmd BufNewFile,BufRead *.log,*.html,*.properties setlocal nowrap
     autocmd BufNewFile,BufRead *.txt setlocal wrap
-    autocmd filetype tex setlocal spell
+    "autocmd BufNewFile,BufRead *.yaml set ft=cloudformation.yaml
+    autocmd BufNewFile,BufRead *.tag set syntax=jsp
+    autocmd BufNewFile,BufRead *.har set syntax=json
+    autocmd filetype tex,text setlocal spell
     autocmd filetype xsd,xsl,xslt,xml setlocal softtabstop=2 tabstop=2 shiftwidth=2
     autocmd filetype html,htmldjango setlocal softtabstop=2 tabstop=2 shiftwidth=2
-    autocmd InsertLeave * if pumvisible() == 0|pclose|endif
-    " If doing a diff. Upon writing changes to file, automatically update
-    " the differences
+    autocmd InsertLeave * if pumvisible() == 0 | pclose | endif
+    " If doing a diff, upon writing changes to file,
+    " automatically update the differences
     autocmd BufWritePost * if &diff == 1 | diffupdate | endif
-    autocmd BufRead *.tag set syntax=jsp
-    autocmd BufRead *.har set syntax=json
     autocmd BufEnter * silent! lcd %:p:h
+    autocmd bufreadpost,filereadpost *.class setlocal filetype=java fileencoding=utf-8 | %!cfr %
+    " Resize splits when the window is resized
+    autocmd VimResized * exe "normal! \<c-w>="
 endif
+
+" ----------------------------------------------------------------------------
+" MAPPINGS
+" ----------------------------------------------------------------------------
+
+nnoremap <silent> gD gDzt
+nnoremap <silent> [[ [[zt
+nnoremap <silent> ]] ]]zt
+" Keep search matches in the middle of the window and pulse the line when
+" moving to them
+nnoremap <silent> n nzzzv:call PulseCursorLine()<CR>
+nnoremap <silent> N Nzzzv:call PulseCursorLine()<CR>
+" search selected text
+vnoremap <silent> * :<C-U>
+  \let old_reg=getreg('"')<Bar>let old_regtype=getregtype('"')<CR>
+  \gvy/<C-R><C-R>=substitute(
+  \escape(@", '/\.*$^~['), '\_s\+', '\\_s\\+', 'g')<CR><CR>
+  \gV:call setreg('"', old_reg, old_regtype)<CR>
+
 " Use Q for formatting the current paragraph (or selection)
 vnoremap <silent> Q gq
 nnoremap <silent> Q gqip
@@ -222,10 +231,6 @@ nnoremap <silent> Q gqip
 nnoremap : ;
 nnoremap ; :
 vnoremap ; :
-
-" ----------------------------------------------------------------------------
-" OTHER SHORTCUTS
-" ----------------------------------------------------------------------------
 
 " strip all trailing whitespace in the current file
 nnoremap <silent> <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
@@ -409,8 +414,6 @@ function! HighlightRepeats() range
 endfunction
 
 command! -range=% HighlightRepeats <line1>,<line2>call HighlightRepeats()
-
-au bufreadpost,filereadpost *.class setlocal filetype=java |  %!cfr %
 
 function! ClearFile()
   execute "norm! ggVGd"
