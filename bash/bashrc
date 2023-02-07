@@ -107,6 +107,16 @@ echoline() {
     head -n "$2" "$1" | tail -n +"$2"
 }
 
+mkcd() {
+    if [ "$#" -ne 1 ]; then
+        echo 1>&2 "Make dir and move into it"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} DIR_NAME"
+        return 1
+    fi
+    mkdir "$1"
+    cd "$1" || return
+}
+
 # {{{ Subversion
 
 sup() { svn up "$@"; }
