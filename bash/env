@@ -103,4 +103,4 @@ export EDITOR="$VISUAL"
 export SVN_EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
 
-export FZF_DEFAULT_OPTS='--layout=reverse --border'
+export FZF_DEFAULT_OPTS='--layout=reverse --border --multi'

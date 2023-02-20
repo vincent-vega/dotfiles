@@ -113,7 +113,7 @@ mkcd() {
         echo 1>&2 "Usage: ${FUNCNAME[0]} DIR_NAME"
         return 1
     fi
-    mkdir "$1"
+    mkdir "$1" || return
     cd "$1" || return
 }
 
