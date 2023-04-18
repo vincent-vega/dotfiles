@@ -85,6 +85,8 @@ open() {
             return 2
         fi
         nautilus --browser "$target" > /dev/null 2>&1 &
+    else
+        command open "$@"
     fi
 }
 
