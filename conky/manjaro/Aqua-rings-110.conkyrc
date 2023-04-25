@@ -127,10 +127,14 @@ conky.text = [[
     ${font Raleway:size=14:style=bold}${color4}${alignr}TEMP
     ${voffset -15}
     ${font Raleway:size=10:style=bold}${color1}${alignr}GPU:  ${font}${hwmon 1 temp 1}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 0:  ${font}${hwmon 2 temp 2}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${hwmon 2 temp 3}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${hwmon 2 temp 4}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${hwmon 2 temp 5}°C
+    #${alignr}${font Raleway:size=10:style=bold}Core 0:  ${font}${hwmon 2 temp 2}°C
+    #${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${hwmon 2 temp 3}°C
+    #${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${hwmon 2 temp 4}°C
+    #${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${hwmon 2 temp 5}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 0:  ${font}${exec sensors | grep 'Core 0' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${exec sensors | grep 'Core 1' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${exec sensors | grep 'Core 2' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
+    ${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${exec sensors | grep 'Core 3' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
     ${alignr}${font Raleway:size=10:style=bold}SSD:  ${font}${hwmon 0 temp 1}°C
     ${alignr}${font Raleway:size=10:style=bold}HDD:  ${font}${hwmon 0 temp 2}°C
 ]];
