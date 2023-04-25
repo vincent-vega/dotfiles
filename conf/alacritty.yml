@@ -69,7 +69,7 @@ window:
   #
   # Window opacity as a floating point number from `0.0` to `1.0`.
   # The value `0.0` is completely transparent and `1.0` is opaque.
-  #opacity: 1.0
+  opacity: 1.0
 
   # Startup Mode (changes require restart)
   #
@@ -114,10 +114,10 @@ window:
   #   - None (default)
   #option_as_alt: None
 
-#scrolling:
+scrolling:
   # Maximum number of lines in the scrollback buffer.
   # Specifying '0' will disable scrolling.
-  #history: 10000
+  history: 10000
 
   # Scrolling distance multiplier.
   #multiplier: 3
@@ -195,7 +195,7 @@ window:
   #builtin_box_drawing: true
 
 # If `true`, bold text is drawn using the bright color variants.
-#draw_bold_text_with_bright_colors: false
+draw_bold_text_with_bright_colors: true
 
 # Colors (Tomorrow Night)
 #colors:
@@ -349,7 +349,7 @@ window:
 # Bell
 #
 # The bell is rung every time the BEL control character is received.
-#bell:
+bell:
   # Visual Bell Animation
   #
   # Animation effect for flashing the screen when the visual bell is rung.
@@ -369,7 +369,7 @@ window:
 
   # Duration of the visual bell flash in milliseconds. A `duration` of `0` will
   # disable the visual bell animation.
-  #duration: 0
+  duration: 0
 
   # Visual bell animation color.
   #color: '#ffffff'
@@ -387,15 +387,15 @@ window:
   #
   #command: None
 
-#selection:
+selection:
   # This string contains all characters that are used as separators for
   # "semantic words" in Alacritty.
   #semantic_escape_chars: ",│`|:\"' ()[]{}<>\t"
 
   # When set to `true`, selected text will be copied to the primary clipboard.
-  #save_to_clipboard: false
+  save_to_clipboard: true
 
-#cursor:
+cursor:
   # Cursor style
   #style:
     # Cursor shape
@@ -433,7 +433,7 @@ window:
 
   # If this is `true`, the cursor will be rendered as a hollow box when the
   # window is not focused.
-  #unfocused_hollow: true
+  unfocused_hollow: true
 
   # Thickness of the cursor relative to the cell width as floating point number
   # from `0.0` to `1.0`.
@@ -773,7 +773,7 @@ mouse:
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
 key_bindings:
-  - { key: N,         mods: Control,                    action: SpawnNewInstance }
+  - { key: N,         mods: Control|Shift,              action: SpawnNewInstance }
   #- { key: Paste,                                       action: Paste            }
   #- { key: Copy,                                        action: Copy             }
   #- { key: L,         mods: Control,                    action: ClearLogNotice   }
