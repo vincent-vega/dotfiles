@@ -10,14 +10,6 @@ esac
 
 shopt -s autocd cdspell checkwinsize histappend
 
-case $TERM in
-    xterm* | aterm | rxvt | screen )
-        PROMPT_COMMAND='echo -ne "\033]0;${USER}@${HOSTNAME%%.*}:${PWD/$HOME/~}\007"'
-        ;;
-    * )
-        ;;
-esac
-
 # sudo autocompletion
 complete -cf sudo
 # enable bash completion in interactive shells
