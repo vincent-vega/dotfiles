@@ -198,10 +198,10 @@ font:
 draw_bold_text_with_bright_colors: true
 
 # Colors (Tomorrow Night)
-#colors:
+colors:
   # Default colors
-  #primary:
-  #  background: '#1d1f21'
+  primary:
+    background: '#000000'
   #  foreground: '#c5c8c6'
 
     # Bright and dim foreground colors
@@ -539,7 +539,7 @@ hints:
       action: Copy
       post_processing: false
       binding:
-        key: U
+        key: A
         mods: Control|Shift
 
 # Mouse bindings
@@ -785,6 +785,11 @@ hints:
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
 key_bindings:
+  # bugfix for 'Shift+Slash' key binding
+  - { key: 53,     mods: Shift,         mode: Vi,     action: SearchBackward }
+  # bugfix: vim alternate buffer
+  - { key: Key6,   mods: Control,       chars: "\x1e"                        }
+
   #- { key: N,         mods: Control,                    action: SpawnNewInstance }
   #- { key: Paste,                                       action: Paste            }
   #- { key: Copy,                                        action: Copy             }
@@ -842,9 +847,6 @@ key_bindings:
   #- { key: Key5,   mods: Shift,         mode: Vi|~Search, action: Bracket                 }
   #- { key: Slash,                       mode: Vi|~Search, action: SearchForward           }
   #- { key: Slash,  mods: Shift,         mode: Vi|~Search, action: SearchBackward          }
-
-  # bugfix for 'Shift+Slash' key binding
-  - { key: 53,     mods: Shift,         mode: Vi, action: SearchBackward }
 
   #- { key: N,                           mode: Vi|~Search, action: SearchNext              }
   #- { key: N,      mods: Shift,         mode: Vi|~Search, action: SearchPrevious          }
