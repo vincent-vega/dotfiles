@@ -31,7 +31,7 @@ if [ -s "$HOME/dotfiles/bash/ps1_colors" ]; then
     source "$HOME/dotfiles/bash/ps1_colors"
 fi
 
-PS1="\[${BGrey27}\][\[${DodgerBlue2}\]\u\[${BGrey27}\]]\[${White}\]@\
+PS1="\[${BGrey27}\][\[${DodgerBlue1}\]\u\[${BGrey27}\]]\[${White}\]@\
 \[${BGrey27}\][\[${Red}\]\h\[${BGrey27}\]]\[${White}\] \A\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
