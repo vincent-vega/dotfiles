@@ -177,10 +177,10 @@ svnhistory() {
 ssvnhistory() {
     local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
           head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
-    svnhistory "$@" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                           s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                           s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                           s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+    svnhistory "$@" | sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
+                             -e "s/^(-([^-].*|))$/$rem\1$reset/" \
+                             -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
+                             -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/"
 }
 
 svnhistoryr() {
@@ -211,10 +211,10 @@ svnhistoryr() {
 ssvnhistoryr() {
     local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
           head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
-    svnhistoryr "$@" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                            s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                            s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                            s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+    svnhistoryr "$@" | sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
+                              -e "s/^(-([^-].*|))$/$rem\1$reset/" \
+                              -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
+                              -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/"
 }
 
 svnactivity() {
@@ -259,10 +259,10 @@ svnactivity() {
 ssvnactivity() {
     local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
           head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
-    svnactivity "$@" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                            s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                            s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                            s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/"
+    svnactivity "$@" | sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
+                              -e "s/^(-([^-].*|))$/$rem\1$reset/" \
+                              -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
+                              -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/"
 }
 
 # }}}
@@ -286,7 +286,7 @@ ff() {
             echo "Listing files in dir $1"
             find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
         else
-            grep_pattern=$(echo "$1" | sed 's/*\+/*/g' | sed 's/*/.*/g')
+            grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$1")
             find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
         fi
     elif [ "$#" -gt 1 ]; then
@@ -294,7 +294,7 @@ ff() {
             echo "Target path is not a directory: $1"
             return 1
         fi
-        grep_pattern=$(echo "$2" | sed 's/*\+/*/g' | sed 's/*/.*/g')
+        grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$2")
         find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
     fi
 }
@@ -382,10 +382,10 @@ colordiff() {
     local add="\o33\[0;38;5;74m" rem="\o33\[0;38;5;167m" \
           head="\o33\[1;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m" diff
     while read -r line; do
-        diff="$diff\n$(echo "$line" | sed "s/^\(+\{1\}\([^+].*$\|$\)\)/$add\1$reset/; \
-                                           s/^\(-\{1\}\([^-].*$\|$\)\)/$rem\1$reset/; \
-                                           s/^\(@@ .\+ @@\)$/$rev\1$reset/; \
-                                           s/^\([+-]\{3\} .\+\|-\{4,\}\|=\+\)$/$head\1$reset/")"
+        diff=$diff"\n"$(sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
+                               -e "s/^(-([^-].*|))$/$rem\1$reset/" \
+                               -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
+                               -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/" <<< "$line")
     done
     echo -e "$diff"
 }
