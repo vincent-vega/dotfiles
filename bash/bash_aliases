@@ -5,7 +5,11 @@ alias rmlinks='find . -maxdepth 1 -type l -exec rm -f {} \;'
 alias mv='mv -i'
 alias cp='cp -i'
 
-alias df='df -Tkh'
+if [ "$__os_family" = "Mac" ]; then
+    alias df='df -kh'
+else
+    alias df='df -Tkh'
+fi
 alias du='du -ch'
 
 if [ "$__os_family" = "Mac" ]; then
