@@ -73,7 +73,7 @@ export HISTFILESIZE=20000
 export HISTSIZE=20000
 export HISTIGNORE='&:l[slat]:cd:..:...:....:.....:......:.......:........\
 :.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean\
-:vim:view'
+:vim:view:tmux'
 export HISTCONTROL="erasedups:ignoreboth"
 export HISTTIMEFORMAT="%F %T "
 export http_proxy=
@@ -104,3 +104,4 @@ export SVN_EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
 
 export FZF_DEFAULT_OPTS='--layout=reverse --border --multi'
+export PYGMENTIZE_STYLE=dracula
