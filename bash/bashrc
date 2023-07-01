@@ -43,7 +43,7 @@ fi
 if [ -s "$HOME/.fzf.bash" ]; then
     source "$HOME/.fzf.bash"
     _fzf_setup_completion 'dir'  fd ff
-    _fzf_setup_completion 'path' la ll lt vd vimdiff
+    _fzf_setup_completion 'path' la ll lt vd vimdiff cmp
 fi
 
 if [ "$__os_family" = "Cygwin" ]; then

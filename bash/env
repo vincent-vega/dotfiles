@@ -73,7 +73,7 @@ export HISTFILESIZE=20000
 export HISTSIZE=20000
 export HISTIGNORE='&:l[slat]:cd:..:...:....:.....:......:.......:........\
 :.........:..........:...........:cd -:[bf]g:jobs:exit:history:make:make clean\
-:vim:view:tmux'
+:vim:view:tmux:ranger'
 export HISTCONTROL="erasedups:ignoreboth"
 export HISTTIMEFORMAT="%F %T "
 export http_proxy=
