@@ -50,7 +50,7 @@ if [ "$__os_family" = "Cygwin" ]; then
     __ssh_host_completion() {
         local cur opts
         cur="${COMP_WORDS[COMP_CWORD]}"
-        opts=$(grep '^Host' "$HOME/.ssh/config" "$HOME/.ssh/config.d"/* 2> /dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
+        opts=$(grep '^Host' "$HOME/.ssh/config" "$HOME/.ssh/config.d"/* 2>/dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
         #COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
         mapfile -t COMPREPLY < <( compgen -W "$opts" -- "$cur" )
         return 0
@@ -63,11 +63,26 @@ open() {
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
         cygstart "$@"
     elif [ "$__os_family" = "Linux" ]; then
-        nautilus --browser -- "$@" > /dev/null 2>&1 &
+        if command -v rifle &>/dev/null; then
+            local text_files=()
+            for x in "$@"; do
+                [ -e "$x" ] || continue
+                if [[ $(rifle -l "$x" | head -1) =~ ^0:editor:: ]]; then
+                    text_files+=("$x")
+                else
+                    rifle -- "$x" &>/dev/null &
+                fi
+            done
+            if (( ${#text_files[@]} > 0 )); then
+                rifle "${text_files[@]}"
+            fi
+        else
+            nautilus --browser -- "$@" &>/dev/null &
+        fi
     else
         command open "$@"
     fi
-}
+} 2>/dev/null
 
 echoline() {
     if [ "$#" -ne 2 ]; then
