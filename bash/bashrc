@@ -61,22 +61,9 @@ fi
 open() {
     if [ "$__os_family" = "Cygwin" ]; then
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
-        cygstart "$1"
+        cygstart "$@"
     elif [ "$__os_family" = "Linux" ]; then
-        local target
-        target="$(pwd)"
-        if [ "$#" -eq 1 ]; then
-            if [ ! -d "$1" ]; then
-                echo "Target path is not a directory"
-                echo "Usage: ${FUNCNAME[0]} [PATH]"
-                return 1
-            fi
-            target="$1"
-        elif [ "$#" -gt 1 ]; then
-            echo "Usage: ${FUNCNAME[0]} [PATH]"
-            return 2
-        fi
-        nautilus --browser "$target" > /dev/null 2>&1 &
+        nautilus --browser -- "$@" > /dev/null 2>&1 &
     else
         command open "$@"
     fi
