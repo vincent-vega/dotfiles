@@ -10,7 +10,7 @@
 # to the user's home directory starting with `~/`.
 import:
 #  - /path/to/alacritty.yml
-  - ~/.config/alacritty/themes/themes/gnome_terminal.yaml
+  - ~/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.yaml
 
 # Any items in the `env` entry below will be added as
 # environment variables. Some entries may override variables
