@@ -2,10 +2,11 @@ dotfiles_dir=${HOME}/dotfiles
 bash_dir=${dotfiles_dir}/bash
 vim_dir=${dotfiles_dir}/vim
 conf_dir=${dotfiles_dir}/conf
+OS := $(shell uname)
 
-.PHONY: clean all bash vim others
+.PHONY: clean all bash vim conf
 
-all: bash vim others
+all: bash vim conf
 	@echo "Complete!"
 
 bash: ${bash_dir}/bash_profile ${bash_dir}/bashrc ${bash_dir}/inputrc
@@ -20,16 +21,27 @@ vim: ${vim_dir} ${vim_dir}/gvimrc ${vim_dir}/vimrc ${vim_dir}/vrapperrc
 	@[ -e ${HOME}/.vimrc ]     || ln -sf ${vim_dir}/vimrc     ${HOME}/.vimrc
 	@[ -e ${HOME}/.vrapperrc ] || ln -sf ${vim_dir}/vrapperrc ${HOME}/.vrapperrc
 
-others: ${conf_dir}/tmux.conf
+conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.yml ${conf_dir}/alacritty-macos.yml
 	@[ -s ${HOME}/.tmux.conf ] || ln -sf ${conf_dir}/tmux.conf ${HOME}/.tmux.conf
+ifeq ($(OS), Darwin)
+	@[ -s ${HOME}/.alacritty-macos.yml ] || ln -sf ${conf_dir}/alacritty-macos.yml ${HOME}/.alacritty.yml
+else
+	@[ -s ${HOME}/.alacritty.yml ] || ln -sf ${conf_dir}/alacritty.yml ${HOME}/.alacritty.yml
+endif
+	@if [ -e "${HOME}/.config/ranger" ]; then \
+		echo existing ranger configuration found, creating backup...; \
+		mv ${HOME}/.config/ranger  "${HOME}/.config/ranger-$(shell mktemp -u XXXXX)-backup"; \
+	fi
+	@ln -s ${conf_dir}/ranger ${HOME}/.config/ranger
 
 clean:
-	@ ! [ -e ${HOME}/.bash_profile ] || rm -f ${HOME}/.bash_profile
-	@ ! [ -e ${HOME}/.bashrc ]       || rm -f ${HOME}/.bashrc
-	@ ! [ -e ${HOME}/.gvimrc ]       || rm -f ${HOME}/.gvimrc
-	@ ! [ -e ${HOME}/.ideavimrc ]    || rm -f ${HOME}/.ideavimrc
-	@ ! [ -e ${HOME}/.inputrc ]      || rm -f ${HOME}/.inputrc
-	@ ! [ -e ${HOME}/.tmux.conf ]    || rm -f ${HOME}/.tmux.conf
-	@ ! [ -e ${HOME}/.vim ]          || rm -f ${HOME}/.vim
-	@ ! [ -e ${HOME}/.vimrc ]        || rm -f ${HOME}/.vimrc
-	@ ! [ -e ${HOME}/.vrapperrc ]    || rm -f ${HOME}/.vrapperrc
+	@ ! [ -e ${HOME}/.alacritty.yml ] || rm -f ${HOME}/.alacritty.yml
+	@ ! [ -e ${HOME}/.bash_profile ]  || rm -f ${HOME}/.bash_profile
+	@ ! [ -e ${HOME}/.bashrc ]        || rm -f ${HOME}/.bashrc
+	@ ! [ -e ${HOME}/.gvimrc ]        || rm -f ${HOME}/.gvimrc
+	@ ! [ -e ${HOME}/.ideavimrc ]     || rm -f ${HOME}/.ideavimrc
+	@ ! [ -e ${HOME}/.inputrc ]       || rm -f ${HOME}/.inputrc
+	@ ! [ -e ${HOME}/.tmux.conf ]     || rm -f ${HOME}/.tmux.conf
+	@ ! [ -e ${HOME}/.vim ]           || rm -f ${HOME}/.vim
+	@ ! [ -e ${HOME}/.vimrc ]         || rm -f ${HOME}/.vimrc
+	@ ! [ -e ${HOME}/.vrapperrc ]     || rm -f ${HOME}/.vrapperrc
