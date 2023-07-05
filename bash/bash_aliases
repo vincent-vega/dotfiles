@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash disable=SC2154
 alias rm='rm -i'
-alias rmlinks='find . -maxdepth 1 -type l -exec rm -f {} \;'
+alias rmlinks='find . -maxdepth 1 -type l -exec rm -f "{}" \;'
 alias mv='mv -i'
 alias cp='cp -i'
 
@@ -85,7 +85,6 @@ alias hexdump='hexdump -C'
 
 if command -v jq &>/dev/null; then
     alias jq="jq -S"
-    alias js="jq -S '.'"
 elif command -v python -m json.tool &>/dev/null; then
     alias js="python -m json.tool"
 fi
