@@ -101,7 +101,6 @@ fi
 [ -z "$CATALINA_HOME" ] && [ -d "/opt/tomcat" ] && export CATALINA_HOME=/opt/tomcat
 
 # }}}
-export PAGER=less
 export VISUAL=vim
 export EDITOR="$VISUAL"
 export SVN_EDITOR="$VISUAL"
