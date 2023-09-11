@@ -100,7 +100,7 @@ echoline() {
         echo 1>&2 "Usage: ${FUNCNAME[0]} FILE LINE_NUM"
         return 1
     fi
-    head -n "$2" "$1" | tail -n +"$2"
+    sed "${2}q;d" "$1"
 }
 
 mkcd() {
@@ -390,4 +390,22 @@ colordiff() {
                                -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/" <<< "$line")
     done
     echo -e "$diff"
+}
+
+gradle_dependencies() {
+    if [ ! -x gradlew ]; then
+        echo "gradlew not found" >&2
+        return 1
+    fi
+    if [[ -n "$1" ]] && [[ ! "$1" =~ ^[^/]+/?$ ]]; then
+        echo "Invalid subproject" >&2
+        return 1
+    fi
+    local subproject
+    [[ -z "$1" ]] && subproject="" || subproject=$(tr -d '/' <<< "$1:")
+    if command -v pygmentize &>/dev/null; then
+        pygmentize <<< "$(./gradlew "$subproject"dependencies --configuration runtimeClasspath)" 2> /dev/null | less
+    else
+        ./gradlew "$subproject"dependencies --configuration runtimeClasspath 2> /dev/null | less
+    fi
 }
