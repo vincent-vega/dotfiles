@@ -1,5 +1,6 @@
-import os
 from ranger.api.commands import Command
+import os
+import subprocess
 
 
 class fzf_select(Command):
@@ -13,7 +14,6 @@ class fzf_select(Command):
     See: https://github.com/junegunn/fzf
     """
     def execute(self):
-        import subprocess
         if self.quantifier:
             # match only directories
             command = "find -L . \( -path '*/\.*' -o -fstype 'dev' -o -fstype 'proc' \) -prune \
@@ -30,3 +30,13 @@ class fzf_select(Command):
                 self.fm.cd(fzf_file)
             else:
                 self.fm.select_file(fzf_file)
+
+
+class open_drop(Command):
+
+    def execute(self):
+        uname_output = subprocess.check_output(['uname']).decode('utf-8').strip()
+        if 'Darwin' in uname_output:
+            subprocess.call(['open', self.fm.thisdir.path])
+        else:
+            subprocess.call(['dragon-drop', '-a', '-x', self.fm.thisfile.path])
