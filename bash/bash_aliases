@@ -7,10 +7,11 @@ alias cp='cp -i'
 
 if [ "$__os_family" = "Mac" ]; then
     alias df='df -kh'
+    alias du='du -ch'
 else
-    alias df='df -Tkh'
+    alias df='df -TkH'
+    alias du='du -bc --si'
 fi
-alias du='du -ch'
 
 if [ "$__os_family" = "Mac" ]; then
     alias ls='ls -G -h -D "%Y %b %e %H:%M"'
@@ -18,7 +19,7 @@ if [ "$__os_family" = "Mac" ]; then
     alias time='/usr/bin/time -hlp'
     alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 else
-    alias ls='ls -h --color=auto --time-style="+%Y %b %e %H:%M"'
+    alias ls='ls --si --color=auto --time-style="+%Y %b %e %H:%M"'
 fi
 alias la='ls -Al'
 alias ll='ls -l'
