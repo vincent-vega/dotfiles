@@ -6,8 +6,8 @@ alias mv='mv -i'
 alias cp='cp -i'
 
 if [ "$__os_family" = "Mac" ]; then
-    alias df='df -kh'
-    alias du='du -ch'
+    alias df='df -H'
+    alias du='du --si -c -A -B 1'
 else
     alias df='df -TkH'
     alias du='du -bc --si'
