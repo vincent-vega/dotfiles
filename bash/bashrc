@@ -285,19 +285,31 @@ ff() {
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
-            echo "Listing files in dir $1"
+            >&2 echo "Listing files in dir $1"
             find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
+        elif [ "$1" == "-t" ]; then
+            find . -type f -exec sh -c 'ls -lrht "$@"' -- "{}" \+
         else
             grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$1")
             find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
         fi
-    elif [ "$#" -gt 1 ]; then
-        if [ ! -d "$1" ]; then
-            echo "Target path is not a directory: $1"
+    elif [ "$#" -eq 2 ]; then
+        if [ "$1" == "-t" ]; then
+            if [ ! -d "$2" ]; then
+                >&2 echo "Target path is not a directory: $2"
+                return 1
+            fi
+            find "$2" -type f -exec sh -c 'ls -lrht "$@"' -- "{}" \+
+        elif [ ! -d "$1" ]; then
+            >&2 echo "Target path is not a directory: $1"
             return 1
+        else
+            grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$2")
+            find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
         fi
-        grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$2")
-        find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
+    else
+        >&2 echo "Too many arguments"
+        return 1
     fi
 }
 
@@ -306,12 +318,15 @@ fd() {
         find . -type d | cat -n
     elif [ "$#" -eq 1 ]; then
         find . -type d -iname '*'"$1"'*' | cat -n | grep -i "$1"
-    elif [ "$#" -gt 1 ]; then
+    elif [ "$#" -eq 2 ]; then
         if [ ! -d "$1" ]; then
-            echo "Target path is not a directory: $1"
+            >&2 echo "Target path is not a directory: $1"
             return 1
         fi
         find "$1" -type d -iname '*'"$2"'*' | cat -n | grep -i "$2"
+    elif [ "$#" -gt 2 ]; then
+        >&2 echo "Too many arguments"
+        return 1
     fi
 }
 
