@@ -64,7 +64,7 @@ tw=${STICKY_OW}:mi=${MISSING_LN}"
     export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
     export MANROFFOPT="-P -c"
 fi
-export MANPAGER="/usr/bin/less -R --use-color -Ddg -Du+c -DEWg"
+export MANPAGER="/usr/bin/less -Ri --use-color -Ddg -Du+c -DEWg"
 
 [ "$__os_family" = "Mac" ] && JQ_NULL="1;30" || JQ_NULL=$BGrey50
 JQ_FALSE="0;39"
