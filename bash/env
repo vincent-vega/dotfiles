@@ -51,14 +51,14 @@ else
     DIR=${PaleGreen3}
     SYM_LINK=${LightSkyBlue3}
     EXE=${BIndianRed}
-    EXE=${BIndianRed}
     CHAR_SP=${BYellow}
     BLOCK_SP=${BYellow}
     STICKY_OW=${RTurquoise2}
     MISSING_LN=${RIndianRed}
+    OTHER_WRITABLE=${DIR}
 
     LS_COLORS="di=${DIR}:ln=${SYM_LINK}:ex=${EXE}:cd=${CHAR_SP}:bd=${BLOCK_SP}:\
-tw=${STICKY_OW}:mi=${MISSING_LN}"
+tw=${STICKY_OW}:mi=${MISSING_LN}:ow=${OTHER_WRITABLE}"
     export LS_COLORS
 
     export GREP_COLORS='mt='${SkyBlue3}':ms='${SkyBlue3}':mc='${SkyBlue3}':fn='${DeepPink3}
