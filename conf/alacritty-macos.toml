@@ -1,0 +1,94 @@
+import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
+live_config_reload = true
+
+[bell]
+duration = 0
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[colors.primary]
+background = "#000000"
+
+[cursor]
+unfocused_hollow = true
+
+[font]
+size = 16.0
+
+[font.bold]
+family = "Hack Nerd Font Mono"
+style = "Bold"
+
+[font.bold_italic]
+family = "Hack Nerd Font Mono"
+style = "Bold Italic"
+
+[font.italic]
+family = "Hack Nerd Font Mono"
+style = "Italic"
+
+[font.normal]
+family = "Hack Nerd Font Mono"
+style = "Regular"
+
+[font.offset]
+x = 1
+y = 1
+
+[hints]
+alphabet = "jfkdls;ahgurieowpq"
+
+# Address
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+regex = '([0-9a-f]{12,128})|([[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3})'
+binding = { key = "A", mods = "Control|Shift" }
+
+# URL
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+regex = '(https?://[-a-zA-Z0-9()@:%_\+.~#?&/=]+)|(www\.[-a-zA-Z0-9()@:%_\+.~#?&/=]+)'
+binding = { key = "U", mods = "Control|Shift" }
+
+# Email
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+regex = '[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}'
+binding = { key = "E", mods = "Control|Shift" }
+
+[keyboard]
+bindings = [
+{ action = "SearchBackward", key = 53, mode = "Vi", mods = "Shift" },
+{ chars = "\u001E", key = "Key6", mods = "Control" },
+]
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 10000
+
+[selection]
+save_to_clipboard = true
+
+[shell]
+args = ["--login"]
+program = "/usr/local/bin/bash"
+
+[window]
+decorations = "buttonless"
+dynamic_title = true
+opacity = 1.0
+title = ""
+
+[window.dimensions]
+columns = 85
+lines = 25
+
+[window.position]
+x = 150
+y = 25

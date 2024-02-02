@@ -24,7 +24,7 @@ vim: ${vim_dir} ${vim_dir}/gvimrc ${vim_dir}/vimrc ${vim_dir}/vrapperrc
 conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.yml ${conf_dir}/alacritty-macos.yml
 	@[ -s ${HOME}/.tmux.conf ] || ln -sf ${conf_dir}/tmux.conf ${HOME}/.tmux.conf
 ifeq ($(OS), Darwin)
-	@[ -s ${HOME}/.alacritty-macos.yml ] || ln -sf ${conf_dir}/alacritty-macos.yml ${HOME}/.alacritty.yml
+	@[ -s ${HOME}/.alacritty-macos.toml ] || ln -sf ${conf_dir}/alacritty-macos.toml ${HOME}/.alacritty.toml
 else
 	@[ -s ${HOME}/.alacritty.yml ] || ln -sf ${conf_dir}/alacritty.yml ${HOME}/.alacritty.yml
 endif
@@ -35,6 +35,7 @@ endif
 	@ln -s ${conf_dir}/ranger ${HOME}/.config/ranger
 
 clean:
+	@ ! [ -e ${HOME}/.alacritty.toml ] || rm -f ${HOME}/.alacritty.toml
 	@ ! [ -e ${HOME}/.alacritty.yml ] || rm -f ${HOME}/.alacritty.yml
 	@ ! [ -e ${HOME}/.bash_profile ]  || rm -f ${HOME}/.bash_profile
 	@ ! [ -e ${HOME}/.bashrc ]        || rm -f ${HOME}/.bashrc

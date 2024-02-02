@@ -12,6 +12,7 @@ else
     alias df='df -TkH'
     alias du='du -bc --si'
 fi
+alias dust='dust -H'
 
 if [ "$__os_family" = "Mac" ]; then
     alias ls='ls -G -h -D "%Y %b %e %H:%M"'
@@ -26,7 +27,6 @@ alias ll='ls -l'
 alias lt='ls -Alrt'
 
 alias less='less -rMi'
-alias more='more -r'
 alias ncal='ncal -Mb'
 if hash ncal &>/dev/null; then
     if ! [ "$__os_family" = "Mac" ]; then
