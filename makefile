@@ -21,12 +21,12 @@ vim: ${vim_dir} ${vim_dir}/gvimrc ${vim_dir}/vimrc ${vim_dir}/vrapperrc
 	@[ -e ${HOME}/.vimrc ]     || ln -sf ${vim_dir}/vimrc     ${HOME}/.vimrc
 	@[ -e ${HOME}/.vrapperrc ] || ln -sf ${vim_dir}/vrapperrc ${HOME}/.vrapperrc
 
-conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.yml ${conf_dir}/alacritty-macos.yml
+conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.toml ${conf_dir}/alacritty-macos.toml
 	@[ -s ${HOME}/.tmux.conf ] || ln -sf ${conf_dir}/tmux.conf ${HOME}/.tmux.conf
 ifeq ($(OS), Darwin)
 	@[ -s ${HOME}/.alacritty-macos.toml ] || ln -sf ${conf_dir}/alacritty-macos.toml ${HOME}/.alacritty.toml
 else
-	@[ -s ${HOME}/.alacritty.yml ] || ln -sf ${conf_dir}/alacritty.yml ${HOME}/.alacritty.yml
+	@[ -s ${HOME}/.alacritty.toml ] || ln -sf ${conf_dir}/alacritty.toml ${HOME}/.alacritty.toml
 endif
 	@if [ -e "${HOME}/.config/ranger" ]; then \
 		echo existing ranger configuration found, creating backup...; \
@@ -36,7 +36,6 @@ endif
 
 clean:
 	@ ! [ -e ${HOME}/.alacritty.toml ] || rm -f ${HOME}/.alacritty.toml
-	@ ! [ -e ${HOME}/.alacritty.yml ] || rm -f ${HOME}/.alacritty.yml
 	@ ! [ -e ${HOME}/.bash_profile ]  || rm -f ${HOME}/.bash_profile
 	@ ! [ -e ${HOME}/.bashrc ]        || rm -f ${HOME}/.bashrc
 	@ ! [ -e ${HOME}/.gvimrc ]        || rm -f ${HOME}/.gvimrc

@@ -32,16 +32,17 @@ else
     #lc = leftcode - Opening terminal code
     #ln = symbolic link
     #mi = non-existent file pointed to by a symbolic link (visible when you type ls -l)
-    #no = normal
+    #no = normal - Global default, although everything should be something
     #or = symbolic link pointing to a non-existent file (orphan)
     #ow = other writable - Directory that is other-writable (o+w) and not sticky
-    #pi = fifo file (pipe)
+    #pi = fifo file (named pipe)
     #rc = rightcode - Closing terminal code
     #sg = set gid - File that is setgid (g+s)
     #so = socket file
     #st = sticky - Directory with the sticky bit set (+t) and not other-writable
     #su = set uid - File that is setuid (u+s)
     #tw = sticky other writable - Directory that is sticky and other-writable (+t,o+w)
+    #*.extension = Every file using this extension e.g. *.jpg
 
     if [ -s "$HOME/dotfiles/bash/ls_colors" ]; then
         # shellcheck source=/dev/null
