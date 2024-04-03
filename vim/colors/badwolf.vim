@@ -116,8 +116,8 @@ let s:bwc.toffee = ['b88853', 137]
 let s:bwc.coffee    = ['c7915b', 173]
 let s:bwc.darkroast = ['88633f', 95]
 
-let s:bwc.diffchange = ['d7005f', 167]
-let s:bwc.diffadd    = ['005f00', 74]
+let s:bwc.diffchange = ['990033', 167]
+let s:bwc.diffadd    = ['006622', 29]
 
 let s:bwc.SkyBlue3   = ['5fafd7', 74]
 let s:bwc.IndianRed  = ['d75f5f', 167]
