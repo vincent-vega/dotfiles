@@ -122,6 +122,15 @@ set scrolloff=3  " Minimal number of screen lines to keep above and below
 " ----------------------------------------------------------------------------
 " PLUGINS
 " ----------------------------------------------------------------------------
+" {{{ fzf
+
+if has('macunix')
+    set rtp+=/usr/local/opt/fzf
+endif
+nnoremap <C-P> :FZF --reverse<CR>
+let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+
+" }}}
 " {{{ Undotree
 
 nnoremap <silent> <F5> :UndotreeToggle<CR>
@@ -131,15 +140,6 @@ endif
 if !exists('g:undotree_SetFocusWhenToggle')
     let g:undotree_SetFocusWhenToggle=1
 endif
-
-" }}}
-" {{{ Ctrl-p
-
-let g:ctrlp_max_files=0
-let g:ctrlp_use_caching=0
-let g:ctrlp_user_command='find %s -type f'
-let g:ctrlp_working_path_mode=0
-let g:ctrlp_open_multiple_files = 'jir'
 
 " }}}
 " {{{ Tagbar
