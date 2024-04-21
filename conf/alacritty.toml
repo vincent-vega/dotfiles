@@ -1,0 +1,64 @@
+import = ["/home/davide/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.toml"]
+live_config_reload = true
+
+[bell]
+duration = 0
+
+[colors]
+draw_bold_text_with_bright_colors = true
+
+[cursor]
+unfocused_hollow = true
+
+[hints]
+alphabet = "jfkdls;ahgurieowpq"
+
+# Address
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+regex = '([0-9a-f]{12,128})|([[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3})'
+binding = { key = "A", mods = "Control|Shift" }
+
+# URL
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+regex = '(https?://[-a-zA-Z0-9()@:%_\+.~#?&/=]+)|(www\.[-a-zA-Z0-9()@:%_\+.~#?&/=]+)'
+binding = { key = "U", mods = "Control|Shift" }
+
+# Email
+[[hints.enabled]]
+action = "Copy"
+post_processing = false
+regex = '[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}'
+binding = { key = "E", mods = "Control|Shift" }
+
+[keyboard]
+bindings = [
+{ action = "SpawnNewInstance", key = "N", mods = "Control|Shift" },
+{ action = "SearchBackward", key = 53, mode = "Vi", mods = "Shift" },
+]
+
+[mouse]
+hide_when_typing = true
+
+[scrolling]
+history = 100000
+
+[selection]
+save_to_clipboard = true
+
+[shell]
+program = "/bin/bash"
+
+[window]
+decorations = "full"
+dynamic_title = true
+opacity = 1.0
+startup_mode = "Windowed"
+title = ""
+
+[window.dimensions]
+columns = 85
+lines = 25
