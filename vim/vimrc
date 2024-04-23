@@ -129,6 +129,7 @@ if has('macunix')
 endif
 nnoremap <C-P> :FZF --reverse<CR>
 let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+let g:fzf_colors = { 'fg': ['fg', 'Normal'] }
 
 " }}}
 " {{{ Undotree
