@@ -362,13 +362,7 @@ colortest() {
             #Formatting
             for attr in 0 1 2 4 5 7 ; do
                 #Print the result
-                local modifier
-                if [ "$__os_family" = "Mac" ]; then
-                    modifier="\033"
-                else
-                    modifier="\e"
-                fi
-                echo -en "${modifier}[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m ${modifier}[0m"
+                echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
             done
             echo
         done
@@ -378,14 +372,8 @@ colortest() {
 colortest256() {
     for fgbg in 38 48 ; do #Foreground/Background
         for color in {0..256} ; do #Colors
-            local modifier
-            if [ "$__os_family" = "Mac" ]; then
-                modifier="\033"
-            else
-                modifier="\e"
-            fi
             #Display the color
-            echo -en "${modifier}[${fgbg};5;${color}m ${color}\t${modifier}[0m"
+            echo -en "\e[${fgbg};5;${color}m ${color}\t\e[0m"
             #Display 10 colors per lines
             if [ $(((color + 1) % 6)) == 0 ]; then
                 echo
@@ -396,13 +384,15 @@ colortest256() {
 }
 
 colordiff() {
-    local add="\o33\[0;38;5;74m" rem="\o33\[0;38;5;167m" \
-          head="\o33\[1;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m" diff
+    local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
+          rev="[1;38;5;244m" reset="[0m" diff esc separator 
+    esc=$(printf '\033')
     while read -r line; do
-        diff=$diff"\n"$(sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
-                               -e "s/^(-([^-].*|))$/$rem\1$reset/" \
-                               -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
-                               -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/" <<< "$line")
+        diff=$diff$separator$(sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
+                               -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
+                               -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
+                               -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/" <<< "$line")
+        separator="\n"
     done
     echo -e "$diff"
 }
