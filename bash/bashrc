@@ -43,7 +43,7 @@ fi
 if [ -s "$HOME/.fzf.bash" ]; then
     source "$HOME/.fzf.bash"
     _fzf_setup_completion 'dir'  fd ff
-    _fzf_setup_completion 'path' la ll lt vd vimdiff cmp
+    _fzf_setup_completion 'path' la ll lt vd vimdiff jq cmp cp mv
 fi
 
 if [ "$__os_family" = "Cygwin" ]; then
@@ -177,12 +177,13 @@ svnhistory() {
 }
 
 ssvnhistory() {
-    local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
-          head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
-    svnhistory "$@" | sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
-                             -e "s/^(-([^-].*|))$/$rem\1$reset/" \
-                             -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
-                             -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/"
+    local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
+          rev="[1;38;5;244m" reset="[0m" esc
+    esc=$(printf '\033')
+    svnhistory "$@" | sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
+                             -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
+                             -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
+                             -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/"
 }
 
 svnhistoryr() {
@@ -211,12 +212,13 @@ svnhistoryr() {
 }
 
 ssvnhistoryr() {
-    local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
-          head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
-    svnhistoryr "$@" | sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
-                              -e "s/^(-([^-].*|))$/$rem\1$reset/" \
-                              -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
-                              -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/"
+    local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
+          rev="[1;38;5;244m" reset="[0m" esc
+    esc=$(printf '\033')
+    svnhistoryr "$@" | sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
+                              -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
+                              -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
+                              -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/"
 }
 
 svnactivity() {
