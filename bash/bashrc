@@ -191,7 +191,7 @@ svnhistoryr() {
         echo "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
-    local url
+    local url first
     url="$1"
     first=$(svn log -r 1:HEAD --limit 1 -q "$url" | "grep" -E -e "^r[[:digit:]]+" -o | cut -c2-)
     if [ ! "$first" ]; then
@@ -333,6 +333,7 @@ fd() {
 }
 
 rmalljarsign() {
+    local file
     for file in *jar; do
         echo "$file"
         zip -d "$file" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
@@ -344,6 +345,7 @@ rmjarsign() {
         echo "Usage: ${FUNCNAME[0]} JAR_FILE..."
         return 1
     fi
+    local jarfile
     for jarfile in "$@"; do
         if [ ! -f "$jarfile" ]; then
             echo "File $jarfile does not exist"
@@ -358,6 +360,7 @@ xml() {
 }
 
 colortest() {
+    local clbg attr
     for clbg in {40..47} {100..107} 49 ; do
         #Foreground
         for clfg in {30..37} {90..97} 39 ; do
@@ -372,28 +375,46 @@ colortest() {
 }
 
 colortest256() {
-    for fgbg in 38 48 ; do #Foreground/Background
-        for color in {0..256} ; do #Colors
-            #Display the color
-            echo -en "\e[${fgbg};5;${color}m ${color}\t\e[0m"
-            #Display 10 colors per lines
-            if [ $(((color + 1) % 6)) == 0 ]; then
+    local fgbg color idx count
+    for fgbg in 38 48; do
+        idx=0 count=8
+        for color in {0..255}; do
+            # TODO fix fg if color in 7,15,[190,195],[226,231],[254,255]
+            echo -en "\e[${fgbg};5;${color}m ${color} "
+            printf '%*s' $((3 - ${#color})) ''
+            echo -en "\e[0m "
+            if (( color > 15 )); then
+                count=12
+            fi
+            if [ $(((idx + 1) % count)) == 0 ]; then
                 echo
             fi
+            case $color in
+                15|231)
+                    echo;
+                    idx=0
+                    ;;
+                *)
+                    idx=$((idx + 1))
+            esac
         done
-        echo
+        if [ $fgbg -eq 38 ]; then
+            printf '\n\n'
+        elif (( fgbg != 48 || color != 255 )); then
+            echo
+        fi
     done
 }
 
 colordiff() {
     local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
-          rev="[1;38;5;244m" reset="[0m" diff esc separator 
+          rev="[1;38;5;244m" reset="[0m" diff esc separator
     esc=$(printf '\033')
     while read -r line; do
         diff=$diff$separator$(sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
-                               -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
-                               -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
-                               -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/" <<< "$line")
+                                     -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
+                                     -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
+                                     -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/" <<< "$line")
         separator="\n"
     done
     echo -e "$diff"
