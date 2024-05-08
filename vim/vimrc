@@ -38,7 +38,9 @@ set splitright
 set shiftround
 set autoread
 set title  " Change the terminal's title
-set cm=blowfish2
+if !has('nvim')
+    set cm=blowfish2
+endif
 set dictionary=/usr/share/dict/words
 set backupskip=/tmp/*,/private/tmp/*  " Make Vim able to edit crontab files
                                       " again
@@ -403,3 +405,8 @@ function! Marks()
     execute "normal! '" . s:mark
 endfunction
 nnoremap ' :call Marks()<CR>
+
+if exists("g:neovide")
+    set guifont=Noto\ Sans\ Mono:h11
+    let g:neovide_cursor_vfx_mode = "railgun"
+endif

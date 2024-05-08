@@ -60,8 +60,9 @@ alias glog='git log --all --stat --summary'
 
 alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
 
-alias vd='vimdiff'
-alias view='vim -R'
+alias vimdiff='nvim -d'
+alias view='nvim -R'
+alias vim='nvim'
 
 alias viewP12='openssl pkcs12 -info -in'
 alias viewPEM='openssl x509 -text -noout -inform PEM -in'
