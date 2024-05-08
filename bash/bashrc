@@ -77,7 +77,9 @@ open() {
                 rifle "${text_files[@]}"
             fi
         else
-            nautilus --browser -- "$@" &>/dev/null &
+            for x in "$@"; do
+                xdg-open "$x"
+            done
         fi
     else
         command open "$@"
@@ -362,11 +364,11 @@ xml() {
 colortest() {
     local clbg attr
     for clbg in {40..47} {100..107} 49 ; do
-        #Foreground
+        # foreground
         for clfg in {30..37} {90..97} 39 ; do
-            #Formatting
+            # formatting
             for attr in 0 1 2 4 5 7 ; do
-                #Print the result
+                # print the result
                 echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
             done
             echo
