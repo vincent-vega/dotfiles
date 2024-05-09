@@ -38,9 +38,6 @@ set splitright
 set shiftround
 set autoread
 set title  " Change the terminal's title
-if !has('nvim')
-    set cm=blowfish2
-endif
 set dictionary=/usr/share/dict/words
 set backupskip=/tmp/*,/private/tmp/*  " Make Vim able to edit crontab files
                                       " again
@@ -120,6 +117,25 @@ set hlsearch     " Highlight the last searched term
 set gdefault     " The substitute flag 'g' is default on
 set scrolloff=3  " Minimal number of screen lines to keep above and below
                  " the cursor
+
+" Neovim support -------------------------------------------------------------
+
+if !has('nvim')
+    set ttymouse=sgr
+    set cm=blowfish2
+endif
+
+if exists("g:neovide")
+    let g:neovide_cursor_vfx_mode = "railgun"
+    let g:neovide_hide_mouse_when_typing = v:true
+    if has('macunix')
+        set guifont=Menlo:h15
+        cd
+        autocmd VimEnter * call timer_start(20, {tid -> execute('NeovideFocus')})
+    else
+        set guifont=Noto_Sans_Mono:h11
+    endif
+endif
 
 " ----------------------------------------------------------------------------
 " PLUGINS
@@ -405,8 +421,3 @@ function! Marks()
     execute "normal! '" . s:mark
 endfunction
 nnoremap ' :call Marks()<CR>
-
-if exists("g:neovide")
-    set guifont=Noto\ Sans\ Mono:h11
-    let g:neovide_cursor_vfx_mode = "railgun"
-endif
