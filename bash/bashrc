@@ -439,3 +439,19 @@ gradle_dependencies() {
         ./gradlew "$subproject"dependencies --configuration runtimeClasspath 2> /dev/null | less
     fi
 }
+
+urlencode() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: ${FUNCNAME[0]} STRING"
+        return 1
+    fi
+    python3 -c "import urllib.parse;import sys;print(urllib.parse.quote_plus('${1//\'/\\\'}'))"
+}
+
+urldecode() {
+    if [ "$#" -ne 1 ]; then
+        echo "Usage: ${FUNCNAME[0]} STRING"
+        return 1
+    fi
+    python3 -c "import urllib.parse;import sys;print(urllib.parse.unquote('${1//\'/\\\'}'))"
+}
