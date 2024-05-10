@@ -3,7 +3,7 @@ set guicursor=a:blinkon0
 
 if has("gui_running")
     if has("gui_macvim")
-        set guifont=Menlo:h15
+        set guifont=-monospace-:h15
     elseif has("x11")
         set guifont=Monospace\ Regular\ 11
     endif
