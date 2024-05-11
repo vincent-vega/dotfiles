@@ -23,13 +23,12 @@ vimplugins: ${vim_dir}/ideavimrc ${vim_dir}/vrapperrc
 	@[ -e "${HOME}/.ideavimrc" ] || ln -sf "${vim_dir}/ideavimrc" "${HOME}/.ideavimrc"
 	@[ -e "${HOME}/.vrapperrc" ] || ln -sf "${vim_dir}/vrapperrc" "${HOME}/.vrapperrc"
 
-neovim: ${vim_dir}/neoviminit.vim
-	@[ -d "${HOME}/.config/nvim" ] || mkdir "${HOME}/.config/nvim"
-	@if [ -e "${HOME}/.config/nvim/init.vim" ]; then \
-		echo Existing neovim configuration found, creating backup...; \
-		mv "${HOME}/.config/nvim/init.vim" "${HOME}/.config/nvim/init.vim-$(shell mktemp -u XXXXX)-backup"; \
+neovim: ${vim_dir}/nvim
+	@if [ -e "${HOME}/.config/nvim" ]; then \
+		echo Existing Neovim configuration found, creating backup...; \
+		mv "${HOME}/.config/nvim" "${HOME}/.config/nvim-$(shell mktemp -u XXXXX)-backup"; \
 	fi
-	@ln -sf "${vim_dir}/neoviminit.vim" "${HOME}/.config/nvim/init.vim"
+	@ln -sf "${vim_dir}/nvim" "${HOME}/.config/nvim"
 
 conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.toml ${conf_dir}/alacritty-macos.toml
 	@[ -s ${HOME}/.tmux.conf ] || ln -sf "${conf_dir}/tmux.conf" "${HOME}/.tmux.conf"
@@ -39,7 +38,7 @@ else
 	@[ -s ${HOME}/.alacritty.toml ] || ln -sf "${conf_dir}/alacritty.toml" "${HOME}/.alacritty.toml"
 endif
 	@if [ -e "${HOME}/.config/ranger" ]; then \
-		echo Existing ranger configuration found, creating backup...; \
+		echo Existing Ranger configuration found, creating backup...; \
 		mv "${HOME}/.config/ranger" "${HOME}/.config/ranger-$(shell mktemp -u XXXXX)-backup"; \
 	fi
 	@ln -s "${conf_dir}/ranger" "${HOME}/.config/ranger"
