@@ -40,8 +40,8 @@ if [ -s "$HOME/dotfiles/bash/env" ]; then
     source "$HOME/dotfiles/bash/env"
 fi
 
-if [ -s "$HOME/.fzf.bash" ]; then
-    source "$HOME/.fzf.bash"
+if command -v fzf &>/dev/null; then
+    eval "$(fzf --bash)"
     _fzf_setup_completion 'dir'  fd ff
     _fzf_setup_completion 'path' la ll lt vd vimdiff jq cmp cp mv
 fi
