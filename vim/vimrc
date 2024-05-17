@@ -30,7 +30,6 @@ set list
 set listchars=tab:►\ ,trail:∙,extends:#,nbsp:∙,eol:¶
 set showbreak=┼
 set fillchars=diff:░
-set shell=/bin/bash
 set lazyredraw   " Do not redraw while running macros (faster)
 set matchtime=3  " Blink matching chars for 3 seconds
 set splitbelow
@@ -60,6 +59,7 @@ set switchbuf=useopen,usetab  " Jump to the first open window that
                               " one) & also consider windows in other tab
                               " pages
 set spelllang=en,it
+execute 'set shell=' . trim(system('which bash'))
 
 " Colors ---------------------------------------------------------------------
 
@@ -123,6 +123,8 @@ set scrolloff=3  " Minimal number of screen lines to keep above and below
 if !has('nvim')
     set ttymouse=sgr
     set cryptmethod=blowfish2
+    " save file you didn't open with root privileges
+    cmap w!! w !sudo tee "%" >/dev/null
 endif
 
 " ----------------------------------------------------------------------------
@@ -151,13 +153,15 @@ endif
 " }}}
 " {{{ Tagbar
 
-if filereadable(glob('/usr/bin/ctags'))
-    let g:tagbar_ctags_bin='/usr/bin/ctags'  " Proper Ctags locations
+if executable('ctags')
+    let g:tagbar_ctags_bin=trim(system('which ctags')) " Proper Ctags locations
     let g:tagbar_width=30     " Default is 40, seems too wide
     let g:tagbar_left=1       " Display panel on the left
     let g:tagbar_autofocus=1  " Move the cursor to the Tagbar
     let g:tagbar_autoclose=1  " automatically close when jump
     nnoremap <silent> <F6> :TagbarToggle<CR>
+else
+    nnoremap <silent> <F6> :echo "ctags not found"<CR>
 endif
 
 " }}}
@@ -243,8 +247,6 @@ vnoremap ; :
 nnoremap <silent> <leader>W :%s/\s\+$//<CR>:let @/=''<CR>
 " reselect the text that was just pasted
 nnoremap <leader>v V`]
-" save file you didn't open with root privileges
-cmap w!! w !sudo tee "%" >/dev/null
 nnoremap <silent> Y y$
 
 " buffer navigation

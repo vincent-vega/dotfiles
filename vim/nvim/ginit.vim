@@ -12,4 +12,3 @@ if exists("g:neovide")
         set guifont=SFMono_Nerd_Font_Mono,Noto_Sans_Mono:h11
     endif
 endif
-
