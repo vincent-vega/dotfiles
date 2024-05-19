@@ -26,7 +26,6 @@ set laststatus=2                " Always display the status line, even if only
                                 " one window is displayed
 set history=1000                " Keep 1000 lines of history
 set list
-"set listchars=tab:»\ ,trail:∙,extends:#,nbsp:∙,eol:¶
 set listchars=tab:►\ ,trail:∙,extends:#,nbsp:∙,eol:¶
 set showbreak=┼
 set fillchars=diff:░
@@ -132,12 +131,16 @@ endif
 " ----------------------------------------------------------------------------
 " {{{ fzf
 
-if has('macunix')
-    set rtp+=/usr/local/opt/fzf
+if executable('fzf')
+    if has('macunix')
+        set rtp+=/usr/local/opt/fzf
+    endif
+    let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+    let g:fzf_colors = { 'fg': ['fg', 'Normal'] }
+    nnoremap <silent> <C-P> :FZF --reverse<CR>
+else
+    nnoremap <silent> <C-P> :echo "fzf not found"<CR>
 endif
-nnoremap <C-P> :FZF --reverse<CR>
-let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
-let g:fzf_colors = { 'fg': ['fg', 'Normal'] }
 
 " }}}
 " {{{ Undotree
