@@ -12,6 +12,7 @@ else
     alias df='df -TkH'
     alias du='du -bc --si'
 fi
+alias dust='dust --apparent-size'
 
 if [ "$__os_family" = "Mac" ]; then
     alias ls='ls -G -h -D "%Y %b %e %H:%M"'
@@ -24,6 +25,7 @@ fi
 alias la='ls -Al'
 alias ll='ls -l'
 alias lt='ls -Alrt'
+alias tree='tree -C'
 
 alias less='less -rMi'
 alias ncal='ncal -Mb'

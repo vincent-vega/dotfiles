@@ -43,7 +43,10 @@ fi
 if command -v fzf &>/dev/null; then
     eval "$(fzf --bash)"
     _fzf_setup_completion 'dir'  fd ff
-    _fzf_setup_completion 'path' la ll lt vd vimdiff jq cmp cp mv
+    _fzf_setup_completion 'path' cmp cp jq la ll ln lt mv vimdiff
+    if [ "$__os_family" = "Mac" ]; then
+        _fzf_setup_completion 'path' pbcopy
+    fi
 fi
 
 if [ "$__os_family" = "Cygwin" ]; then
