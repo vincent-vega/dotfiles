@@ -126,9 +126,8 @@ if !has('nvim')
     cmap w!! w !sudo tee "%" >/dev/null
 endif
 
-" ----------------------------------------------------------------------------
-" PLUGINS
-" ----------------------------------------------------------------------------
+" Plugins --------------------------------------------------------------------
+
 " {{{ fzf
 
 if executable('fzf')
@@ -182,24 +181,25 @@ let g:ale_linters = {
 let g:ale_python_flake8_options='--ignore=E201,E202,E501'
 
 " }}}
-" ----------------------------------------------------------------------------
-" MAN PAGES
-" ----------------------------------------------------------------------------
+
+" Man pages ------------------------------------------------------------------
 
 runtime ftplugin/man.vim
 " Open a man page for the word under the cursor
 nmap K :Man <cword><CR>
 
-" ----------------------------------------------------------------------------
-" FOLDING SETTINGS
-" ----------------------------------------------------------------------------
+" Folding settings -----------------------------------------------------------
 
 set nofoldenable       " don't fold by default
 "set foldmethod=indent  " fold based on indent
 "set foldnestmax=10     " deepest fold is 10 levels
 "set foldlevel=1
 
-" ----------------------------------------------------------------------------
+" Misc -----------------------------------------------------------------------
+
+" Highlight special white space chars as error
+hi def link WhiteSpaceError Error
+match WhiteSpaceError /[\x0b\x0c\u00a0\u1680\u180e\u2000-\u200a\u2028\u202f\u205f\u3000]/
 
 if has('autocmd')
     autocmd BufNewFile,BufRead *.log,*.html,*.properties setlocal nowrap
@@ -220,9 +220,7 @@ if has('autocmd')
     autocmd VimResized * exe "normal! \<c-w>="
 endif
 
-" ----------------------------------------------------------------------------
-" MAPPINGS
-" ----------------------------------------------------------------------------
+" Mappings -------------------------------------------------------------------
 
 nnoremap <silent> gD gDzt
 nnoremap <silent> [[ [[zt
