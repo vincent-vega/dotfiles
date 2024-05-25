@@ -30,9 +30,7 @@ alias tree='tree -C'
 alias less='less -rMi'
 alias ncal='ncal -Mb'
 if hash ncal &>/dev/null; then
-    if ! [ "$__os_family" = "Mac" ]; then
-        alias cal='ncal -Mb'
-    fi
+    ! [ "$__os_family" = "Mac" ] && alias cal='ncal -Mb'
 elif ! [ "$__os_family" = "Mac" ]; then
     alias cal='cal -m'
 fi
@@ -57,6 +55,7 @@ alias ...........='cd ../../../../../../../../../..'
 alias sci='svn ci'
 alias gsl='git stash list'
 alias gcp='git pull; git commit; git push'
+alias gcss='git commit -m "" --allow-empty-message'
 alias glog='git log --all --stat --summary'
 
 alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'

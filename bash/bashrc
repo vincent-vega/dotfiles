@@ -23,30 +23,24 @@ if ! shopt -oq posix; then
     fi
 fi
 
-if [ -s "$HOME/dotfiles/bash/bash_aliases" ]; then
-    source "$HOME/dotfiles/bash/bash_aliases"
-fi
+[ -s /usr/local/bin/aws_completer ] && complete -C '/usr/local/bin/aws_completer' aws
 
-if [ -s "$HOME/dotfiles/bash/ps1_colors" ]; then
-    source "$HOME/dotfiles/bash/ps1_colors"
-fi
+[ -s "$HOME/dotfiles/bash/ps1_colors" ] && source "$HOME/dotfiles/bash/ps1_colors"
 
 PS1="\[${BGrey27}\][\[${DodgerBlue1}\]\u\[${BGrey27}\]]\[${White}\]@\
 \[${BGrey27}\][\[${Red}\]\h\[${BGrey27}\]]\[${White}\] \A\
- \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
+ \[${SpringGreen5}\]\w\r\n\[${ResetColor}\]# \
 "
 
-if [ -s "$HOME/dotfiles/bash/env" ]; then
-    source "$HOME/dotfiles/bash/env"
-fi
+[ -s "$HOME/dotfiles/bash/env" ] && source "$HOME/dotfiles/bash/env"
+
+[ -s "$HOME/dotfiles/bash/bash_aliases" ] && source "$HOME/dotfiles/bash/bash_aliases"
 
 if command -v fzf &>/dev/null; then
     eval "$(fzf --bash)"
     _fzf_setup_completion 'dir'  fd ff
     _fzf_setup_completion 'path' cmp cp jq la ll ln lt mv vimdiff
-    if [ "$__os_family" = "Mac" ]; then
-        _fzf_setup_completion 'path' pbcopy
-    fi
+    [ "$__os_family" = "Mac" ] && _fzf_setup_completion 'path' pbcopy
 fi
 
 if [ "$__os_family" = "Cygwin" ]; then
@@ -288,17 +282,17 @@ ff() {
     local grep_pattern
     if [ "$#" -eq 0 ]; then
         # current directory
-        find . -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
+        find . -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
             >&2 echo "Listing files in dir $1"
-            find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
+            find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n
         elif [ "$1" == "-t" ]; then
             find . -type f -exec sh -c 'ls -lrht "$@"' -- "{}" \+
         else
             grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$1")
-            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
+            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n | grep -E -i "$grep_pattern"
         fi
     elif [ "$#" -eq 2 ]; then
         if [ "$1" == "-t" ]; then
@@ -312,7 +306,7 @@ ff() {
             return 1
         else
             grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$2")
-            find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
+            find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n | grep -E -i "$grep_pattern"
         fi
     else
         >&2 echo "Too many arguments"
@@ -423,6 +417,23 @@ colordiff() {
         separator="\n"
     done
     echo -e "$diff"
+}
+
+instupdate() {
+    local outcome
+    outcome=$(brew update)
+    if [[ $outcome =~ ^.*Already\ up-to-date.* ]]; then
+        echo -e "\e[0;38;5;68m==>\e[1;49;39m Already up-to-date"
+    else
+        echo -e "\e[0;38;5;68m==>\e[1;49;39m Upgrade..."
+        brew upgrade
+        echo -e "\e[0;38;5;68m==>\e[1;49;39m Cleaning up..."
+        brew cleanup
+        brew autoremove
+    fi
+    sdk update
+    softwareupdate --list
+    #echo "Latest neovide release: $(curl -sI https://github.com/neovide/neovide/releases/latest | grep location | rev | cut -d '/' -f 1 | rev)"
 }
 
 gradle_dependencies() {
