@@ -23,30 +23,22 @@ if ! shopt -oq posix; then
     fi
 fi
 
-if [ -s "$HOME/dotfiles/bash/bash_aliases" ]; then
-    source "$HOME/dotfiles/bash/bash_aliases"
-fi
-
-if [ -s "$HOME/dotfiles/bash/ps1_colors" ]; then
-    source "$HOME/dotfiles/bash/ps1_colors"
-fi
+[ -s "$HOME/dotfiles/bash/ps1_colors" ] && source "$HOME/dotfiles/bash/ps1_colors"
 
 PS1="\[${BGrey27}\][\[${DodgerBlue1}\]\u\[${BGrey27}\]]\[${White}\]@\
 \[${BGrey27}\][\[${Red}\]\h\[${BGrey27}\]]\[${White}\] \A\
  \[${PaleGreen3}\]\w\r\n\[${ResetColor}\]# \
 "
 
-if [ -s "$HOME/dotfiles/bash/env" ]; then
-    source "$HOME/dotfiles/bash/env"
-fi
+[ -s "$HOME/dotfiles/bash/env" ] && source "$HOME/dotfiles/bash/env"
+
+[ -s "$HOME/dotfiles/bash/bash_aliases" ] && source "$HOME/dotfiles/bash/bash_aliases"
 
 if command -v fzf &>/dev/null; then
     eval "$(fzf --bash)"
     _fzf_setup_completion 'dir'  fd ff
     _fzf_setup_completion 'path' cmp cp jq la ll ln lt mv vimdiff
-    if [ "$__os_family" = "Mac" ]; then
-        _fzf_setup_completion 'path' pbcopy
-    fi
+    [ "$__os_family" = "Mac" ] && _fzf_setup_completion 'path' pbcopy
 fi
 
 if [ "$__os_family" = "Cygwin" ]; then
