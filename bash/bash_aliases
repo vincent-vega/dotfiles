@@ -28,8 +28,8 @@ alias lt='ls -Alrt'
 alias tree='tree -C'
 
 alias less='less -rMi'
-alias ncal='ncal -Mb'
 if hash ncal &>/dev/null; then
+    alias ncal='ncal -Mb'
     ! [ "$__os_family" = "Mac" ] && alias cal='ncal -Mb'
 elif ! [ "$__os_family" = "Mac" ]; then
     alias cal='cal -m'
