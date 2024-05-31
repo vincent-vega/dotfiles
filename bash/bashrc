@@ -126,8 +126,8 @@ ssync() {
 
 svnstash() {
     if [ "$#" -lt 1 ]; then
-        echo "Print current developments patch"
-        echo "Usage: ${FUNCNAME[0]} PATH..."
+        echo 1>&2 "Print current developments patch"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} PATH..."
         return 1
     fi
     local unversioned
@@ -136,9 +136,9 @@ svnstash() {
     if [ -n "$unversioned" ]; then
         local tmp_file
         tmp_file=$(mktemp --tmpdir)
-        echo "Created temp file $tmp_file" 1>&2
+        echo 1>&2 "Created temp file $tmp_file"
         # logging unversioned files to tmp_file
-        echo "$unversioned" > "$tmp_file"
+        echo 1>&2 "$unversioned" > "$tmp_file"
         # adding unversioned files
         xargs -r -d '\n' svn add < "$tmp_file" 1>&2
     fi
@@ -150,13 +150,13 @@ svnstash() {
         xargs -r -d '\n' svn delete --keep-local < "$tmp_file" 1>&2
         # clean
         rm -f "$tmp_file"
-        echo "Temp file removed" 1>&2
+        echo 1>&2 "Temp file removed"
     fi
 }
 
 svnhistory() {
     if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} PATH"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
     local url
@@ -185,7 +185,7 @@ ssvnhistory() {
 
 svnhistoryr() {
     if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} PATH"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} PATH"
         return 1
     fi
     local url first
@@ -220,8 +220,8 @@ ssvnhistoryr() {
 
 svnactivity() {
     if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
-        echo "Print the last NUM commits"
-        echo "Usage: ${FUNCNAME[0]} USERNAME NUM [PATH]"
+        echo 1>&2 "Print the last NUM commits"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} USERNAME NUM [PATH]"
         return 1
     fi
     local committername="$1" numcommit="$2" pagesize=200 svnpath revisions \
@@ -250,7 +250,7 @@ svnactivity() {
         unset "commits[$i]"
     done
     # TODO reverse commit array
-    echo "Found commits: ${commits[*]}"
+    echo 1>&2 "Found commits: ${commits[*]}"
     # shellcheck disable=SC2048
     for c in ${commits[*]}; do
         svn log -"$c" --diff "$svnpath"
@@ -284,7 +284,7 @@ ff() {
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
-            >&2 echo "Listing files in dir $1"
+            echo 1>&2 "Listing files in dir $1"
             find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
         elif [ "$1" == "-t" ]; then
             find . -type f -exec sh -c 'ls -lrht "$@"' -- "{}" \+
@@ -295,19 +295,19 @@ ff() {
     elif [ "$#" -eq 2 ]; then
         if [ "$1" == "-t" ]; then
             if [ ! -d "$2" ]; then
-                >&2 echo "Target path is not a directory: $2"
+                echo 1>&2 "Target path is not a directory: $2"
                 return 1
             fi
             find "$2" -type f -exec sh -c 'ls -lrht "$@"' -- "{}" \+
         elif [ ! -d "$1" ]; then
-            >&2 echo "Target path is not a directory: $1"
+            echo 1>&2 "Target path is not a directory: $1"
             return 1
         else
             grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$2")
             find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
         fi
     else
-        >&2 echo "Too many arguments"
+        echo 1>&2 "Too many arguments"
         return 1
     fi
 }
@@ -319,12 +319,12 @@ fd() {
         find . -type d -iname '*'"$1"'*' | cat -n | grep -i "$1"
     elif [ "$#" -eq 2 ]; then
         if [ ! -d "$1" ]; then
-            >&2 echo "Target path is not a directory: $1"
+            echo 1>&2 "Target path is not a directory: $1"
             return 1
         fi
         find "$1" -type d -iname '*'"$2"'*' | cat -n | grep -i "$2"
     elif [ "$#" -gt 2 ]; then
-        >&2 echo "Too many arguments"
+        echo 1>&2 "Too many arguments"
         return 1
     fi
 }
@@ -332,20 +332,20 @@ fd() {
 rmalljarsign() {
     local file
     for file in *jar; do
-        echo "$file"
+        echo 1>&2 "$file"
         zip -d "$file" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
     done
 }
 
 rmjarsign() {
     if [ "$#" -eq 0 ]; then
-        echo "Usage: ${FUNCNAME[0]} JAR_FILE..."
+        echo 1>&2 "Usage: ${FUNCNAME[0]} JAR_FILE..."
         return 1
     fi
     local jarfile
     for jarfile in "$@"; do
         if [ ! -f "$jarfile" ]; then
-            echo "File $jarfile does not exist"
+            echo 1>&2 "File $jarfile does not exist"
             continue
         fi
         zip -d "$jarfile" 'META-INF/*.SF' 'META-INF/*.RSA' 'META-INF/*.DSA'
@@ -418,16 +418,25 @@ colordiff() {
 }
 
 gradle_dependencies() {
-    if [ ! -x gradlew ]; then
-        echo "gradlew not found" >&2
+    if [ "$1" == "-h" ]; then
+        echo 1>&2 "List runtime dependencies"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} [SUBPROJECT]"
         return 1
     fi
-    if [[ -n "$1" ]] && [[ ! "$1" =~ ^[^/]+/?$ ]]; then
-        echo "Invalid subproject" >&2
+    if [ "$#" -gt 1 ]; then
+        echo 1>&2 "List runtime dependencies"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} [SUBPROJECT]"
+        return 1
+    fi
+    if [ ! -x gradlew ]; then
+        echo 1>&2 "Error: gradlew not found"
         return 1
     fi
     local subproject
-    [[ -z "$1" ]] && subproject="" || subproject=$(tr -d '/' <<< "$1:")
+    if [[ -n "$1" ]]; then
+        subproject=$(sed -r -e "s@/@:@g" <<< "$1")
+        [[ "${subproject}" != *: ]] && subproject="${subproject}:"
+    fi
     if command -v pygmentize &>/dev/null; then
         pygmentize <<< "$(./gradlew "$subproject"dependencies --configuration runtimeClasspath)" 2> /dev/null | less
     else
@@ -437,7 +446,7 @@ gradle_dependencies() {
 
 urlencode() {
     if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} STRING"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} STRING"
         return 1
     fi
     python3 -c "import urllib.parse;import sys;print(urllib.parse.quote_plus('${1//\'/\\\'}'))"
@@ -445,7 +454,7 @@ urlencode() {
 
 urldecode() {
     if [ "$#" -ne 1 ]; then
-        echo "Usage: ${FUNCNAME[0]} STRING"
+        echo 1>&2 "Usage: ${FUNCNAME[0]} STRING"
         return 1
     fi
     python3 -c "import urllib.parse;import sys;print(urllib.parse.unquote('${1//\'/\\\'}'))"
