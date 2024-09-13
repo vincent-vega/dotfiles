@@ -1,45 +1,40 @@
 #!/usr/bin/env bash
 # shellcheck shell=bash disable=SC2154
-alias rm='rm -i'
-alias rmlinks='find . -maxdepth 1 -type l -exec rm -f "{}" \;'
-alias mv='mv -i'
-alias cp='cp -i'
-
 if [ "$__os_family" = "Mac" ]; then
     alias df='df -H'
     alias du='du --si -c -A -B 1'
-else
-    alias df='df -TkH'
-    alias du='du -bc --si'
-fi
-alias dust='dust --apparent-size'
-
-if [ "$__os_family" = "Mac" ]; then
+    alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
     alias ls='ls -G -h -D "%Y %b %e %H:%M"'
     alias tac='tail -r'
     alias time='/usr/bin/time -hlp'
-    alias flushdns='sudo dscacheutil -flushcache; sudo killall -HUP mDNSResponder'
 else
+    alias df='df -TkH'
+    alias du='du -bc --si'
     alias ls='ls --si --color=auto --time-style="+%Y %b %e %H:%M"'
 fi
+
+alias cp='cp -i'
+alias dust='dust --apparent-size'
+alias egrep='grep -E --color=auto'
+alias fgrep='grep -F --color=auto'
+alias grep='grep --color=auto'
 alias la='ls -Al'
+alias less='less -rMi'
 alias ll='ls -l'
 alias lt='ls -Alrt'
+alias mv='mv -i'
+alias rm='rm -i'
+alias rmlinks='find . -maxdepth 1 -type l -exec rm -f "{}" \;'
 alias tree='tree -C'
+alias xmllint='xmllint --format'
+alias zgrep='zgrep --color=auto'
 
-alias less='less -rMi'
 if hash ncal &>/dev/null; then
     alias ncal='ncal -Mb'
     ! [ "$__os_family" = "Mac" ] && alias cal='ncal -Mb'
 elif ! [ "$__os_family" = "Mac" ]; then
     alias cal='cal -m'
 fi
-alias xmllint='xmllint --format'
-
-alias grep='grep --color=auto'
-alias zgrep='zgrep --color=auto'
-alias egrep='grep -E --color=auto'
-alias fgrep='grep -F --color=auto'
 
 alias ..='cd ..'
 alias ...='cd ../..'
@@ -62,16 +57,16 @@ alias vimdiff='nvim -d'
 alias view='nvim -R'
 alias vim='nvim'
 
-alias viewP12='openssl pkcs12 -info -in'
-alias viewPEM='openssl x509 -text -noout -inform PEM -in'
+alias viewASN1DER='openssl asn1parse -inform DER -i -in'
+alias viewASN1PEM='openssl asn1parse -inform PEM -i -in'
+alias viewCRL='openssl crl  -text -noout -inform DER -in'
 alias viewDER='openssl x509 -text -noout -inform DER -in'
 alias viewNET='openssl x509 -text -noout -inform NET -in'
-alias viewPUBRSA='openssl rsa -text -noout -pubin -in'
-alias viewPRIVRSA='openssl rsa -text -noout -in'
+alias viewP12='openssl pkcs12 -info -in'
+alias viewPEM='openssl x509 -text -noout -inform PEM -in'
 alias viewPFX='certutil -dump'
-alias viewASN1PEM='openssl asn1parse -inform PEM -i -in'
-alias viewASN1DER='openssl asn1parse -inform DER -i -in'
-alias viewCRL='openssl crl -text -noout -inform DER -in'
+alias viewPRIVRSA='openssl rsa -text -noout -in'
+alias viewPUBRSA='openssl  rsa -text -noout -in -pubin'
 
 if hash xset &>/dev/null; then
     if [[ $(xset q) == *"Server does not have the DPMS Extension"* ]]; then
