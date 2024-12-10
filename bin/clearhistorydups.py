@@ -9,11 +9,11 @@ import sys
 UNWANTED_COMMANDS = { r'(builtin\s+)?cd\s+' }
 
 
-def _err(*args, **kwargs) -> None:
+def _err(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
-def _keep(command: str, seen: set) -> bool:
+def _keep(command: str, seen: set[str]) -> bool:
     if command == '' or command in seen:
         return False
     for p in filter(lambda p: re.match(p, command), UNWANTED_COMMANDS):
