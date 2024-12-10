@@ -40,7 +40,7 @@ def clear(hist_file: str) -> int:
         return 3
 
     with open(hist_file, 'r+') as f:
-        history = list(reversed(list(map(lambda line: line.strip(), f))))
+        history = [ line.strip() for line in f ][::-1]
         seen = set()
         result = []
         for h in filter(lambda x: _keep(x, seen), history):
@@ -49,7 +49,7 @@ def clear(hist_file: str) -> int:
                 seen.add(h)
         if result and result != history:
             f.seek(0)
-            print(*result[::-1], file=f, sep='\n')
+            print(*reversed(result), file=f, sep='\n')
             f.truncate()
             _err(f'{len(history) - len(result)} lines have been purged ({(len(history) - len(result)) / len(history) * 100:.1f}%)')
             resp = None
