@@ -40,7 +40,7 @@ def clear(hist_file: str) -> int:
         return 3
 
     with open(hist_file, 'r+') as f:
-        history = [ line.strip() for line in f.read().splitlines() ][::-1]
+        history = list(reversed(list(map(lambda line: line.strip(), f))))
         seen = set()
         result = []
         for h in filter(lambda x: _keep(x, seen), history):
