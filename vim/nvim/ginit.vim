@@ -7,7 +7,7 @@ if exists("g:neovide")
     if has('macunix')
         set guifont=SF_Mono,Menlo:h15
         cd
-        autocmd VimEnter * call timer_start(20, {tid -> execute('NeovideFocus')})
+        "autocmd VimEnter * call timer_start(20, {tid -> execute('NeovideFocus')})
     else
         set guifont=SFMono_Nerd_Font_Mono,Noto_Sans_Mono:h11
     endif

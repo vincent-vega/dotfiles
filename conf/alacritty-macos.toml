@@ -1,6 +1,3 @@
-import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
-live_config_reload = true
-
 [bell]
 duration = 0
 
@@ -75,7 +72,7 @@ history = 10000
 [selection]
 save_to_clipboard = true
 
-[shell]
+[terminal.shell]
 args = ["--login"]
 program = "/usr/local/bin/bash"
 
@@ -92,3 +89,9 @@ lines = 26
 [window.position]
 x = 91
 y = 25
+
+[general]
+#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/pencil_dark.toml"]
+#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
+import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.toml"]
+live_config_reload = true
