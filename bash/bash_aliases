@@ -11,6 +11,11 @@ else
     alias df='df -TkH'
     alias du='du -bc --si'
     alias ls='ls --si --color=auto --time-style="+%Y %b %e %H:%M"'
+    if hash xclip &>/dev/null; then
+        alias pbcopy='xclip -selection clipboard'
+    elif hash xsel &>/dev/null; then
+        alias pbcopy='xsel --clipboard --input'
+    fi
 fi
 
 alias cp='cp -i'
