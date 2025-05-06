@@ -48,37 +48,40 @@
 #106 = turquoise background
 #107 = white background
 
-ResetColor='\e[0m'
+ResetColor="\[\e[0m\]"
 
 # High Intensty
-#Black='\e[0;49;90m'
-#Blue='\e[0;49;94m'
-#Cyan='\e[0;49;96m'
-#Green='\e[0;49;92m'
-#Purple='\e[0;49;95m'
-#Yellow='\e[0;49;93m'
-DodgerBlue1='\e[0;38;5;33m'
-PaleGreen3='\e[0;38;5;114m'
-SkyBlue2='\e[0;38;5;111m'
-Red='\e[0;38;5;9m'
-White='\e[0;38;5;15m'
+#Black="\[\e[0;49;90m\]"
+#Blue="\[\e[0;49;94m\]"
+#Cyan="\[\e[0;49;96m\]"
+DodgerBlue1="\[\e[0;38;5;33m\]"
+#DodgerBlue2="\[\e[0;38;5;27m\]"
+#Green="\[\e[0;49;92m\]"
+Honeydew2="\[\e[0;38;5;194m\]"
+PaleGreen3="\[\e[0;38;5;114m\]"
+#Purple="\[\e[0;49;95m\]"
+Red="\[\e[0;38;5;9m\]"
+SkyBlue2="\[\e[0;38;5;111m\]"
+#SpringGreen5="\[\e[0;38;5;44m\]"
+White="\[\e[0;38;5;15m\]"
+#Yellow="\[\e[0;49;93m\]"
 
 # Bold High Intensty
-#BBlue='\e[1;49;94m'
-#BCyan='\e[1;49;96m'
-#BGreen='\e[1;49;92m'
-#BPurple='\e[1;49;95m'
-#BRed='\e[1;49;91m'
-#BWhite='\e[1;49;97m'
-#BYellow='\e[1;49;93m'
-BGrey27='\e[1;38;5;238m'
+#BBlue="\[\e[1;49;94m\]"
+#BCyan="\[\e[1;49;96m\]"
+#BGreen="\[\e[1;49;92m\]"
+BGrey27="\[\e[1;38;5;238m\]"
+#BPurple="\[\e[1;49;95m\]"
+#BRed="\[\e[1;49;91m\]"
+#BWhite="\[\e[1;49;97m\]"
+#BYellow="\[\e[1;49;93m\]"
 
 # Underline High Intensty
-#UBlack='\e[4;49;90m'
-#UBlue='\e[4;49;94m'
-#UCyan='\e[4;49;96m'
-#UGreen='\e[4;49;92m'
-#UPurple='\e[4;49;95m'
-#URed='\e[4;49;91m'
-#UWhite='\e[4;49;97m'
-#UYellow='\e[4;49;93m'
+#UBlack="\[\e[4;49;90m\]"
+#UBlue="\[\e[4;49;94m\]"
+#UCyan="\[\e[4;49;96m\]"
+#UGreen="\[\e[4;49;92m\]"
+#UPurple="\[\e[4;49;95m\]"
+#URed="\[\e[4;49;91m\]"
+#UWhite="\[\e[4;49;97m\]"
+#UYellow="\[\e[4;49;93m\]"
