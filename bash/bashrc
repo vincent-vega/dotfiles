@@ -23,15 +23,28 @@ if ! shopt -oq posix; then
     fi
 fi
 
+# shellcheck source=/dev/null
 [ -s "$HOME/dotfiles/bash/ps1_colors" ] && source "$HOME/dotfiles/bash/ps1_colors"
-
+if ! type __git_ps1 &>/dev/null; then
+    if [ -s "/usr/local/etc/bash_completion.d/git-prompt.sh" ]; then
+        source "/usr/local/etc/bash_completion.d/git-prompt.sh"
+    fi
+fi
+if type __git_ps1 &>/dev/null; then
+    # shellcheck disable=SC2034
+    GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWCONFLICTSTATE=1 GIT_PS1_SHOWCOLORHINTS=1
+else
+    __git_ps1() { true; }
+fi
+# shellcheck disable=SC2154
 PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 '"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${PaleGreen3}"'\
-\w\r\n'"${ResetColor}"'#'"${Honeydew2}"'$(__git_ps1)'"${ResetColor}"' \
-'
+\w\r\n'"${ResetColor}"'#$(__git_ps1) '
 
+# shellcheck source=/dev/null
 [ -s "$HOME/dotfiles/bash/env" ] && source "$HOME/dotfiles/bash/env"
 
+# shellcheck source=/dev/null
 [ -s "$HOME/dotfiles/bash/bash_aliases" ] && source "$HOME/dotfiles/bash/bash_aliases"
 
 if command -v fzf &>/dev/null; then
