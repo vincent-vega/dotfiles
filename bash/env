@@ -114,6 +114,5 @@ export GIT_EDITOR="$VISUAL"
 export FZF_DEFAULT_OPTS='--layout=reverse --border --multi'
 export PYGMENTIZE_STYLE=dracula
 if [ -n "$RANGER_LEVEL" ]; then
-    type __git_ps1 &>/dev/null || function __git_ps1 () { true; }
     export PS1="${BGrey27}[${SkyBlue2}ranger${BGrey27}]$PS1"
 fi

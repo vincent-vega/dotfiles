@@ -25,9 +25,14 @@ fi
 
 # shellcheck source=/dev/null
 [ -s "$HOME/dotfiles/bash/ps1_colors" ] && source "$HOME/dotfiles/bash/ps1_colors"
+
 if ! type __git_ps1 &>/dev/null; then
     if [ -s "/usr/local/etc/bash_completion.d/git-prompt.sh" ]; then
+        # shellcheck disable=SC1091
         source "/usr/local/etc/bash_completion.d/git-prompt.sh"
+    elif [ -s "/usr/share/git/completion/git-prompt.sh" ]; then
+        # shellcheck disable=SC1091
+        source "/usr/share/git/completion/git-prompt.sh"
     fi
 fi
 if type __git_ps1 &>/dev/null; then
