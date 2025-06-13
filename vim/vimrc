@@ -114,6 +114,7 @@ set incsearch    " Show search matches as you type
 set showmatch
 set hlsearch     " Highlight the last searched term
 set gdefault     " The substitute flag 'g' is default on
+set smoothscroll
 set scrolloff=3  " Minimal number of screen lines to keep above and below
                  " the cursor
 

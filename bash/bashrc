@@ -37,7 +37,7 @@ if ! type __git_ps1 &>/dev/null; then
 fi
 if type __git_ps1 &>/dev/null; then
     # shellcheck disable=SC2034
-    GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWCONFLICTSTATE=1 GIT_PS1_SHOWCOLORHINTS=1
+    GIT_PS1_SHOWCOLORHINTS=1 GIT_PS1_SHOWCONFLICTSTATE=1 GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWUNTRACKEDFILES=1
 else
     __git_ps1() { true; }
 fi
@@ -456,9 +456,9 @@ gradle_dependencies() {
         [[ "${subproject}" != *: ]] && subproject="${subproject}:"
     fi
     if command -v pygmentize &>/dev/null; then
-        pygmentize <<< "$(./gradlew "$subproject"dependencies --configuration runtimeClasspath)" 2> /dev/null | less
+        pygmentize <<< "$(./gradlew "$subproject"dependencies)" 2> /dev/null | less
     else
-        ./gradlew "$subproject"dependencies --configuration runtimeClasspath 2> /dev/null | less
+        ./gradlew "$subproject"dependencies 2>/dev/null | less
     fi
 }
 

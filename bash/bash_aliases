@@ -7,6 +7,7 @@ if [ "$__os_family" = "Mac" ]; then
     alias ls='ls -G -h -D "%Y %b %e %H:%M"'
     alias tac='tail -r'
     alias time='/usr/bin/time -hlp'
+    alias restartTouchBar='sudo pkill TouchBarServer;sudo killall "ControlStrip"'
 else
     alias df='df -TkH'
     alias du='du -bc --si'
@@ -24,7 +25,7 @@ alias egrep='grep -E --color=auto'
 alias fgrep='grep -F --color=auto'
 alias grep='grep --color=auto'
 alias la='ls -Al'
-alias less='less -rMi'
+alias less='less -rMi -x4' # lesskey file is disabled on MacOS
 alias ll='ls -l'
 alias lt='ls -Alrt'
 alias mv='mv -i'
