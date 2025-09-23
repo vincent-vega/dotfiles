@@ -24,9 +24,9 @@ if ! shopt -oq posix; then
 fi
 
 # shellcheck source=/dev/null
-[ -s "$HOME/dotfiles/bash/ps1_colors" ] && source "$HOME/dotfiles/bash/ps1_colors"
+[[ -s "$HOME/dotfiles/bash/ps1_colors" ]] && source "$HOME/dotfiles/bash/ps1_colors"
 
-if ! type __git_ps1 &>/dev/null; then
+if ! command -v __git_ps1 &>/dev/null; then
     if [ -s "/usr/local/etc/bash_completion.d/git-prompt.sh" ]; then
         # shellcheck disable=SC1091
         source "/usr/local/etc/bash_completion.d/git-prompt.sh"
@@ -35,7 +35,7 @@ if ! type __git_ps1 &>/dev/null; then
         source "/usr/share/git/completion/git-prompt.sh"
     fi
 fi
-if type __git_ps1 &>/dev/null; then
+if command -v __git_ps1 &>/dev/null; then
     # shellcheck disable=SC2034
     GIT_PS1_SHOWCOLORHINTS=1 GIT_PS1_SHOWCONFLICTSTATE=1 GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWUNTRACKEDFILES=1
 else
@@ -47,10 +47,10 @@ PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 \w\r\n'"${ResetColor}"'#$(__git_ps1) '
 
 # shellcheck source=/dev/null
-[ -s "$HOME/dotfiles/bash/env" ] && source "$HOME/dotfiles/bash/env"
+[[ -s "$HOME/dotfiles/bash/env" ]] && source "$HOME/dotfiles/bash/env"
 
 # shellcheck source=/dev/null
-[ -s "$HOME/dotfiles/bash/bash_aliases" ] && source "$HOME/dotfiles/bash/bash_aliases"
+[[ -s "$HOME/dotfiles/bash/bash_aliases" ]] && source "$HOME/dotfiles/bash/bash_aliases"
 
 if command -v fzf &>/dev/null; then
     eval "$(fzf --bash)"
@@ -467,7 +467,7 @@ urlencode() {
         echo 1>&2 "Usage: ${FUNCNAME[0]} STRING"
         return 1
     fi
-    python3 -c "import urllib.parse;import sys;print(urllib.parse.quote_plus('${1//\'/\\\'}'))"
+    python3 -c "import urllib.parse;print(urllib.parse.quote_plus('${1//\'/\\\'}'))"
 }
 
 urldecode() {
@@ -475,5 +475,5 @@ urldecode() {
         echo 1>&2 "Usage: ${FUNCNAME[0]} STRING"
         return 1
     fi
-    python3 -c "import urllib.parse;import sys;print(urllib.parse.unquote('${1//\'/\\\'}'))"
+    python3 -c "import urllib.parse;print(urllib.parse.unquote('${1//\'/\\\'}'))"
 }
