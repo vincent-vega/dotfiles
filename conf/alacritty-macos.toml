@@ -1,3 +1,9 @@
+[general]
+#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/pencil_dark.toml"]
+#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
+import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.toml"]
+live_config_reload = true
+
 [bell]
 duration = 0
 
@@ -57,11 +63,16 @@ post_processing = false
 regex = '[a-zA-Z0-9._%+-]+@([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}'
 binding = { key = "E", mods = "Control|Shift" }
 
-[keyboard]
-bindings = [
-{ action = "SearchBackward", key = 53, mode = "Vi", mods = "Shift" },
-{ chars = "\u001E", key = "Key6", mods = "Control" },
-]
+[[keyboard.bindings]]
+action = "SearchBackward"
+key = 53
+mode = "Vi"
+mods = "Shift"
+
+[[keyboard.bindings]]
+chars = "\u001E"
+key = "Key6"
+mods = "Control"
 
 [mouse]
 hide_when_typing = true
@@ -89,9 +100,3 @@ lines = 26
 [window.position]
 x = 91
 y = 25
-
-[general]
-#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/pencil_dark.toml"]
-#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
-import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.toml"]
-live_config_reload = true

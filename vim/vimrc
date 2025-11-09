@@ -26,7 +26,8 @@ set laststatus=2                " Always display the status line, even if only
                                 " one window is displayed
 set history=1000                " Keep 1000 lines of history
 set list
-set listchars=tab:►\ ,trail:∙,extends:#,nbsp:∙,eol:¶
+"set listchars=tab:►\ ,trail:∙,extends:#,nbsp:∙,eol:¶
+set listchars=tab:►\ ,trail:∙,extends:#,nbsp:∙
 set showbreak=┼
 set fillchars=diff:░
 set lazyredraw   " Do not redraw while running macros (faster)

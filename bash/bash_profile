@@ -1,3 +1,24 @@
 #!/usr/bin/env bash
 # shellcheck source=/dev/null
+
+if command -v brew &>/dev/null; then
+  HOMEBREW_PREFIX="$(brew --prefix)"
+  [ -z "$HOMEBREW_CELLAR" ] && export HOMEBREW_CELLAR="$HOMEBREW_PREFIX/Cellar";
+  [ -z "$HOMEBREW_REPOSITORY" ] && export HOMEBREW_REPOSITORY="$HOMEBREW_PREFIX/Homebrew"
+  if [[ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]]
+  then
+    source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+  else
+    for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*
+    do
+      [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+    done
+  fi
+fi
+
 [[ -s "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
+
+#THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
+export SDKMAN_DIR="$HOME/.sdkman"
+# shellcheck source=/dev/null
+[[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]] && source "$HOME/.sdkman/bin/sdkman-init.sh"
