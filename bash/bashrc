@@ -43,7 +43,7 @@ else
 fi
 # shellcheck disable=SC2154
 PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
-'"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${PaleGreen3}"'\
+'"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${SpringGreen5}"'\
 \w\r\n'"${ResetColor}"'#$(__git_ps1) '
 
 # shellcheck source=/dev/null
@@ -298,17 +298,17 @@ ff() {
     local grep_pattern
     if [ "$#" -eq 0 ]; then
         # current directory
-        find . -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
+        find . -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n
     elif [ "$#" -eq 1 ]; then
         if [ -d "$1" ]; then
             # directory
             echo 1>&2 "Listing files in dir $1"
-            find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n
+            find "$1" -type f -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n
         elif [ "$1" == "-t" ]; then
             find . -type f -exec sh -c 'ls -lrht "$@"' -- "{}" \+
         else
             grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$1")
-            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
+            find . -type f -iname '*'"$1"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n | grep -E -i "$grep_pattern"
         fi
     elif [ "$#" -eq 2 ]; then
         if [ "$1" == "-t" ]; then
@@ -322,7 +322,7 @@ ff() {
             return 1
         else
             grep_pattern=$(sed -r 's/\*+/.*/g' <<< "$2")
-            find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | cat -n | grep -E -i "$grep_pattern"
+            find "$1" -type f -iname '*'"$2"'*' -exec sh -c 'ls -lh "$@"' -- "{}" \+ | grep -v ".DS_Store" | cat -n | grep -E -i "$grep_pattern"
         fi
     else
         echo 1>&2 "Too many arguments"
@@ -477,3 +477,29 @@ urldecode() {
     fi
     python3 -c "import urllib.parse;print(urllib.parse.unquote('${1//\'/\\\'}'))"
 }
+
+if [ "$__os_family" = "Mac" ]; then
+    instupdate() {
+        if command -v brew &>/dev/null; then
+            local outcome
+            outcome=$(brew update)
+            if [[ $outcome =~ ^.*Already\ up-to-date.* ]]; then
+                echo -e "\\033[34m==>\\033[0m \\033[1mAlready up-to-date\\033[0m"
+            else
+                echo -e "\\033[34m==>\\033[0m \\033[1mUpgrade...\\033[0m"
+                brew upgrade
+                echo -e "\\033[34m==>\\033[0m \\033[1mCleaning up...\\033[0m"
+                brew cleanup
+                brew autoremove
+            fi
+        else
+            echo "brew not found. Skip update"
+        fi
+        if command -v sdk &>/dev/null; then
+            sdk update
+        else
+            echo "sdkman not found. Skip update"
+        fi
+        softwareupdate --list
+    }
+fi
