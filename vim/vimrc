@@ -58,7 +58,11 @@ set switchbuf=useopen,usetab  " Jump to the first open window that
                               " one) & also consider windows in other tab
                               " pages
 set spelllang=en,it
-execute 'set shell=' . trim(system('which bash'))
+if executable('bash')
+    execute 'set shell=' . trim(system('which bash'))
+else
+    set shell=/bin/sh
+endif
 
 " Colors ---------------------------------------------------------------------
 
