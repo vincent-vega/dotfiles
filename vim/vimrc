@@ -187,6 +187,34 @@ let g:ale_linters = {
 let g:ale_python_flake8_options='--ignore=E201,E202,E501'
 
 " }}}
+" {{{ Startify
+
+let g:startify_custom_header = [
+  \ '   ███╗   ██╗███████╗ ██████╗ ██╗   ██╗██╗███╗   ███╗',
+  \ '   ████╗  ██║██╔════╝██╔═══██╗██║   ██║██║████╗ ████║',
+  \ '   ██╔██╗ ██║█████╗  ██║   ██║██║   ██║██║██╔████╔██║',
+  \ '   ██║╚██╗██║██╔══╝  ██║   ██║╚██╗ ██╔╝██║██║╚██╔╝██║',
+  \ '   ██║ ╚████║███████╗╚██████╔╝ ╚████╔╝ ██║██║ ╚═╝ ██║',
+  \ '   ╚═╝  ╚═══╝╚══════╝ ╚═════╝   ╚═══╝  ╚═╝╚═╝     ╚═╝',
+  \ ]
+
+let g:startify_lists = [
+  \ { 'type': 'files',     'header': ['   Recent Files'] },
+  \ { 'type': 'dir',       'header': ['   Current Directory '] },
+  \ { 'type': 'sessions',  'header': ['   Sessions'] },
+  \ { 'type': 'bookmarks', 'header': ['   Bookmarks'] },
+  \ ]
+
+let g:startify_bookmarks = [
+  \ { 'b': '~/.bashrc' },
+  \ { 'h': '~/.bash_history' },
+  \ { 'n': '~/.config/nvim/init.vim' },
+  \ { 'v': '~/.vimrc' },
+  \ ]
+
+autocmd BufDelete * if empty(filter(tabpagebuflist(), '!buflisted(v:val)')) | Startify | endif
+
+" }}}
 
 " Man pages ------------------------------------------------------------------
 

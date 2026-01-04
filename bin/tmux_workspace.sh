@@ -10,12 +10,13 @@ tmux send-keys ' ranger' Enter
 tmux new-window -n 'mnt'
 tmux send-keys ' cd ~/Downloads' Enter
 tmux send-keys ' htop' Enter
+tmux send-keys '#' Enter
 tmux split-window -v
 tmux send-keys ' cd ~/Downloads' Enter
 tmux send-keys ' btop' Enter
 tmux split-window -v
 tmux send-keys ' cd ~/Downloads' Enter
-tmux send-keys ' while true; do ping www.reddit.com; sleep 2; done' Enter
+tmux send-keys ' while true; do ping -i 3 www.reddit.com; sleep 2; done' Enter
 
 tmux select-layout even-vertical
 tmux select-pane -t w:1.1

@@ -28,6 +28,7 @@ htop
 imagemagick
 jnv
 jq
+media-info
 nmap
 node
 openapi-generator
