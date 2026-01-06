@@ -53,7 +53,7 @@ binding = { key = "A", mods = "Control|Shift" }
 [[hints.enabled]]
 action = "Copy"
 post_processing = false
-regex = '(https?://[-a-zA-Z0-9()@:%_\+.~#?&/=]+)|(www\.[-a-zA-Z0-9()@:%_\+.~#?&/=]+)'
+regex = '((https?:|file:/)//[-a-zA-Z0-9()@:%_\+.~#?&/=]+)|(www\.[-a-zA-Z0-9()@:%_\+.~#?&/=]+)'
 binding = { key = "U", mods = "Control|Shift" }
 
 # Email
