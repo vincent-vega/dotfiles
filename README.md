@@ -102,6 +102,48 @@ Note: This will only remove symlinks, not the actual dotfiles repository or any 
 
 On macOS (Darwin), the Alacritty configuration will use `alacritty-macos.toml` instead of the standard `alacritty.toml`.
 
+### Ranger Icons
+
+The Ranger configuration uses the `ranger_devicons` plugin to display file icons. This requires a Nerd Font to be installed for the icons to display correctly.
+
+**Installing Nerd Fonts on macOS:**
+
+```bash
+# Using Homebrew (recommended)
+brew install font-hack-nerd-font
+
+# Or manually download and install
+# Download from: https://github.com/ryanoasis/nerd-fonts/releases
+# Move .ttf files to ~/Library/Fonts/
+```
+
+**Installing Nerd Fonts on Linux:**
+
+```bash
+# Create fonts directory if it doesn't exist
+mkdir -p ~/.local/share/fonts
+
+# Download a Nerd Font (e.g., Source Code Pro)
+cd ~/.local/share/fonts
+wget https://github.com/ryanoasis/nerd-fonts/releases/latest/download/SourceCodePro.zip
+
+# Extract the font
+unzip SourceCodePro.zip
+rm SourceCodePro.zip
+
+# Update font cache
+fc-cache -fv
+```
+
+**Terminal Configuration:**
+
+Most terminals will automatically use the installed Nerd Font and icons should display correctly. If icons still appear as squares, you may need to configure your terminal to use the Nerd Font explicitly. For Alacritty, add this to `~/.config/alacritty/alacritty.toml`:
+
+```toml
+[font.normal]
+family = "SauceCodePro Nerd Font"  # or "Hack Nerd Font" if using Hack
+```
+
 ### Backups
 
 The installation process will automatically create backups if existing configurations are found for:
