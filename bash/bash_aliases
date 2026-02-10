@@ -8,7 +8,6 @@ if [ "$__os_family" = "Mac" ]; then
     alias tac='tail -r'
     alias time='/usr/bin/time -hlp'
     alias restartTouchBar='sudo pkill TouchBarServer;sudo killall "ControlStrip"'
-    alias rg='rg --colors "match:fg:74" --colors "path:fg:219" --colors "line:fg:36"'
 else
     alias df='df -TkH'
     alias du='du -bc --si'
@@ -35,6 +34,7 @@ alias rmlinks='find . -maxdepth 1 -type l -exec rm -f "{}" \;'
 alias tree='tree -C'
 alias xmllint='xmllint --format'
 alias zgrep='zgrep --color=auto'
+alias rg='rg --colors "match:fg:74" --colors "path:fg:219" --colors "line:fg:36"'
 
 if command -v ncal &>/dev/null; then
     alias ncal='ncal -Mb'
