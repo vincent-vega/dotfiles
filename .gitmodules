@@ -1,9 +1,6 @@
 [submodule "vim/pack/bundle/start/delimitMate"]
 	path = vim/pack/bundle/start/delimitMate
 	url = https://github.com/Raimondi/delimitMate.git
-[submodule "vim/pack/bundle/start/jedi-vim"]
-	path = vim/pack/bundle/start/jedi-vim
-	url = https://github.com/davidhalter/jedi-vim.git
 [submodule "vim/pack/bundle/start/nerdcommenter"]
 	path = vim/pack/bundle/start/nerdcommenter
 	url = https://github.com/preservim/nerdcommenter.git
