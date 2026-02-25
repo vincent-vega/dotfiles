@@ -69,7 +69,6 @@ make conf        # Install tmux, alacritty, and ranger configurations only
 The following vim plugins are included as submodules:
 
 - [delimitMate](https://github.com/Raimondi/delimitMate) - Auto-completion for quotes, parens, brackets
-- [jedi-vim](https://github.com/davidhalter/jedi-vim) - Python autocompletion
 - [nerdcommenter](https://github.com/preservim/nerdcommenter) - Comment functions
 - [nerdtree](https://github.com/preservim/nerdtree) - File system explorer
 - [tagbar](https://github.com/majutsushi/tagbar) - Display tags in a window
