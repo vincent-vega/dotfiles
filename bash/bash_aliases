@@ -55,8 +55,8 @@ alias ..........='cd ../../../../../../../../..'
 alias ...........='cd ../../../../../../../../../..'
 
 alias gcp='git pull; git commit; git push'
-alias glog='git log --all --stat --summary'
 alias gsl='git stash list'
+alias gsw='{ git branch | sed "s/^[* ]*//"; echo "--- remote ---"; git branch -r | grep -v HEAD | sed "s|^ *origin/||" | grep -vFf <(git branch | sed "s/^[* ]*//"); } | fzf --height=40% --reverse --no-multi --prompt="Switch branch: " | grep -v "^---" | xargs -I{} git switch {}'
 
 alias ctags='ctags --extra=+f --langdef=file --langmap='"'"'file:.xsd.xml.xsl.jsp.tag.properties.js'"'"' --exclude=target --exclude=*.class -R'
 

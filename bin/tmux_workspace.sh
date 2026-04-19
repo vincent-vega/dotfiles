@@ -1,8 +1,8 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 tmux new-session -d -s w
 
-tmux rename-window -t w:0 ''
+tmux rename-window -t w:1 ''
 # not necessary but keeping for future reference
 tmux send-keys ' cd ~/Downloads; tmux wait-for -S move' Enter\; wait-for move
 tmux send-keys ' ranger' Enter
@@ -14,15 +14,18 @@ tmux send-keys '#' Enter
 tmux split-window -v
 tmux send-keys ' cd ~/Downloads' Enter
 tmux send-keys ' btop' Enter
-tmux split-window -v
-tmux send-keys ' cd ~/Downloads' Enter
-tmux send-keys ' while true; do ping -i 3 www.reddit.com; sleep 2; done' Enter
+#tmux split-window -v
+#tmux send-keys ' cd ~/Downloads' Enter
+#tmux send-keys ' while true; do ping -i 3 www.reddit.com; sleep 2; done' Enter
+
+#tmux select-layout even-vertical
+#tmux select-pane -t w:2.3
+#tmux resize-pane -D 7
 
 tmux select-layout even-vertical
-tmux select-pane -t w:1.1
-tmux resize-pane -D 7
-tmux select-pane -t w:1.2
+tmux select-pane -t w:2.1
+tmux resize-pane -U 7
 
-tmux select-window -t w:0
+tmux select-window -t w:1
 
 tmux attach-session -t w

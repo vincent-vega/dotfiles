@@ -49,12 +49,19 @@ post_processing = false
 regex = '([0-9a-f]{12,128})|([[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3})'
 binding = { key = "A", mods = "Control|Shift" }
 
-# URL
+# URL (copy)
 [[hints.enabled]]
 action = "Copy"
 post_processing = false
 regex = '((https?:|file:/)//[-a-zA-Z0-9()@:%_\+.~#?&/=]+)|(www\.[-a-zA-Z0-9()@:%_\+.~#?&/=]+)'
 binding = { key = "U", mods = "Control|Shift" }
+
+# URL (open in browser)
+[[hints.enabled]]
+command = { program = "open", args = [] }
+post_processing = false
+regex = '((https?:|file:/)//[-a-zA-Z0-9()@:%_\+.~#?&/=]+)|(www\.[-a-zA-Z0-9()@:%_\+.~#?&/=]+)'
+binding = { key = "O", mods = "Control|Shift" }
 
 # Email
 [[hints.enabled]]
