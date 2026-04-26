@@ -1,4 +1,4 @@
-﻿" Preamble -------------------------------------------------------------------
+" Preamble -------------------------------------------------------------------
 
 filetype on
 filetype plugin on  " Use the file type plugins
@@ -119,7 +119,9 @@ set incsearch    " Show search matches as you type
 set showmatch
 set hlsearch     " Highlight the last searched term
 set gdefault     " The substitute flag 'g' is default on
-set smoothscroll
+if has('nvim') || has('patch-9.0.0640')
+    set smoothscroll
+endif
 set scrolloff=3  " Minimal number of screen lines to keep above and below
                  " the cursor
 
