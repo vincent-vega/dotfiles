@@ -24,29 +24,44 @@ vimplugins: ${vim_dir}/ideavimrc ${vim_dir}/vrapperrc
 	@[ -e "${HOME}/.vrapperrc" ] || ln -sf "${vim_dir}/vrapperrc" "${HOME}/.vrapperrc"
 
 neovim: ${vim_dir}/nvim
-	@if [ -e "${HOME}/.config/nvim" ]; then \
-		echo Existing Neovim configuration found, creating backup...; \
-		mv "${HOME}/.config/nvim" "${HOME}/.config/nvim-$(shell mktemp -u XXXXX)-backup"; \
+	@target="${HOME}/.config/nvim"; src="${vim_dir}/nvim"; \
+	if [ "$$(readlink "$$target" 2>/dev/null)" = "$$src" ]; then : ; else \
+		if [ -e "$$target" ] || [ -L "$$target" ]; then \
+			echo Existing Neovim configuration found, creating backup...; \
+			mv "$$target" "$$target-$$(mktemp -u XXXXX)-backup"; \
+		fi; \
+		ln -s "$$src" "$$target"; \
 	fi
-	@ln -sf "${vim_dir}/nvim" "${HOME}/.config/nvim"
 
-conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.toml ${conf_dir}/alacritty-macos.toml
+conf: ${conf_dir}/tmux.conf ${conf_dir}/alacritty.toml ${conf_dir}/alacritty-macos.toml ${conf_dir}/neovide
 	@[ -s ${HOME}/.tmux.conf ] || ln -sf "${conf_dir}/tmux.conf" "${HOME}/.tmux.conf"
 ifeq ($(OS), Darwin)
 	@[ -s ${HOME}/.alacritty-macos.toml ] || ln -sf "${conf_dir}/alacritty-macos.toml" "${HOME}/.alacritty.toml"
 else
 	@[ -s ${HOME}/.alacritty.toml ] || ln -sf "${conf_dir}/alacritty.toml" "${HOME}/.alacritty.toml"
 endif
-	@if [ -e "${HOME}/.config/ranger" ]; then \
-		echo Existing Ranger configuration found, creating backup...; \
-		mv "${HOME}/.config/ranger" "${HOME}/.config/ranger-$(shell mktemp -u XXXXX)-backup"; \
+	@target="${HOME}/.config/ranger"; src="${conf_dir}/ranger"; \
+	if [ "$$(readlink "$$target" 2>/dev/null)" = "$$src" ]; then : ; else \
+		if [ -e "$$target" ] || [ -L "$$target" ]; then \
+			echo Existing Ranger configuration found, creating backup...; \
+			mv "$$target" "$$target-$$(mktemp -u XXXXX)-backup"; \
+		fi; \
+		ln -s "$$src" "$$target"; \
 	fi
-	@ln -s "${conf_dir}/ranger" "${HOME}/.config/ranger"
+	@target="${HOME}/.config/neovide"; src="${conf_dir}/neovide"; \
+	if [ "$$(readlink "$$target" 2>/dev/null)" = "$$src" ]; then : ; else \
+		if [ -e "$$target" ] || [ -L "$$target" ]; then \
+			echo Existing Neovide configuration found, creating backup...; \
+			mv "$$target" "$$target-$$(mktemp -u XXXXX)-backup"; \
+		fi; \
+		ln -s "$$src" "$$target"; \
+	fi
 
 clean:
 	@ ! [ -h "${HOME}/.alacritty.toml" ]       || rm -f "${HOME}/.alacritty.toml"
 	@ ! [ -h "${HOME}/.bash_profile" ]         || rm -f "${HOME}/.bash_profile"
 	@ ! [ -h "${HOME}/.bashrc" ]               || rm -f "${HOME}/.bashrc"
+	@ ! [ -h "${HOME}/.config/neovide" ]       || rm -f "${HOME}/.config/neovide"
 	@ ! [ -h "${HOME}/.config/nvim/init.vim" ] || rm -f "${HOME}/.config/nvim/init.vim"
 	@ ! [ -h "${HOME}/.gvimrc" ]               || rm -f "${HOME}/.gvimrc"
 	@ ! [ -h "${HOME}/.ideavimrc" ]            || rm -f "${HOME}/.ideavimrc"

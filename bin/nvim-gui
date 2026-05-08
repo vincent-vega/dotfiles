@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+# macOS GUI launches skip /etc/profile, so /etc/paths.d entries (Homebrew, TeX, ...) are missing from PATH.
+if [ -x /usr/libexec/path_helper ]; then
+    eval "$(/usr/libexec/path_helper -s)"
+fi
+
+# Bash sets TERM=dumb when stdin is not a tty, which has no terminfo entry; pin a real one.
+case "${TERM:-}" in
+    ""|dumb) export TERM="xterm-256color" ;;
+esac
+exec nvim "$@"

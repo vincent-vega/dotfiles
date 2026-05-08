@@ -47,6 +47,7 @@ This will set up:
 - Bash configuration files (.bash_profile, .bashrc, .inputrc)
 - Vim configuration files (.vim, .vimrc, .gvimrc)
 - Neovim configuration (.config/nvim)
+- Neovide configuration (.config/neovide)
 - Vim plugin configurations (.ideavimrc, .vrapperrc)
 - Tmux configuration (.tmux.conf)
 - Alacritty configuration (.alacritty.toml)
@@ -61,7 +62,7 @@ make bash        # Install bash configuration only
 make vim         # Install vim configuration only
 make vimplugins  # Install vim plugin configurations only
 make neovim      # Install neovim configuration only
-make conf        # Install tmux, alacritty, and ranger configurations only
+make conf        # Install tmux, alacritty, neovide and ranger configurations only
 ```
 
 ## Included Vim Plugins
