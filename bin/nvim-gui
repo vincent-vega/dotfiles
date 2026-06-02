@@ -4,8 +4,8 @@ if [ -x /usr/libexec/path_helper ]; then
     eval "$(/usr/libexec/path_helper -s)"
 fi
 
-# Bash sets TERM=dumb when stdin is not a tty, which has no terminfo entry; pin a real one.
-case "${TERM:-}" in
-    ""|dumb) export TERM="xterm-256color" ;;
-esac
+# Neovide passes TERM=su (no terminfo); bash defaults TERM=dumb without a tty (terminfo exists but is degraded). Either breaks :terminal — pin a real one.
+if [ "${TERM:-}" = "dumb" ] || ! infocmp -- "${TERM:-}" >/dev/null 2>&1; then
+    export TERM="xterm-256color"
+fi
 exec nvim "$@"
