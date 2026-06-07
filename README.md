@@ -102,6 +102,10 @@ Note: This will only remove symlinks, not the actual dotfiles repository or any 
 
 On macOS (Darwin), the Alacritty configuration will use `alacritty-macos.toml` instead of the standard `alacritty.toml`.
 
+### Neovide
+
+`make conf` generates `~/.config/neovide/config.toml` from `conf/neovide/config.toml`, substituting `@HOME@` with the current `$HOME`. Neovide does not expand `~` or environment variables in this file, so the absolute path to the `nvim-gui` wrapper is filled in per user/OS at install time.
+
 ### Ranger Icons
 
 The Ranger configuration uses the `ranger_devicons` plugin to display file icons. This requires a Nerd Font to be installed for the icons to display correctly.
