@@ -88,8 +88,8 @@ alias hexdump='hexdump -C'
 
 if command -v jq &>/dev/null; then
     alias jq="jq -S"
-elif command -v python -m json.tool &>/dev/null; then
-    alias js="python -m json.tool"
+elif command -v python3 &>/dev/null; then
+    alias js="python3 -m json.tool"
 fi
 
 alias httpsforw='sudo iptables -t nat -A OUTPUT -o lo -p tcp -j REDIRECT -d localhost --dport 443 --to-ports 8443'
