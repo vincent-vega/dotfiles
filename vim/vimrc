@@ -140,7 +140,12 @@ endif
 
 if executable('fzf')
     if has('macunix')
-        set rtp+=/usr/local/opt/fzf
+        for s:fzf_dir in ['/opt/homebrew/opt/fzf', '/usr/local/opt/fzf']
+            if isdirectory(s:fzf_dir)
+                let &runtimepath .= ',' . s:fzf_dir
+                break
+            endif
+        endfor
     endif
     let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
     let g:fzf_colors = { 'fg': ['fg', 'Normal'] }

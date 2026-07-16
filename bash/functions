@@ -83,7 +83,7 @@ svnstash() {
 
     if [ -n "$unversioned" ]; then
         local tmp_file
-        tmp_file=$(mktemp --tmpdir)
+        tmp_file=$(mktemp "${TMPDIR:-/tmp}/svnstash.XXXXXX")
         echo 1>&2 "Created temp file $tmp_file"
         # logging unversioned files to tmp_file
         echo 1>&2 "$unversioned" > "$tmp_file"

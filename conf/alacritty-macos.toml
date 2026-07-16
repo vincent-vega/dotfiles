@@ -1,7 +1,7 @@
 [general]
-#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/pencil_dark.toml"]
-#import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
-import = ["/Users/davide/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.toml"]
+#import = ["~/.config/alacritty/themes/alacritty-theme/themes/pencil_dark.toml"]
+#import = ["~/.config/alacritty/themes/alacritty-theme/themes/thelovelace.toml"]
+import = ["~/.config/alacritty/themes/alacritty-theme/themes/gnome_terminal.toml"]
 live_config_reload = true
 
 [bell]
@@ -92,6 +92,7 @@ save_to_clipboard = true
 
 [terminal.shell]
 args = ["--login"]
+# Intel; on Apple Silicon use /opt/homebrew/bin/bash (system bash is stuck at 3.2)
 program = "/usr/local/bin/bash"
 
 [window]

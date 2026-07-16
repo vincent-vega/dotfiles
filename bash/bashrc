@@ -27,9 +27,9 @@ fi
 [[ -s "$HOME/dotfiles/bash/ps1_colors" ]] && source "$HOME/dotfiles/bash/ps1_colors"
 
 if ! command -v __git_ps1 &>/dev/null; then
-    if [ -s "/usr/local/etc/bash_completion.d/git-prompt.sh" ]; then
+    if [ -s "$HOMEBREW_PREFIX/etc/bash_completion.d/git-prompt.sh" ]; then
         # shellcheck disable=SC1091
-        source "/usr/local/etc/bash_completion.d/git-prompt.sh"
+        source "$HOMEBREW_PREFIX/etc/bash_completion.d/git-prompt.sh"
     elif [ -s "/usr/share/git/completion/git-prompt.sh" ]; then
         # shellcheck disable=SC1091
         source "/usr/share/git/completion/git-prompt.sh"
@@ -53,11 +53,21 @@ PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 [[ -s "$HOME/dotfiles/bash/bash_aliases" ]] && source "$HOME/dotfiles/bash/bash_aliases"
 
 if command -v fzf &>/dev/null; then
-    eval "$(fzf --bash)"
-    _fzf_setup_completion 'dir'  fd ff
-    _fzf_setup_completion 'path' cmp cp jq la ll ln lt mv vimdiff
-    if command -v pbcopy &>/dev/null; then
-        _fzf_setup_completion 'path' pbcopy
+    if __fzf_bash=$(fzf --bash 2>/dev/null); then
+        eval "$__fzf_bash"
+    else # fzf < 0.48 (e.g. debian/ubuntu packages)
+        # shellcheck source=/dev/null
+        [ -s /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
+        # shellcheck source=/dev/null
+        [ -s /usr/share/doc/fzf/examples/completion.bash ] && source /usr/share/doc/fzf/examples/completion.bash
+    fi
+    unset __fzf_bash
+    if declare -F _fzf_setup_completion >/dev/null; then
+        _fzf_setup_completion 'dir'  fd ff
+        _fzf_setup_completion 'path' cmp cp jq la ll ln lt mv vimdiff
+        if command -v pbcopy &>/dev/null; then
+            _fzf_setup_completion 'path' pbcopy
+        fi
     fi
 fi
 
