@@ -35,6 +35,7 @@ if !has("gui_running") && &t_Co != 88 && &t_Co != 256
     finish
 endif
 
+highlight clear
 set background=dark
 
 if exists("syntax_on")
@@ -53,7 +54,7 @@ endif " }}}
 
 " }}}
 
-highlight CursorLineNr ctermfg=Cyan ctermbg=NONE guifg=Cyan guibg=NONE
+"highlight CursorLineNr ctermfg=Cyan ctermbg=NONE guifg=Cyan guibg=NONE
 
 " Palette {{{
 
