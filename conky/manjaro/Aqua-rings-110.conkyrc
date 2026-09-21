@@ -130,6 +130,6 @@ conky.text = [[
     ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 1:  ${font}${hwmon coretemp temp 3}°C
     ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 2:  ${font}${hwmon coretemp temp 4}°C
     ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 3:  ${font}${hwmon coretemp temp 5}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}SSD:  ${font}${hwmon acpitz temp 1}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}HDD:  ${font}${hwmon acpitz temp 2}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}SSD:  ${font}${execi 30 ~/dotfiles/conky/manjaro/disktemp.sh ata-Samsung_SSD_850_EVO_250GB_S21PNSBG401257W}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}HDD:  ${font}${execi 30 ~/dotfiles/conky/manjaro/disktemp.sh ata-WDC_WD1500HLFS-01G6U0_WD-WXL908059123}°C
 ]];
