@@ -24,219 +24,113 @@ require 'cairo'
 
 ------------------------------------------------------------------------------
 --                                                                  gauge DATA
-gauge = {
-{
-    name='cpu',                    arg='cpu1',                  max_value=100,
-    x=100,                         y=172,
-    graph_radius=54,
-    graph_thickness=5,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=64,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=28,
-    graduation_thickness=0,        graduation_mark_thickness=1,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='',
-    caption_weight=1,              caption_size=9.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
-},
-{
-    name='cpu',                    arg='cpu2',                  max_value=100,
-    x=100,                         y=172,
-    graph_radius=48,
-    graph_thickness=5,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=40,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=28,
-    graduation_thickness=0,        graduation_mark_thickness=1,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='',
-    caption_weight=1,              caption_size=9.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
-},
-{
-    name='cpu',                    arg='cpu3',                  max_value=100,
-    x=100,                         y=172,
-    graph_radius=42,
-    graph_thickness=5,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=30,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=28,
-    graduation_thickness=0,        graduation_mark_thickness=1,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='',
-    caption_weight=1,              caption_size=9.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
-},
-{
-    name='cpu',                    arg='cpu4',                  max_value=100,
-    x=100,                         y=172,
-    graph_radius=36,
-    graph_thickness=5,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=4,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=28,
-    graduation_thickness=0,        graduation_mark_thickness=1,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='',
-    caption_weight=1,              caption_size=9.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
-},
-{
-    name='memperc',                arg='',                      max_value=100,
-    x=100,                         y=377,
-    graph_radius=54,
-    graph_thickness=15,
+-- Rings are built from the detected hardware (see sysinfo.lua): one CPU ring
+-- per logical CPU, one disk ring per mounted filesystem (rescanned at runtime),
+-- network rings on the default-route interface.
+
+local script_dir = debug.getinfo(1, 'S').source:match('^@(.*/)') or './'
+local sysinfo = dofile(script_dir .. 'sysinfo.lua')
+
+-- ring centres, matching the conkyrc text layout
+local LINE_HEIGHT = 17          -- one text row (SFMono Nerd Font size 10)
+local MIN_DISK_ROWS = 3         -- conky_disk_rows() pads to this many rows
+local CPU_Y, MEM_Y, DISK_Y, NET_Y = 172, 377, 585, 745  -- NET_Y with MIN_DISK_ROWS rows
+
+local ring_defaults = {
+    max_value=100,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
     graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
     graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
     hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=42,
+    txt_radius=0,
     txt_weight=0,                  txt_size=9.0,
     txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=23,
-    graduation_thickness=0,        graduation_mark_thickness=2,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.5,
-    caption='',
-    caption_weight=1,              caption_size=10.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
-},
-{
-    name='fs_used_perc', arg='/run/media/davide/E2F4C40DF4C3E241', max_value=100,
-    x=100,                         y=585,
-    graph_radius=54,
-    graph_thickness=7,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=64,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=23,
-    graduation_thickness=0,        graduation_mark_thickness=2,
+    graduation_radius=0,
+    graduation_thickness=0,        graduation_mark_thickness=1,
     graduation_unit_angle=27,
     graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='Storage',
+    caption='',
     caption_weight=0.5,            caption_size=12.0,
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
-},
-{
-    name='fs_used_perc',           arg='/home',                 max_value=100,
-    x=100,                         y=585,
-    graph_radius=42,
-    graph_thickness=7,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=32,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=23,
-    graduation_thickness=0,        graduation_mark_thickness=2,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='Home',
-    caption_weight=0.5,            caption_size=12.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
-},
-{
-    name='fs_used_perc',           arg='/',                     max_value=100,
-    x=100,                         y=585,
-    graph_radius=30,
-    graph_thickness=7,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
-    txt_radius=22,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0x678b8b,        txt_fg_alpha=0,
-    graduation_radius=23,
-    graduation_thickness=0,        graduation_mark_thickness=2,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='Root',
-    caption_weight=0.5,            caption_size=12.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
-},
-{
-    name='downspeedf',             arg='enp3s0',                max_value=100,
-    full_scale=122070,             -- KiB/s, 1 Gbit/s link
-    x=90,                          y=745,
-    graph_radius=54,
-    graph_thickness=7,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0xEF5A29,       hand_fg_alpha=0,
-    txt_radius=64,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0xEF5A29,        txt_fg_alpha=0,
-    graduation_radius=28,
-    graduation_thickness=0,        graduation_mark_thickness=1,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='Down',
-    caption_weight=0.5,            caption_size=11.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
-},
-{
-    name='upspeedf',               arg='enp3s0',                max_value=100,
-    full_scale=122070,             -- KiB/s, 1 Gbit/s link
-    x=90,                          y=745,
-    graph_radius=42,
-    graph_thickness=7,
-    graph_start_angle=180,
-    graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
-    hand_fg_colour=0xEF5A29,       hand_fg_alpha=0,
-    txt_radius=30,
-    txt_weight=0,                  txt_size=9.0,
-    txt_fg_colour=0xEF5A29,        txt_fg_alpha=0,
-    graduation_radius=28,
-    graduation_thickness=0,        graduation_mark_thickness=1,
-    graduation_unit_angle=27,
-    graduation_fg_colour=0xFFFFFF, graduation_fg_alpha=0.3,
-    caption='Up',
-    caption_weight=0.5,            caption_size=11.0,
-    caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.5,
-}}
+}
+
+local function ring(fields)
+    return setmetatable(fields, { __index = ring_defaults })
+end
+
+local net_iface = sysinfo.net_iface()
+local cpu_count = sysinfo.cpu_count()
+local mounts = {}
+local mounts_key = ''
+gauge = {}
+
+local function build_gauges()
+    gauge = {}
+
+    -- CPU: concentric rings, outermost is cpu1
+    local step = cpu_count > 1 and math.min(6, 24 / (cpu_count - 1)) or 0
+    local thickness = cpu_count > 1 and math.max(1, math.min(5, step - 1)) or 5
+    for i = 1, cpu_count do
+        table.insert(gauge, ring{
+            name='cpu', arg='cpu' .. i, x=100, y=CPU_Y,
+            graph_radius=54 - (i - 1) * step, graph_thickness=thickness,
+            graph_bg_alpha=0.2, graph_fg_alpha=0.8,
+        })
+    end
+
+    table.insert(gauge, ring{
+        name='memperc', arg='', x=100, y=MEM_Y,
+        graph_radius=54, graph_thickness=15,
+    })
+
+    -- disks: root innermost, extra mounts outwards
+    local n = #mounts
+    step = n > 1 and math.min(12, 24 / (n - 1)) or 0
+    for i, m in ipairs(mounts) do
+        table.insert(gauge, ring{
+            name='fs_used_perc', arg=m.path, x=100, y=DISK_Y,
+            graph_radius=54 - (n - i) * step,
+            graph_thickness=n > 1 and math.min(7, step - 2) or 7,
+            caption=m.caption, caption_size=n > 1 and math.min(12, step) or 12,
+        })
+    end
+
+    -- network: follows the disk rows, which may be more than MIN_DISK_ROWS
+    local net_y = NET_Y + math.max(0, n - MIN_DISK_ROWS) * LINE_HEIGHT
+    local full_scale = sysinfo.link_speed_kib(net_iface)
+    for i, dir in ipairs({ 'down', 'up' }) do
+        table.insert(gauge, ring{
+            name=dir .. 'speedf', arg=net_iface, full_scale=full_scale, x=90, y=net_y,
+            graph_radius=66 - i * 12, graph_thickness=7,
+            hand_fg_alpha=0,
+            caption=dir == 'down' and 'Down' or 'Up', caption_size=11.0,
+        })
+    end
+end
+
+-- rebuild when the set of mounted filesystems changes
+local function refresh_mounts()
+    local key = ''
+    for _, m in ipairs(sysinfo.mounts()) do key = key .. m.path .. '\n' end
+    if key ~= mounts_key then
+        mounts_key = key
+        mounts = sysinfo.mounts_with_captions()
+        build_gauges()
+    end
+end
+
+refresh_mounts()
+
+-- ${lua_parse disk_rows}: one "Free / Used" row per ring, padded to MIN_DISK_ROWS
+function conky_disk_rows()
+    local rows = {}
+    for _, m in ipairs(mounts) do
+        table.insert(rows, string.format('${offset 117}Free: ${fs_free %s} ${alignr}Used: ${fs_used %s}', m.path, m.path))
+    end
+    for _ = #rows + 1, MIN_DISK_ROWS do table.insert(rows, '') end
+    return table.concat(rows, '\n    ')
+end
 
 ------------------------------------------------------------------------------
 --                                                                rgb_to_r_g_b
@@ -366,8 +260,8 @@ function go_gauge_rings(display)
         draw_gauge_ring(display, data, value)
     end
 
-    for i in pairs(gauge) do
-        load_gauge_rings(display, gauge[i])
+    for _, data in ipairs(gauge) do
+        load_gauge_rings(display, data)
     end
 end
 
@@ -384,6 +278,10 @@ function conky_main()
 
     local updates = conky_parse('${updates}')
     update_num = tonumber(updates)
+
+    if update_num % 10 == 0 then
+        refresh_mounts()
+    end
 
     if update_num > 5 then
         go_gauge_rings(display)

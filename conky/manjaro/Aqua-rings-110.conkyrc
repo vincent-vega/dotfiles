@@ -1,3 +1,9 @@
+-- Hardware-dependent parts (network interface, temperature sensors) are
+-- detected at startup by sysinfo.lua, shared with the rings script.
+local dir = os.getenv('HOME') .. '/dotfiles/conky/manjaro/'
+local sysinfo = dofile(dir .. 'sysinfo.lua')
+local label_font = 'SFMono Nerd Font Mono:size=10:style=bold'
+
 conky.config = {
 --========================  Aqua-rings-110.conkyrc  ========================================
 --
@@ -75,11 +81,11 @@ conky.config = {
     color9 = '6B9083',
 
     -- Loading lua script for drawing rings
-    lua_load = '$HOME/dotfiles/conky/manjaro/Aqua-rings-110.lua',
+    lua_load = dir .. 'Aqua-rings-110.lua',
     lua_draw_hook_post = 'main',
 };
 
-conky.text = [[
+local text = [[
     ${voffset 40}${alignr}${color4} ${kernel}
 
     # CPU
@@ -109,27 +115,36 @@ conky.text = [[
     ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr}󰋊 DISKS
     ${voffset -5}
     ${alignr}${diskiograph 20,180 666666 68364B -t -l}
-    ${offset 117}${font}${color1}Free: ${fs_free /} ${alignr}Used: ${fs_used /}
-    ${offset 117}Free: ${fs_free /home} ${alignr}Used: ${fs_used /home}
-    ${offset 117}Free: ${fs_free /run/media/davide/E2F4C40DF4C3E241} ${alignr}Used: ${fs_used /run/media/davide/E2F4C40DF4C3E241}
+    ${font}${color1}${lua_parse disk_rows}
 
     # Network
     ${voffset 18}
     ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr}󰈀 NETWORK
     ${voffset -5}
-    ${offset 71}${font}${color1}Down: ${downspeed enp3s0} ${alignr}Up: ${upspeed enp3s0}
+    ${offset 71}${font}${color1}Down: ${downspeed @IFACE@} ${alignr}Up: ${upspeed @IFACE@}
     ${voffset -20}
-    ${offset 80}${color4}${downspeedgraph enp3s0 50,100} ${alignr}${upspeedgraph enp3s0 50,100}
+    ${offset 80}${color4}${downspeedgraph @IFACE@ 50,100} ${alignr}${upspeedgraph @IFACE@ 50,100}
 
     # Temp
     ${voffset 18}
     ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr}󰔏 TEMP
     ${voffset -15}
-    ${font SFMono Nerd Font Mono:size=10:style=bold}${color1}${alignr}GPU:  ${font}${hwmon amdgpu temp 1}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 0:  ${font}${hwmon coretemp temp 2}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 1:  ${font}${hwmon coretemp temp 3}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 2:  ${font}${hwmon coretemp temp 4}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 3:  ${font}${hwmon coretemp temp 5}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}SSD:  ${font}${execi 30 ~/dotfiles/conky/manjaro/disktemp.sh ata-Samsung_SSD_850_EVO_250GB_S21PNSBG401257W}°C
-    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}HDD:  ${font}${execi 30 ~/dotfiles/conky/manjaro/disktemp.sh ata-WDC_WD1500HLFS-01G6U0_WD-WXL908059123}°C
-]];
+@TEMPS@
+    ${execpi 30 ~/dotfiles/conky/manjaro/disktemp.sh '@LABEL_FONT@'}
+]]
+
+local temps = {}
+local gpu = sysinfo.gpu_temp()
+if gpu then table.insert(temps, { label = 'GPU', expr = gpu }) end
+for _, t in ipairs(sysinfo.cpu_temps()) do table.insert(temps, t) end
+local temp_rows = {}
+for _, t in ipairs(temps) do
+    table.insert(temp_rows, '    ${color1}${alignr}${font ' .. label_font .. '}' .. t.label .. ':  ${font}' .. t.expr .. '°C')
+end
+
+local values = {
+    IFACE = sysinfo.net_iface(),
+    TEMPS = table.concat(temp_rows, '\n'),
+    LABEL_FONT = label_font,
+}
+conky.text = text:gsub('@(%u[%u_]*)@', values)
