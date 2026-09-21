@@ -21,20 +21,19 @@
 --============================================================================
 
 require 'cairo'
-require 'cairo_xlib'
 
 ------------------------------------------------------------------------------
 --                                                                  gauge DATA
 gauge = {
 {
-    name='cpu',                    arg='cpu0',                  max_value=100,
-    x=100,                         y=180,
+    name='cpu',                    arg='cpu1',                  max_value=100,
+    x=100,                         y=172,
     graph_radius=54,
-    graph_thickness=4,
+    graph_thickness=5,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
     hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=64,
     txt_weight=0,                  txt_size=9.0,
@@ -48,14 +47,14 @@ gauge = {
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
 },
 {
-    name='cpu',                    arg='cpu1',                  max_value=100,
-    x=100,                         y=180,
+    name='cpu',                    arg='cpu2',                  max_value=100,
+    x=100,                         y=172,
     graph_radius=48,
-    graph_thickness=4,
+    graph_thickness=5,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
     hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=40,
     txt_weight=0,                  txt_size=9.0,
@@ -69,14 +68,14 @@ gauge = {
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
 },
 {
-    name='cpu',                    arg='cpu2',                  max_value=100,
-    x=100,                         y=180,
+    name='cpu',                    arg='cpu3',                  max_value=100,
+    x=100,                         y=172,
     graph_radius=42,
-    graph_thickness=4,
+    graph_thickness=5,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
     hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=30,
     txt_weight=0,                  txt_size=9.0,
@@ -90,14 +89,14 @@ gauge = {
     caption_fg_colour=0xFFFFFF,    caption_fg_alpha=0.3,
 },
 {
-    name='cpu',                    arg='cpu3',                  max_value=100,
-    x=100,                         y=180,
+    name='cpu',                    arg='cpu4',                  max_value=100,
+    x=100,                         y=172,
     graph_radius=36,
-    graph_thickness=4,
+    graph_thickness=5,
     graph_start_angle=180,
     graph_unit_angle=2.7,          graph_unit_thickness=2.7,
-    graph_bg_colour=0xffffff,      graph_bg_alpha=0.1,
-    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.3,
+    graph_bg_colour=0xffffff,      graph_bg_alpha=0.2,
+    graph_fg_colour=0xFFFFFF,      graph_fg_alpha=0.8,
     hand_fg_colour=0x678b8b,       hand_fg_alpha=1.0,
     txt_radius=4,
     txt_weight=0,                  txt_size=9.0,
@@ -112,7 +111,7 @@ gauge = {
 },
 {
     name='memperc',                arg='',                      max_value=100,
-    x=100,                         y=390,
+    x=100,                         y=377,
     graph_radius=54,
     graph_thickness=15,
     graph_start_angle=180,
@@ -133,7 +132,7 @@ gauge = {
 },
 {
     name='fs_used_perc', arg='/run/media/davide/E2F4C40DF4C3E241', max_value=100,
-    x=100,                         y=600,
+    x=100,                         y=585,
     graph_radius=54,
     graph_thickness=7,
     graph_start_angle=180,
@@ -154,7 +153,7 @@ gauge = {
 },
 {
     name='fs_used_perc',           arg='/home',                 max_value=100,
-    x=100,                         y=600,
+    x=100,                         y=585,
     graph_radius=42,
     graph_thickness=7,
     graph_start_angle=180,
@@ -175,7 +174,7 @@ gauge = {
 },
 {
     name='fs_used_perc',           arg='/',                     max_value=100,
-    x=100,                         y=600,
+    x=100,                         y=585,
     graph_radius=30,
     graph_thickness=7,
     graph_start_angle=180,
@@ -196,7 +195,8 @@ gauge = {
 },
 {
     name='downspeedf',             arg='enp3s0',                max_value=100,
-    x=90,                          y=760,
+    full_scale=122070,             -- KiB/s, 1 Gbit/s link
+    x=90,                          y=745,
     graph_radius=54,
     graph_thickness=7,
     graph_start_angle=180,
@@ -217,7 +217,8 @@ gauge = {
 },
 {
     name='upspeedf',               arg='enp3s0',                max_value=100,
-    x=90,                          y=760,
+    full_scale=122070,             -- KiB/s, 1 Gbit/s link
+    x=90,                          y=745,
     graph_radius=42,
     graph_thickness=7,
     graph_start_angle=180,
@@ -277,8 +278,9 @@ function draw_gauge_ring(display, data, value)
     cairo_set_line_width(display, graph_thickness)
     cairo_stroke(display)
 
-    -- arc of value
-    local val = value % (max_value + 1)
+    -- arc of value (clamped; rescaled to max_value when the gauge sets full_scale)
+    local full_scale = data['full_scale'] or max_value
+    local val = math.min(math.max(value, 0), full_scale) * max_value / full_scale
     local start_arc = 0
     local stop_arc = 0
     local i = 1
@@ -325,7 +327,7 @@ function draw_gauge_ring(display, data, value)
     local txt_fg_colour, txt_fg_alpha = data['txt_fg_colour'], data['txt_fg_alpha']
     local movex = txt_radius * math.cos(angle_to_position(graph_start_angle, angle))
     local movey = txt_radius * math.sin(angle_to_position(graph_start_angle, angle))
-    cairo_select_font_face(display, "ubuntu", CAIRO_FONT_SLANT_NORMAL, txt_weight)
+    cairo_select_font_face(display, "SFMono Nerd Font Mono", CAIRO_FONT_SLANT_NORMAL, txt_weight)
     cairo_set_font_size(display, txt_size)
     cairo_set_source_rgba(display, rgb_to_r_g_b(txt_fg_colour, txt_fg_alpha))
     cairo_move_to(display, x + movex - (txt_size / 2), y + movey + 3)
@@ -338,7 +340,7 @@ function draw_gauge_ring(display, data, value)
     local caption_fg_colour, caption_fg_alpha = data['caption_fg_colour'], data['caption_fg_alpha']
     local tox = graph_radius * (math.cos((graph_start_angle * 2 * math.pi / 360)-(math.pi/2)))
     local toy = graph_radius * (math.sin((graph_start_angle * 2 * math.pi / 360)-(math.pi/2)))
-    cairo_select_font_face (display, "ubuntu", CAIRO_FONT_SLANT_NORMAL, caption_weight);
+    cairo_select_font_face (display, "SFMono Nerd Font Mono", CAIRO_FONT_SLANT_NORMAL, caption_weight);
     cairo_set_font_size(display, caption_size)
     cairo_set_source_rgba(display, rgb_to_r_g_b(caption_fg_colour, caption_fg_alpha))
     cairo_move_to(display, x + tox + 1, y + toy + 5)
@@ -360,7 +362,7 @@ function go_gauge_rings(display)
         local str, value = '', 0
         str = string.format('${%s %s}',data['name'], data['arg'])
         str = conky_parse(str)
-        value = tonumber(str)
+        value = tonumber(str) or 0
         draw_gauge_ring(display, data, value)
     end
 
@@ -372,11 +374,12 @@ end
 ------------------------------------------------------------------------------
 --                                                                        MAIN
 function conky_main()
-    if conky_window == nil then
+    -- surface is owned by conky and only valid for this draw cycle: don't destroy it
+    local cs = conky_surface()
+    if cs == nil then
         return
     end
 
-    local cs = cairo_xlib_surface_create(conky_window.display, conky_window.drawable, conky_window.visual, conky_window.width, conky_window.height)
     local display = cairo_create(cs)
 
     local updates = conky_parse('${updates}')
@@ -386,7 +389,6 @@ function conky_main()
         go_gauge_rings(display)
     end
 
-    cairo_surface_destroy(cs)
     cairo_destroy(display)
 
 end

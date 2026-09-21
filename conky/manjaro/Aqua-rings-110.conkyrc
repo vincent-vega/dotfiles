@@ -38,8 +38,7 @@ conky.config = {
     -- minimum_width = 150, minimum_height = 600,
     -- maximum_width = 300,
     own_window = true,
-    own_window_transparent = true,
-    own_window_argb_visual = true,
+    own_window_colour = '#00000000',
     own_window_type = 'desktop',
     own_window_hints = 'undecorated,sticky,skip_taskbar,skip_pager,below',
     border_inner_margin = 30,
@@ -58,7 +57,7 @@ conky.config = {
     override_utf8_locale = true,
     use_xft = true,
     --font = 'caviar dreams:size=10',
-    font = 'Raleway:size=10',
+    font = 'SFMono Nerd Font Mono:size=10',
     xftalpha = 0.5,
     uppercase = false,
 
@@ -81,11 +80,11 @@ conky.config = {
 };
 
 conky.text = [[
-    ${voffset 40}${alignr}${color4}${kernel}
+    ${voffset 40}${alignr}${color4} ${kernel}
 
     # CPU
     ${voffset -30}
-    ${font Raleway:size=14:style=bold}${color4}${alignr}CPU
+    ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr} CPU
     ${alignr}${cpugraph cpu0 40,170 -t}
     # Showing TOP 5 CPU-consumers
     ${voffset -10}
@@ -96,18 +95,18 @@ conky.text = [[
     ${goto 115}${top name 5}${alignr}${top cpu 5}%
 
     # Memory
-    ${voffset 0}
-    ${font Raleway:size=14:style=bold}${color4}${alignr}MEM
+    ${voffset 18}
+    ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr} MEM
     ${voffset 10}
     ${goto 115}${font}${color1}${top_mem name 1}${alignr}${top_mem mem_res 1}
     ${goto 115}${top_mem name 2}${alignr}${top_mem mem_res 2}
     ${goto 115}${color2}${top_mem name 3}${alignr}${top_mem mem_res 3}
     ${goto 115}${color3}${top_mem name 4}${alignr}${top_mem mem_res 4}
-    ${goto 115}${top_mem name 4}${alignr}${top_mem mem_res 5}
+    ${goto 115}${top_mem name 5}${alignr}${top_mem mem_res 5}
 
     # Disks
-    ${voffset 0}
-    ${font Raleway:size=14:style=bold}${color4}${alignr}DISKS
+    ${voffset 18}
+    ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr}󰋊 DISKS
     ${voffset -5}
     ${alignr}${diskiograph 20,180 666666 68364B -t -l}
     ${offset 117}${font}${color1}Free: ${fs_free /} ${alignr}Used: ${fs_used /}
@@ -115,26 +114,22 @@ conky.text = [[
     ${offset 117}Free: ${fs_free /run/media/davide/E2F4C40DF4C3E241} ${alignr}Used: ${fs_used /run/media/davide/E2F4C40DF4C3E241}
 
     # Network
-    ${voffset 0}
-    ${font Raleway:size=14:style=bold}${color4}${alignr}NETWORK
+    ${voffset 18}
+    ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr}󰈀 NETWORK
     ${voffset -5}
     ${offset 71}${font}${color1}Down: ${downspeed enp3s0} ${alignr}Up: ${upspeed enp3s0}
     ${voffset -20}
     ${offset 80}${color4}${downspeedgraph enp3s0 50,100} ${alignr}${upspeedgraph enp3s0 50,100}
 
     # Temp
-    ${voffset 0}
-    ${font Raleway:size=14:style=bold}${color4}${alignr}TEMP
+    ${voffset 18}
+    ${font SFMono Nerd Font Mono:size=14:style=bold}${color4}${alignr}󰔏 TEMP
     ${voffset -15}
-    ${font Raleway:size=10:style=bold}${color1}${alignr}GPU:  ${font}${hwmon 1 temp 1}°C
-    #${alignr}${font Raleway:size=10:style=bold}Core 0:  ${font}${hwmon 2 temp 2}°C
-    #${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${hwmon 2 temp 3}°C
-    #${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${hwmon 2 temp 4}°C
-    #${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${hwmon 2 temp 5}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 0:  ${font}${exec sensors | grep 'Core 0' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 1:  ${font}${exec sensors | grep 'Core 1' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 2:  ${font}${exec sensors | grep 'Core 2' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
-    ${alignr}${font Raleway:size=10:style=bold}Core 3:  ${font}${exec sensors | grep 'Core 3' | awk '{print $3}' | cut -b 2- | cut -d . -f 1}°C
-    ${alignr}${font Raleway:size=10:style=bold}SSD:  ${font}${hwmon 0 temp 1}°C
-    ${alignr}${font Raleway:size=10:style=bold}HDD:  ${font}${hwmon 0 temp 2}°C
+    ${font SFMono Nerd Font Mono:size=10:style=bold}${color1}${alignr}GPU:  ${font}${hwmon amdgpu temp 1}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 0:  ${font}${hwmon coretemp temp 2}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 1:  ${font}${hwmon coretemp temp 3}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 2:  ${font}${hwmon coretemp temp 4}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}Core 3:  ${font}${hwmon coretemp temp 5}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}SSD:  ${font}${hwmon acpitz temp 1}°C
+    ${alignr}${font SFMono Nerd Font Mono:size=10:style=bold}HDD:  ${font}${hwmon acpitz temp 2}°C
 ]];
