@@ -8,6 +8,13 @@ if [ "$__os_family" = "Mac" ]; then
     alias tac='tail -r'
     alias time='/usr/bin/time -hlp'
     alias restartTouchBar='sudo pkill TouchBarServer;sudo killall "ControlStrip"'
+    # GNU findutils for interactive use only; PATH keeps BSD find so builds are unaffected
+    if command -v gfind &>/dev/null; then
+        alias find='gfind'
+        alias xargs='gxargs'
+        alias locate='glocate'
+        alias updatedb='gupdatedb'
+    fi
 else
     alias df='df -TkH'
     alias du='du -bc --si'

@@ -222,6 +222,27 @@ gst() { git status "$@"; }
 
 gunstage() { git restore --staged "$@"; }
 
+gmc() {
+    local green yellow red reset
+    if [[ -t 1 ]]; then
+        green=$'\e[1;32m'; yellow=$'\e[1;33m'
+        red=$'\e[1;31m';   reset=$'\e[0m'
+    fi
+    local base="${1:-main}"
+    if git merge-tree --write-tree "$base" HEAD >/dev/null; then
+        printf '%sClean%s\n' "$green" "$reset"
+    else
+        local rc=$?
+        if [ "$rc" -eq 1 ]; then
+            printf '%sConflicts%s\n' "$yellow" "$reset"
+            git merge-tree --write-tree --name-only "$base" HEAD | tail -n +2
+        else
+            printf '%sError%s\n' "$red" "$reset" >&2
+        fi
+        return "$rc"
+    fi
+}
+
 # }}}
 
 ff() {
@@ -411,17 +432,12 @@ urldecode() {
 if [ "$__os_family" = "Mac" ]; then
     instupdate() {
         if command -v brew &>/dev/null; then
-            local outcome
-            outcome=$(brew update)
-            if [[ $outcome =~ ^.*Already\ up-to-date.* ]]; then
-                echo -e "\\033[34m==>\\033[0m \\033[1mAlready up-to-date\\033[0m"
-            else
-                echo -e "\\033[34m==>\\033[0m \\033[1mUpgrade...\\033[0m"
-                brew upgrade
-                echo -e "\\033[34m==>\\033[0m \\033[1mCleaning up...\\033[0m"
-                brew cleanup
-                brew autoremove
-            fi
+            brew update
+            echo -e "\\033[34m==>\\033[0m \\033[1mOutdated\\033[0m"
+            brew outdated
+            echo -e "\\033[34m==>\\033[0m \\033[1mCleaning up...\\033[0m"
+            brew cleanup -s
+            brew autoremove
         else
             echo "brew not found. Skip update"
         fi

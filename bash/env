@@ -111,6 +111,10 @@ export SVN_EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
 
 export FZF_DEFAULT_OPTS='--layout=reverse --border --multi'
+# sbin comes from brew shellenv (bash_profile); gnubin dir resolves to empty on Linux
+# findutils gnubin deliberately NOT on PATH: GNU find on PATH breaks source builds (brew doctor); interactive use gets it via aliases
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin${HOMEBREW_PREFIX:+:$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnubin}:$PATH"
+
 export PYGMENTIZE_STYLE=dracula
 if [ -n "$RANGER_LEVEL" ]; then
     export PS1="${BGrey27}[${SkyBlue2}ranger${BGrey27}]$PS1"

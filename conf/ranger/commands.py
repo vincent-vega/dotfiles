@@ -2,6 +2,18 @@ from ranger.api.commands import Command
 import os
 import subprocess
 
+# Show full date + time in the log viewer (bound to `W`).
+# ranger hardcodes datefmt='%H:%M:%S' in ranger/ext/logutils.py, so the log only
+# shows the time. Re-set the formatter on the already-installed log handlers to
+# prepend the date, keeping ranger's own format string (normal vs --debug).
+import logging as _logging
+
+_LOG_DATEFMT = '%Y-%m-%d %H:%M:%S'
+for _handler in _logging.getLogger().handlers:
+    _fmt = _handler.formatter
+    if _fmt is not None:
+        _handler.setFormatter(_logging.Formatter(fmt=_fmt._fmt, datefmt=_LOG_DATEFMT))
+
 
 class fzf_select(Command):
     """

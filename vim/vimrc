@@ -147,7 +147,7 @@ if executable('fzf')
             endif
         endfor
     endif
-    let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
+    let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'yoffset': 1.0 } }
     let g:fzf_colors = { 'fg': ['fg', 'Normal'] }
     nnoremap <silent> <C-P> :FZF --reverse<CR>
 else

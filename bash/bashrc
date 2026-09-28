@@ -20,6 +20,14 @@ if ! shopt -oq posix; then
     elif [ -s /etc/bash_completion ]; then
         # shellcheck source=/dev/null
         source /etc/bash_completion
+    elif [ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]; then
+        # shellcheck source=/dev/null
+        source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
+    elif [ -d "${HOMEBREW_PREFIX}/etc/bash_completion.d" ]; then
+        for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
+            # shellcheck source=/dev/null
+            [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
+        done
     fi
 fi
 
@@ -85,3 +93,5 @@ fi
 
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/functions" ]] && source "$HOME/dotfiles/bash/functions"
+# shellcheck source=/dev/null
+[[ -s "$HOME/dotfiles/bash/obsopen" ]] && source "$HOME/dotfiles/bash/obsopen"

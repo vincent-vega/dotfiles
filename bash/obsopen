@@ -1,0 +1,81 @@
+#!/usr/bin/env bash
+#
+# obsopen - symlink an external file into your Obsidian vault root and open it.
+#
+# Setup:
+#   1. Source this file from your ~/.bashrc or ~/.zshrc, e.g.:
+#        source ~/bin/obsopen.sh
+#   2. Set OBSIDIAN_VAULT to your vault's absolute path, e.g.:
+#        export OBSIDIAN_VAULT="$HOME/Documents/MyVault"
+#   3. Requires `jq` (used for URL-encoding the obsidian:// URI).
+#
+# Usage:
+#   obsopen /path/to/some/file.md
+
+# Helper: does $1 already exist as a symlink pointing at $target?
+_obsopen_points_here() {
+    [[ -L "$1" ]] && [[ "$(readlink -- "$1")" == "$target" ]]
+}
+
+obsopen() {
+    if [[ -z "$1" ]]; then
+        echo "usage: obsopen <file>" >&2
+        return 1
+    fi
+    if [[ -z "$OBSIDIAN_VAULT" ]]; then
+        echo "obsopen: OBSIDIAN_VAULT is not set" >&2
+        return 1
+    fi
+    if ! command -v jq >/dev/null 2>&1; then
+        echo "obsopen: requires 'jq' for URL-encoding" >&2
+        return 1
+    fi
+
+    local target
+    target=$(realpath -- "$1" 2>/dev/null) || { echo "obsopen: no such file: $1" >&2; return 1; }
+    [[ -e "$target" ]] || { echo "obsopen: no such file: $1" >&2; return 1; }
+
+    local vault="${OBSIDIAN_VAULT%/}"
+    local vault_name
+    vault_name=$(basename "$vault")
+
+    local base stem ext link_name link_path
+    base="$(basename "$target")"
+    stem="${base%.*}"
+    ext="${base##*.}"
+    [[ "$base" == "$ext" ]] && ext=""   # no extension
+
+    link_name="Link-to-$base"
+    link_path="$vault/$link_name"
+
+    if [[ -e "$link_path" ]] && ! _obsopen_points_here "$link_path"; then
+        # Collision with an unrelated file: prefix with the parent dir name.
+        local parent
+        parent="$(basename "$(dirname "$target")")"
+        stem="${parent}-${stem}"
+        link_name="Link-to-${stem}${ext:+.$ext}"
+        link_path="$vault/$link_name"
+
+        # Still colliding (e.g. two files from same-named parent dirs)?
+        # Fall back to a numeric suffix.
+        local n=2
+        while [[ -e "$link_path" ]] && ! _obsopen_points_here "$link_path"; do
+            link_name="${stem}-${n}${ext:+.$ext}"
+            link_path="$vault/$link_name"
+            ((n++))
+        done
+    fi
+
+    [[ -e "$link_path" ]] || ln -s -- "$target" "$link_path"
+
+    # Obsidian's `file` param can omit the .md extension; strip it if present.
+    local file_param="${link_name%.md}"
+    local uri
+    uri="obsidian://open?vault=$(jq -rn --arg s "$vault_name" '$s|@uri')&file=$(jq -rn --arg s "$file_param" '$s|@uri')&paneType=tab"
+
+    case "$(uname -s)" in
+        Darwin) open "$uri" ;;
+        Linux)  xdg-open "$uri" ;;
+        *) echo "obsopen: unsupported OS: $(uname -s)" >&2; return 1 ;;
+    esac
+}
