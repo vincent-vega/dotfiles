@@ -21,21 +21,30 @@ if ! command -v __git_ps1 &>/dev/null; then
     elif [ -s "/usr/share/git/completion/git-prompt.sh" ]; then
         # shellcheck disable=SC1091
         source "/usr/share/git/completion/git-prompt.sh"
+    elif [ -s /usr/lib/git-core/git-sh-prompt ]; then
+        # Debian/Ubuntu
+        # shellcheck disable=SC1091
+        source /usr/lib/git-core/git-sh-prompt
     fi
 fi
 if command -v __git_ps1 &>/dev/null; then
     # shellcheck disable=SC2034
     GIT_PS1_SHOWCOLORHINTS=1 GIT_PS1_SHOWCONFLICTSTATE=1 GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWUNTRACKEDFILES=1
 else
-    __git_ps1() { true; }
+    __git_ps1() { PS1="$1$2"; }
 fi
 # shellcheck disable=SC2154
 PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 '"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${PaleGreen3}"'\
-\w\r\n'"${ResetColor}"'#$(__git_ps1) '
+\w\r\n'"${ResetColor}"'#'
 
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/env" ]] && source "$HOME/dotfiles/bash/env"
+
+# GIT_PS1_SHOWCOLORHINTS only works in PROMPT_COMMAND mode (`__git_ps1 pre post` sets PS1) on Ubuntu's older git,
+# not with `$(__git_ps1)` in PS1. Capture PS1 as the prefix after env, which may prepend a [ranger] marker to it.
+__ps1_pre=$PS1
+[[ "$PROMPT_COMMAND" == *__git_ps1* ]] || PROMPT_COMMAND="__git_ps1 \"\$__ps1_pre\" ' '${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
 # bash-completion must load after env: its _comp_expand_glob derives a local LC_CTYPE from LANG,
 # and an unset LANG makes bash 5.3 warn "setlocale: LC_COLLATE: cannot change locale ()" three times
