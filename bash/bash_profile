@@ -1,19 +1,10 @@
 #!/usr/bin/env bash
 # shellcheck source=/dev/null
 
-# brew is not on the default PATH on Apple Silicon; shellenv sets PATH and all HOMEBREW_* vars
-for __brew in /opt/homebrew/bin/brew /usr/local/bin/brew; do
-  [ -x "$__brew" ] && eval "$("$__brew" shellenv)" && break
-done
-unset __brew
+# MacPorts
+[ -x /opt/local/bin/port ] && export PATH="/opt/local/bin:/opt/local/sbin:$PATH"
+
 [[ -s "$HOME/.bashrc" ]] && source "$HOME/.bashrc"
 
-if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
-    #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
-    export SDKMAN_DIR="$HOME/.sdkman"
-    # shellcheck source=/dev/null
-    source "$HOME/.sdkman/bin/sdkman-init.sh"
-fi
-
-# Dedupe PATH: path_helper and brew shellenv both add /usr/local/bin, and nested logins re-add everything
+# Dedupe PATH: nested logins re-add everything
 PATH=$(printf %s "$PATH" | awk -v RS=: -v ORS=: '!seen[$0]++'); export PATH="${PATH%:}"

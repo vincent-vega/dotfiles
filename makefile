@@ -2,11 +2,13 @@ dotfiles_dir=${HOME}/dotfiles
 bash_dir=${dotfiles_dir}/bash
 vim_dir=${dotfiles_dir}/vim
 conf_dir=${dotfiles_dir}/conf
+bin_dir=${dotfiles_dir}/bin
+local_bin=${HOME}/.local/bin
 OS := $(shell uname)
 
-.PHONY: all bash clean conf neovim vim vimplugins
+.PHONY: all bash bin clean conf neovim vim vimplugins
 
-all: bash conf neovim vim vimplugins
+all: bash bin conf neovim vim vimplugins
 	@echo "Complete!"
 
 bash: ${bash_dir}/bash_profile ${bash_dir}/bashrc ${bash_dir}/inputrc
@@ -59,12 +61,20 @@ endif
 		printf '%s\n' "$$gen" > "$$target/config.toml"; \
 	fi
 
+bin: ${bin_dir}/cfr.sh ${bin_dir}/clearhistorydups.py
+	@mkdir -p "${local_bin}"
+	@[ -e "${local_bin}/cfr" ]              || ln -sf "${bin_dir}/cfr.sh"              "${local_bin}/cfr"
+	@[ -e "${local_bin}/clearhistorydups" ] || ln -sf "${bin_dir}/clearhistorydups.py" "${local_bin}/clearhistorydups"
+
 clean:
+	@ ! [ -h "${local_bin}/cfr" ]              || rm -f "${local_bin}/cfr"
+	@ ! [ -h "${local_bin}/clearhistorydups" ] || rm -f "${local_bin}/clearhistorydups"
 	@ ! [ -h "${HOME}/.alacritty.toml" ]       || rm -f "${HOME}/.alacritty.toml"
 	@ ! [ -h "${HOME}/.bash_profile" ]         || rm -f "${HOME}/.bash_profile"
 	@ ! [ -h "${HOME}/.bashrc" ]               || rm -f "${HOME}/.bashrc"
 	@ ! [ -e "${HOME}/.config/neovide" ]       || rm -rf "${HOME}/.config/neovide"
-	@ ! [ -h "${HOME}/.config/nvim/init.vim" ] || rm -f "${HOME}/.config/nvim/init.vim"
+	@ ! [ -h "${HOME}/.config/nvim" ]          || rm -f "${HOME}/.config/nvim"
+	@ ! [ -h "${HOME}/.config/ranger" ]        || rm -f "${HOME}/.config/ranger"
 	@ ! [ -h "${HOME}/.gvimrc" ]               || rm -f "${HOME}/.gvimrc"
 	@ ! [ -h "${HOME}/.ideavimrc" ]            || rm -f "${HOME}/.ideavimrc"
 	@ ! [ -h "${HOME}/.inputrc" ]              || rm -f "${HOME}/.inputrc"

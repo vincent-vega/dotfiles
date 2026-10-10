@@ -111,9 +111,11 @@ export SVN_EDITOR="$VISUAL"
 export GIT_EDITOR="$VISUAL"
 
 export FZF_DEFAULT_OPTS='--layout=reverse --border --multi'
-# sbin comes from brew shellenv (bash_profile); gnubin dir resolves to empty on Linux
-# findutils gnubin deliberately NOT on PATH: GNU find on PATH breaks source builds (brew doctor); interactive use gets it via aliases
-[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin${HOMEBREW_PREFIX:+:$HOMEBREW_PREFIX/opt/gnu-tar/libexec/gnubin}:$PATH"
+# /opt/local/{bin,sbin} come from bash_profile; gnutar via alias (MacPorts gnubin also contains GNU find)
+# findutils gnubin deliberately NOT on PATH: GNU find on PATH breaks source builds; interactive use gets it via aliases
+[[ ":$PATH:" != *":$HOME/.local/bin:"* ]] && export PATH="$HOME/.local/bin:$PATH"
+# MacPorts ImageMagick7 keeps its CLI out of /opt/local/bin so it can coexist with ImageMagick 6
+[ -d /opt/local/lib/ImageMagick7/bin ] && export PATH="/opt/local/lib/ImageMagick7/bin:$PATH"
 
 export PYGMENTIZE_STYLE=dracula
 if [ -n "$RANGER_LEVEL" ]; then

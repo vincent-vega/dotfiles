@@ -10,34 +10,14 @@ esac
 
 shopt -s autocd cdspell checkwinsize histappend
 
-# sudo autocompletion
-complete -cf sudo
-# enable bash completion in interactive shells
-if ! shopt -oq posix; then
-    if [ -s /usr/share/bash-completion/bash_completion ]; then
-        # shellcheck source=/dev/null
-        source /usr/share/bash-completion/bash_completion
-    elif [ -s /etc/bash_completion ]; then
-        # shellcheck source=/dev/null
-        source /etc/bash_completion
-    elif [ -r "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh" ]; then
-        # shellcheck source=/dev/null
-        source "${HOMEBREW_PREFIX}/etc/profile.d/bash_completion.sh"
-    elif [ -d "${HOMEBREW_PREFIX}/etc/bash_completion.d" ]; then
-        for COMPLETION in "${HOMEBREW_PREFIX}/etc/bash_completion.d/"*; do
-            # shellcheck source=/dev/null
-            [[ -r "${COMPLETION}" ]] && source "${COMPLETION}"
-        done
-    fi
-fi
-
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/ps1_colors" ]] && source "$HOME/dotfiles/bash/ps1_colors"
 
 if ! command -v __git_ps1 &>/dev/null; then
-    if [ -s "$HOMEBREW_PREFIX/etc/bash_completion.d/git-prompt.sh" ]; then
+    if [ -s /opt/local/share/git/git-prompt.sh ]; then
+        # MacPorts
         # shellcheck disable=SC1091
-        source "$HOMEBREW_PREFIX/etc/bash_completion.d/git-prompt.sh"
+        source /opt/local/share/git/git-prompt.sh
     elif [ -s "/usr/share/git/completion/git-prompt.sh" ]; then
         # shellcheck disable=SC1091
         source "/usr/share/git/completion/git-prompt.sh"
@@ -56,6 +36,33 @@ PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/env" ]] && source "$HOME/dotfiles/bash/env"
+
+# bash-completion must load after env: its _comp_expand_glob derives a local LC_CTYPE from LANG,
+# and an unset LANG makes bash 5.3 warn "setlocale: LC_COLLATE: cannot change locale ()" three times
+# enable bash completion in interactive shells
+if ! shopt -oq posix; then
+    if [ -s /usr/share/bash-completion/bash_completion ]; then
+        # shellcheck source=/dev/null
+        source /usr/share/bash-completion/bash_completion
+    elif [ -s /etc/bash_completion ]; then
+        # shellcheck source=/dev/null
+        source /etc/bash_completion
+    elif [ -r /opt/local/etc/profile.d/bash_completion.sh ]; then
+        # MacPorts. The azure-cli port ships a broken az completion (calls a non-existent argcomplete module,
+        # prints an error at every shell start): skip that file and register az the way argcomplete intends.
+        BASH_COMPLETION_COMPAT_IGNORE="az"
+        # shellcheck source=/dev/null
+        source /opt/local/etc/profile.d/bash_completion.sh
+        for __rpa in /opt/local/bin/register-python-argcomplete-3.*; do
+            [ -x "$__rpa" ] && eval "$("$__rpa" --shell bash az)" && break
+        done
+        unset __rpa
+    fi
+fi
+
+# sudo: bash-completion delegates to the wrapped command's completion (`sudo port <TAB>` completes port
+# subcommands); registering `complete -cf sudo` ourselves would override that, so only do it without it
+[ -n "${BASH_COMPLETION_VERSINFO+x}" ] || complete -cf sudo
 
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/bash_aliases" ]] && source "$HOME/dotfiles/bash/bash_aliases"
@@ -95,3 +102,11 @@ fi
 [[ -s "$HOME/dotfiles/bash/functions" ]] && source "$HOME/dotfiles/bash/functions"
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/obsopen" ]] && source "$HOME/dotfiles/bash/obsopen"
+
+# SDKMAN defines `sdk` as a shell function, so it has to be sourced by every interactive shell, including the
+# non-login ones tmux opens (bash_profile would only cover login shells). Keep it last: it prepends to PATH.
+if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
+    export SDKMAN_DIR="$HOME/.sdkman"
+    # shellcheck source=/dev/null
+    source "$HOME/.sdkman/bin/sdkman-init.sh"
+fi

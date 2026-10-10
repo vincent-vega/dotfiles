@@ -431,15 +431,18 @@ urldecode() {
 
 if [ "$__os_family" = "Mac" ]; then
     instupdate() {
-        if command -v brew &>/dev/null; then
-            brew update
+        if command -v port &>/dev/null; then
+            sudo port selfupdate
             echo -e "\\033[34m==>\\033[0m \\033[1mOutdated\\033[0m"
-            brew outdated
+            port outdated
             echo -e "\\033[34m==>\\033[0m \\033[1mCleaning up...\\033[0m"
-            brew cleanup -s
-            brew autoremove
+            sudo port reclaim
         else
-            echo "brew not found. Skip update"
+            echo "port not found. Skip update"
+        fi
+        if command -v npm &>/dev/null; then
+            echo -e "\\033[34m==>\\033[0m \\033[1mnpm outdated (global)\\033[0m"
+            npm outdated -g
         fi
         if command -v sdk &>/dev/null; then
             echo -e "\\033[34m==>\\033[0m \\033[1msdk update...\\033[0m"

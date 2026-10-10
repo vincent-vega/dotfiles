@@ -139,14 +139,16 @@ endif
 " {{{ fzf
 
 if executable('fzf')
-    if has('macunix')
-        for s:fzf_dir in ['/opt/homebrew/opt/fzf', '/usr/local/opt/fzf']
-            if isdirectory(s:fzf_dir)
-                let &runtimepath .= ',' . s:fzf_dir
-                break
-            endif
-        endfor
-    endif
+    " Distros that install into vimfiles (Arch, Fedora) need nothing; the rest
+    " keep the plugin out of the runtimepath: MacPorts, Debian/Ubuntu, git install
+    for s:fzf_dir in ['/opt/local/share/fzf/vim', '/usr/share/doc/fzf/examples', expand('~/.fzf')]
+        if isdirectory(s:fzf_dir . '/plugin')
+            let &runtimepath .= ',' . s:fzf_dir
+            break
+        endif
+    endfor
+    unlet s:fzf_dir
+    "let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'relative': v:true, 'yoffset': 1.0 } }
     let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.6, 'yoffset': 1.0 } }
     let g:fzf_colors = { 'fg': ['fg', 'Normal'] }
     nnoremap <silent> <C-P> :FZF --reverse<CR>
@@ -245,7 +247,7 @@ match WhiteSpaceError /[\x0b\x0c\u00a0\u1680\u180e\u2000-\u200a\u2028\u202f\u205
 if has('autocmd')
     autocmd BufNewFile,BufRead *.log,*.html,*.properties setlocal nowrap
     autocmd BufNewFile,BufRead *.txt setlocal wrap
-    "autocmd BufNewFile,BufRead *.yaml set ft=cloudformation.yaml
+    autocmd BufNewFile,BufRead */.github/workflows/*.{yml,yaml} let b:ale_linters = {'yaml': ['actionlint', 'yamllint']}
     autocmd BufNewFile,BufRead *.tag set syntax=jsp
     autocmd BufNewFile,BufRead *.har set syntax=json
     autocmd BufNewFile,BufRead *.md setlocal wrap spell

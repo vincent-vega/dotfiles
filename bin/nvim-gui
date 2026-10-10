@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
-# macOS GUI launches skip /etc/profile, so /etc/paths.d entries (Homebrew, TeX, ...) are missing from PATH.
+# macOS GUI launches skip /etc/profile, so /etc/paths.d entries (TeX, ...) are missing from PATH.
 if [ -x /usr/libexec/path_helper ]; then
     eval "$(/usr/libexec/path_helper -s)"
 fi
-
-# Neovide passes TERM=su (no terminfo); bash defaults TERM=dumb without a tty (terminfo exists but is degraded). Either breaks :terminal — pin a real one.
-if [ "${TERM:-}" = "dumb" ] || ! infocmp -- "${TERM:-}" >/dev/null 2>&1; then
-    export TERM="xterm-256color"
-fi
+# MacPorts is not in /etc/paths.d
+[ -d /opt/local/bin ] && export PATH="/opt/local/bin:$PATH"
 exec nvim "$@"

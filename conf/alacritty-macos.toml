@@ -92,8 +92,8 @@ save_to_clipboard = true
 
 [terminal.shell]
 args = ["--login"]
-# Intel; on Apple Silicon use /opt/homebrew/bin/bash (system bash is stuck at 3.2)
-program = "/usr/local/bin/bash"
+# MacPorts bash (system bash is stuck at 3.2)
+program = "/opt/local/bin/bash"
 
 [window]
 decorations = "buttonless"

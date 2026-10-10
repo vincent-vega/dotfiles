@@ -9,6 +9,7 @@ Personal configuration files for bash, vim, neovim, tmux, alacritty, and ranger.
 - Vim/Neovim (optional, for vim configurations)
 - Tmux (optional, for tmux configuration)
 - Alacritty (optional, for terminal configuration)
+- Neovide (optional, for the Neovim GUI configuration)
 - Ranger (optional, for file manager configuration)
 
 ## Installation
@@ -88,19 +89,25 @@ git submodule update --remote --merge
 
 ## Uninstallation
 
-To remove all symlinks created by this dotfiles setup:
+To remove the symlinks created by this dotfiles setup and the generated Neovide config:
 
 ```bash
 make clean
 ```
 
-Note: This will only remove symlinks, not the actual dotfiles repository or any backup files created during installation.
+Note: This will not touch the dotfiles repository or any backup files created during installation.
 
 ## Platform-Specific Notes
 
 ### macOS
 
 On macOS (Darwin), the Alacritty configuration will use `alacritty-macos.toml` instead of the standard `alacritty.toml`.
+
+The macOS setup expects [MacPorts](https://www.macports.org/install.php) in `/opt/local`. `alacritty-macos.toml` launches `/opt/local/bin/bash` as its shell because the system bash is stuck at 3.2, so Alacritty will not start without the `bash` port. The bash configuration also picks up git prompt, bash-completion and other tools from `/opt/local` when present. The full list of ports in use is in `conf/macports_packages.txt`; install them with:
+
+```bash
+xargs sudo port install < conf/macports_packages.txt
+```
 
 ### Neovide
 
@@ -112,14 +119,17 @@ The Ranger configuration uses the `ranger_devicons` plugin to display file icons
 
 **Installing Nerd Fonts on macOS:**
 
-```bash
-# Using Homebrew (recommended)
-brew install font-hack-nerd-font
+No package manager needed: macOS loads any font dropped into `~/Library/Fonts` immediately, with no Font Book step and no restart. The Alacritty config in this repo uses Hack:
 
-# Or manually download and install
-# Download from: https://github.com/ryanoasis/nerd-fonts/releases
-# Move .ttf files to ~/Library/Fonts/
+```bash
+# Download the Hack Nerd Font and install it for the current user
+cd "$(mktemp -d)"
+curl -fsSLO https://github.com/ryanoasis/nerd-fonts/releases/latest/download/Hack.zip
+unzip -q Hack.zip -d ~/Library/Fonts
+ls ~/Library/Fonts | grep -c HackNerdFont   # expect 12
 ```
+
+Other fonts are listed at https://www.nerdfonts.com/font-downloads. To upgrade, run the same commands again; to remove, delete the `HackNerdFont*.ttf` files. Open a new Alacritty window afterwards.
 
 **Installing Nerd Fonts on Linux:**
 
@@ -145,7 +155,7 @@ Most terminals will automatically use the installed Nerd Font and icons should d
 
 ```toml
 [font.normal]
-family = "SauceCodePro Nerd Font"  # or "Hack Nerd Font" if using Hack
+family = "Hack Nerd Font Mono"  # or "SauceCodePro Nerd Font" if using Source Code Pro
 ```
 
 ### Backups
@@ -153,6 +163,7 @@ family = "SauceCodePro Nerd Font"  # or "Hack Nerd Font" if using Hack
 The installation process will automatically create backups if existing configurations are found for:
 - Neovim configuration (backed up with random suffix)
 - Ranger configuration (backed up with random suffix)
+- Neovide configuration (backed up with random suffix, only if it differs from the generated one)
 
 ## Directory Structure
 
@@ -160,7 +171,7 @@ The installation process will automatically create backups if existing configura
 dotfiles/
 ├── bash/           # Bash configuration files
 ├── bin/            # Custom scripts
-├── conf/           # Configuration files (tmux, alacritty, ranger)
+├── conf/           # Configuration files (tmux, alacritty, ranger, neovide, ...)
 ├── conky/          # Conky configuration
 ├── vim/            # Vim and Neovim configuration
 │   └── pack/       # Vim plugins (submodules)
