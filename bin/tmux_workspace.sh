@@ -1,5 +1,10 @@
 #!/usr/bin/env bash
 
+if tmux has-session -t =w 2>/dev/null; then
+  echo "tmux session 'w' already exists, aborting" >&2
+  exit 1
+fi
+
 tmux new-session -d -s w
 
 tmux rename-window -t w:1 ''
