@@ -216,6 +216,7 @@ let g:startify_lists = [
 
 let g:startify_bookmarks = [
   \ { 'b': '~/.bashrc' },
+  \ { 'f': '~/dotfiles/bash/functions' },
   \ { 'h': '~/.bash_history' },
   \ { 'n': '~/.config/nvim/init.vim' },
   \ { 'v': '~/.vimrc' },
