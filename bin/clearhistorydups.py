@@ -6,19 +6,44 @@ import os
 import re
 import sys
 
-UNWANTED_COMMANDS = { r'(builtin\s+)?cd\s+' }
+# Entries matching one of these in full are purged (so `cd x && make` survives).
+UNWANTED_COMMANDS = { r'(builtin\s+)?cd(\s+[^;&|]*)?' }
+TS = re.compile(r'#\d+')  # bash HISTTIMEFORMAT marker line
 
 
 def _err(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
 
+def _confirm(prompt: str, default: str) -> bool:
+    while True:
+        try:
+            resp = input(prompt).strip().lower() or default
+        except EOFError:
+            resp = default
+        if resp in ('y', 'n'):
+            return resp == 'y'
+
+
+def _entries(lines: list[str]) -> list[tuple[str | None, str]]:
+    """Group lines like bash does: a '#epoch' line owns every following line up
+    to the next one (multi-line commands). Lines before any timestamp are one
+    entry each. Returns (timestamp | None, command) with the command stripped
+    as a whole, inner indentation untouched."""
+    groups: list[tuple[str | None, list[str]]] = []
+    for line in lines:
+        if TS.fullmatch(line):
+            groups.append((line, []))
+        elif groups and groups[-1][0] is not None:
+            groups[-1][1].append(line)
+        else:
+            groups.append((None, [line]))
+    return [(ts, '\n'.join(cmd).strip()) for ts, cmd in groups]
+
+
 def _keep(command: str, seen: set[str]) -> bool:
-    if command == '' or command in seen:
-        return False
-    for p in filter(lambda p: re.match(p, command), UNWANTED_COMMANDS):
-        return False
-    return True
+    return (command != '' and command not in seen
+            and not any(re.fullmatch(p, command) for p in UNWANTED_COMMANDS))
 
 
 def clear(hist_file: str) -> int:
@@ -30,32 +55,30 @@ def clear(hist_file: str) -> int:
     copy2(hist_file, backup_hist)
     _err(f'History backup-file written to {backup_hist}')
 
-    resp = None
-    while resp is None or resp not in 'yYnN':
-        resp = input(f'File "{hist_file}" will be edited, continue? (y/N) ').strip()
-
-    if resp in 'nN':
+    if not _confirm(f'File "{hist_file}" will be edited, continue? (y/N) ', 'n'):
         _err('Aborted!')
         os.remove(backup_hist)
         return 3
 
-    with open(hist_file, 'r+') as f:
-        history = [ line.strip() for line in f ][::-1]
-        seen = set()
-        result = []
-        for h in filter(lambda x: _keep(x, seen), history):
-            if not re.match(r'#\d+', h) or result and not re.match(r'#\d+', result[-1]):
-                result.append(h)
-                seen.add(h)
-        if result and result != history:
+    with open(hist_file, 'r+', errors='surrogateescape') as f:
+        entries = _entries([line.rstrip('\n') for line in f])
+        seen: set[str] = set()
+        kept = []
+        for ts, cmd in reversed(entries):  # newest first, so the last occurrence wins
+            if _keep(cmd, seen):
+                seen.add(cmd)
+                kept.append((ts, cmd))
+        kept.reverse()
+        if kept and kept != entries:
             f.seek(0)
-            print(*reversed(result), file=f, sep='\n')
+            for ts, cmd in kept:
+                if ts is not None:
+                    print(ts, file=f)
+                print(cmd, file=f)
             f.truncate()
-            _err(f'{len(history) - len(result)} lines have been purged ({(len(history) - len(result)) / len(history) * 100:.1f}%)')
-            resp = None
-            while resp is None or resp not in 'yYnN':
-                resp = input(f'Delete history backup-file {backup_hist}? (Y/n)').strip()
-            if resp in 'yY':
+            purged = len(entries) - len(kept)
+            _err(f'{purged} entries have been purged ({purged / len(entries) * 100:.1f}%)')
+            if _confirm(f'Delete history backup-file {backup_hist}? (Y/n) ', 'y'):
                 os.remove(backup_hist)
         else:
             os.remove(backup_hist)
@@ -65,7 +88,7 @@ def clear(hist_file: str) -> int:
 
 if __name__ == '__main__':
     if len(sys.argv) > 2 or len(sys.argv) == 2 and sys.argv[1].lower() in ('-h', '--help'):
-        _err(f'USAGE: {sys.argv[0].split("/")[-1]} [PATH]')
+        _err(f'USAGE: {os.path.basename(sys.argv[0])} [PATH]')
         _err(f'    "{os.environ["HOME"]}/.bash_history" will be used if the PATH argument is not present.')
         sys.exit(1)
 
