@@ -1,5 +1,6 @@
 from ranger.api.commands import Command
 import os
+import shutil
 import subprocess
 
 # Show full date + time in the log viewer (bound to `W`).
@@ -48,7 +49,9 @@ class open_drop(Command):
 
     def execute(self):
         uname_output = subprocess.check_output(['uname']).decode('utf-8').strip()
-        if 'Darwin' in uname_output:
-            subprocess.call(['open', self.fm.thisdir.path])
-        else:
+        if shutil.which('dragon-drop'):
             subprocess.call(['dragon-drop', '-a', '-x', self.fm.thisfile.path])
+        elif 'Darwin' in uname_output:
+            subprocess.call(['open', '-R', self.fm.thisfile.path])
+        else:
+            subprocess.call(['open', self.fm.thisdir.path])
