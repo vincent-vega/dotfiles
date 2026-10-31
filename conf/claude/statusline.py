@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Claude Code status line (Nerd Font + true color). Reads the session JSON on stdin, prints two lines:
-  󰚩 model │ ██████░░░░ 42% 200k │ $0.31 │ 2m5s │ 5h:23% 7d:10%
-   branch* │ +12/-3 │ dir │ worktree:name
+"""Claude Code status line (Nerd Font + true color). Reads the session JSON on stdin, prints 2-3 lines:
+  󰚩 model │ ██████░░░░ 42% 200k │ 5h:23% 7d:10% │ 󰈸 4m11s 94%
+   $0.31 │ 󰔟 2m5s │  branch* │ +12/-3 │ dir
+   worktree:name            (only in a worktree session or with --agent)
 """
 import json
 import os
 import subprocess
 import sys
+import time
 
 RST, GRAY, CYAN, BLUE = "\033[0m", "\033[90m", "\033[36m", "\033[34m"
 GREEN, YELLOW, RED = "\033[32m", "\033[33m", "\033[31m"
@@ -19,6 +21,8 @@ I_COST = ""    # U+F155 nf-fa-dollar
 I_TIME = "󰔟"    # U+F051F nf-md-timer_outline
 I_WARN = "󰀦"    # U+F0026 nf-md-alert
 I_AGENT = ""   # U+F013 nf-fa-cog
+I_WARM = "\U000F0238"   # U+F0238 nf-md-fire (escaped: pastes strip these glyphs)
+I_COLD = "\U000F0717"   # U+F0717 nf-md-snowflake
 
 # Context bar: 10 cells, green → red gradient
 BAR_RGB = [(46, 204, 113), (116, 195, 89), (186, 186, 64), (241, 196, 15), (239, 161, 24),
@@ -43,6 +47,25 @@ def git(cwd, *args):
     return r.stdout.strip() if r.returncode == 0 else None
 
 
+def cache_segment(c):
+    """󰈸 4m12s 94%  when warm │ 󰜗 cold 120k 94%  when expired; misses appended only if any."""
+    if c.get("warm"):
+        left = max(0, int(c.get("expires_at") or 0) - int(time.time()))
+        seg = f"{YELLOW}{I_WARM}{RST} {GRAY}{left // 60}m{left % 60:02d}s"
+    else:
+        recache = c.get("recache_tokens_if_cold")
+        seg = f"{CYAN}{I_COLD}{RST} {GRAY}cold" + (f" {recache // 1000}k" if recache else "")
+    hit = c.get("hit_ratio")
+    if hit is not None:
+        pct = int(hit * 100)
+        seg += f" {RED if pct < 80 else GRAY}{pct}%"
+    misses = c.get("misses") or 0
+    if misses:
+        causes = (c.get("last_miss_cause") or {}).get("causes") or []
+        seg += f" {RED}miss:{misses}" + (f" {causes[0]}" if causes else "")
+    return seg + RST
+
+
 def main():
     d = json.load(sys.stdin)
     model = get(d, "model.display_name", "?")
@@ -59,7 +82,7 @@ def main():
     wt = get(d, "worktree.name", "")
     agent = get(d, "agent.name", "")
 
-    # Line 1: model │ context bar │ cost │ duration │ rate limits
+    # Line 1: model │ context bar │ rate limits │ cache
     bar = "".join(rgb(*BAR_RGB[i]) + "█" if i < pct // 10 else rgb(*EMPTY_RGB) + "░" for i in range(10))
     pct_color = RED if pct >= 90 else YELLOW if pct >= 70 else GREEN
     ctx = f"{bar}{RST} {pct_color}{pct}%{RST}"
@@ -72,15 +95,20 @@ def main():
 
     cost_color = GRAY if cost == "0.00" else RED if float(cost) >= 10 else YELLOW
 
-    line1 = [f"{PURPLE}{I_BRAND}{RST} {CYAN}{model}{RST}", ctx, f"{cost_color}{I_COST} ${cost}{RST}"]
-    if dur > 0:
-        line1.append(f"{GRAY}{I_TIME} {dur // 60}m{dur % 60}s{RST}")
+    line1 = [f"{PURPLE}{I_BRAND}{RST} {CYAN}{model}{RST}", ctx]
     rate = [f"{RED if v >= 80 else GRAY}{label}:{v}%{RST}" for label, v in (("5h", r5), ("7d", r7)) if v >= 0]
     if rate:
         line1.append(" ".join(rate))
+    cache = get(d, "prompt_cache", None)
+    if cache:
+        line1.append(cache_segment(cache))
 
-    # Line 2: branch │ +add/-rm │ dir │ worktree/agent
-    line2 = []
+    # Line 2: cost │ duration │ branch │ +add/-rm │ dir
+    line2 = [f"{cost_color}{I_COST} ${cost}{RST}"]
+    if dur >= 3600:
+        line2.append(f"{GRAY}{I_TIME} {dur // 3600}h{dur % 3600 // 60}m{RST}")
+    elif dur > 0:
+        line2.append(f"{GRAY}{I_TIME} {dur // 60}m{dur % 60}s{RST}")
     if os.path.isdir(cwd) and git(cwd, "rev-parse", "--git-dir") is not None:
         branch = branch or git(cwd, "branch", "--show-current") or git(cwd, "rev-parse", "--short", "HEAD") or ""
         dirty = "" if git(cwd, "diff", "--quiet", "HEAD") is not None else "*"
@@ -88,13 +116,15 @@ def main():
     if add > 0 or rm > 0:
         line2.append(f"{GREEN}+{add}{RST}/{RED}-{rm}{RST}")
     line2.append(f"{BLUE}{os.path.basename(cwd)}{RST}")
-    if wt:
-        line2.append(f"{YELLOW}{I_AGENT} worktree:{wt}{RST}")
-    elif agent:
-        line2.append(f"{YELLOW}{I_AGENT} {agent}{RST}")
 
-    print(SEP.join(line1))
-    print(SEP.join(line2), end="")
+    # Line 3: worktree or agent, only when present
+    lines = [line1, line2]
+    if wt:
+        lines.append([f"{YELLOW}{I_AGENT} worktree:{wt}{RST}"])
+    elif agent:
+        lines.append([f"{YELLOW}{I_AGENT} {agent}{RST}"])
+
+    print("\n".join(SEP.join(l) for l in lines), end="")
 
 
 if __name__ == "__main__":
