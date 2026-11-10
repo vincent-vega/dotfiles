@@ -259,7 +259,6 @@ if has('autocmd')
     " If doing a diff, upon writing changes to file,
     " automatically update the differences
     autocmd BufWritePost * if &diff == 1 | diffupdate | endif
-    autocmd BufEnter * silent! lcd %:p:h
     autocmd bufreadpost,filereadpost *.class setlocal filetype=java fileencoding=utf-8 | %!cfr %
     " Resize splits when the window is resized
     autocmd VimResized * exe "normal! \<c-w>="

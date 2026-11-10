@@ -17,6 +17,7 @@ if [ "$__os_family" = "Mac" ]; then
     fi
     command -v gnutar &>/dev/null && alias tar='gnutar'
     command -v gtelnet &>/dev/null && alias telnet='gtelnet'   # MacPorts inetutils prefixes everything with g
+    command -v graphping &>/dev/null && alias ping='graphping --clear'
 else
     alias df='df -TkH'
     alias du='du -bc --si'

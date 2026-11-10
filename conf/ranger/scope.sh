@@ -116,6 +116,11 @@ handle_extension() {
             python -m json.tool -- "${FILE_PATH}" && exit 5
             ;;
 
+        ## Markdown
+        md|markdown)
+            glow -s dark -w "${PV_WIDTH}" -- "${FILE_PATH}" && exit 5
+            ;;
+
         ## Jupyter Notebooks
         ipynb)
             jupyter nbconvert --to markdown "${FILE_PATH}" --stdout | env COLORTERM=8bit bat --color=always --style=plain --language=markdown && exit 5

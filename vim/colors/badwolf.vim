@@ -54,8 +54,6 @@ endif " }}}
 
 " }}}
 
-"highlight CursorLineNr ctermfg=Cyan ctermbg=NONE guifg=Cyan guibg=NONE
-
 " Palette {{{
 
 let s:bwc = {}
@@ -65,7 +63,7 @@ let s:bwc = {}
 let s:bwc.plain = ['f8f6f2', 15]
 
 " Pure and simple.
-let s:bwc.snow = ['ffffff', 15]
+let s:bwc.snow = ['ffffff', 231]
 let s:bwc.coal = ['000000', 16]
 
 " All of the Gravel colors are based on a brown from Clouds Midnight.
@@ -94,11 +92,11 @@ let s:bwc.saltwatertaffy = ['8cffba', 121]
 
 " The star of the show comes straight from Made of Code.
 "
-" You should almost never use this.  It should be used for things that denote
-" 'where the user is', which basically consists of:
+" Used for things that denote 'where the user is' or what is selected:
 "
-" * The cursor
-" * A REPL prompt
+" * The statusline, selected tab and popup menu item
+" * The incremental search match
+" * The current line number and a REPL prompt
 let s:bwc.tardis = ['0a9dff', 39]
 
 " This one's from Mustang, not Florida!
@@ -117,14 +115,13 @@ let s:bwc.toffee = ['b88853', 137]
 let s:bwc.coffee    = ['c7915b', 173]
 let s:bwc.darkroast = ['88633f', 95]
 
-let s:bwc.diffchange = ['990033', 167]
-let s:bwc.diffadd    = ['006622', 29]
+let s:bwc.diffchange = ['990033', 89]
+let s:bwc.diffadd    = ['006622', 22]
 
-let s:bwc.SkyBlue3   = ['5fafd7', 74]
-let s:bwc.IndianRed  = ['d75f5f', 167]
-let s:bwc.IndianRed1 = ['ff5f5f', 203]
-let s:bwc.Khaki1     = ['ffff87', 228]
-let s:bwc.Grey50     = ['808080', 244]
+let s:bwc.indianred  = ['d75f5f', 167]
+let s:bwc.indianred1 = ['ff5f5f', 203]
+let s:bwc.khaki1     = ['ffff87', 228]
+let s:bwc.grey50     = ['808080', 244]
 
 " }}}
 " Highlighting Function {{{
@@ -183,7 +180,7 @@ if exists('g:badwolf_tabline')
     elseif  g:badwolf_tabline == 3
         let s:tabline = 'deepgravel'
     else
-        let s:tabline = 'blackestgravel'
+        let s:tabline = 'blackgravel'
     endif
 else
     let s:tabline = 'blackgravel'
@@ -218,7 +215,6 @@ call s:HL('SpecialKey', 'deepgravel', 'bg')
 call s:HL('Visual',    '',  'deepgravel')
 call s:HL('VisualNOS', '',  'deepgravel')
 
-"call s:HL('Search',    'coal', 'dalespale', 'bold')
 call s:HL('Search',    'coal', 'tardis', 'bold')
 call s:HL('IncSearch', 'coal', 'tardis',    'bold')
 
@@ -249,13 +245,14 @@ call s:HL('Tag', '', '', 'bold')
 call s:HL('LineNr',     'mediumgravel', s:gutter)
 call s:HL('SignColumn', '',             s:gutter)
 call s:HL('FoldColumn', 'mediumgravel', s:gutter)
+call s:HL('CursorLineNr', 'tardis', s:gutter, 'bold')
 
 " }}}
 " Cursor {{{
 
-call s:HL('Cursor',  'coal', 'IndianRed1', 'bold')
-call s:HL('vCursor', 'coal', 'IndianRed1', 'bold')
-call s:HL('iCursor', 'coal', 'IndianRed1', 'none')
+call s:HL('Cursor',  'coal', 'indianred1', 'bold')
+call s:HL('vCursor', 'coal', 'indianred1', 'bold')
+call s:HL('iCursor', 'coal', 'indianred1', 'none')
 
 " }}}
 " Syntax highlighting {{{
@@ -434,10 +431,10 @@ call s:HL('level1c',  'saltwatertaffy', '', '')
 " }}}
 " ShowMarks {{{
 
-call s:HL('ShowMarksHLl', 'tardis', 'blackgravel')
-call s:HL('ShowMarksHLu', 'tardis', 'blackgravel')
-call s:HL('ShowMarksHLo', 'tardis', 'blackgravel')
-call s:HL('ShowMarksHLm', 'tardis', 'blackgravel')
+call s:HL('ShowMarksHLl', 'tardis', s:gutter)
+call s:HL('ShowMarksHLu', 'tardis', s:gutter)
+call s:HL('ShowMarksHLo', 'tardis', s:gutter)
+call s:HL('ShowMarksHLm', 'tardis', s:gutter)
 
 " }}}
 
@@ -484,7 +481,7 @@ else
     call s:HL('cssTextProp', 'fg', '', 'none')
     call s:HL('cssRenderProp', 'fg', '', 'none')
     call s:HL('cssGeneratedContentProp', 'fg', '', 'none')
-end
+endif
 
 call s:HL('cssValueLength', 'toffee', '', 'bold')
 call s:HL('cssColor', 'toffee', '', 'bold')
@@ -495,20 +492,20 @@ call s:HL('cssClassName', 'orange', '', 'none')
 " }}}
 " Diff {{{
 
-call s:HL('gitDiff', 'lightgravel', '',)
+call s:HL('gitDiff', 'lightgravel')
 
-call s:HL('diffRemoved', 'IndianRed', '',)
-call s:HL('diffAdded', 'SkyBlue3', '',)
-call s:HL('diffFile', 'Khaki1', '', '')
-call s:HL('diffNewFile', 'Khaki1', '', '')
+call s:HL('diffRemoved', 'indianred')
+call s:HL('diffAdded', 'lime')
+call s:HL('diffFile', 'khaki1', '', '')
+call s:HL('diffNewFile', 'khaki1', '', '')
 
-call s:HL('diffLine', 'Grey50', '', 'bold')
+call s:HL('diffLine', 'grey50', '', 'bold')
 call s:HL('diffSubname', 'orange', '', 'none')
 
 " }}}
 " Django Templates {{{
 
-call s:HL('djangoArgument', 'dirtyblonde', '',)
+call s:HL('djangoArgument', 'dirtyblonde')
 call s:HL('djangoTagBlock', 'orange', '')
 call s:HL('djangoVarBlock', 'orange', '')
 " hi djangoStatement guifg=#ff3853 gui=bold
@@ -557,7 +554,6 @@ call s:HL('texMathZoneC', 'orange', '', 'none')
 call s:HL('texMathZoneD', 'orange', '', 'none')
 call s:HL('texMathZoneE', 'orange', '', 'none')
 call s:HL('texMathZoneV', 'orange', '', 'none')
-call s:HL('texMathZoneX', 'orange', '', 'none')
 call s:HL('texMath', 'orange', '', 'none')
 call s:HL('texMathMatcher', 'orange', '', 'none')
 call s:HL('texRefLabel', 'dirtyblonde', '', 'none')
@@ -614,7 +610,7 @@ call s:HL('markdownHeadingRule', 'lightgravel', '', 'bold')
 call s:HL('markdownHeadingDelimiter', 'lightgravel', '', 'bold')
 call s:HL('markdownOrderedListMarker', 'lightgravel', '', 'bold')
 call s:HL('markdownListMarker', 'lightgravel', '', 'bold')
-call s:HL('markdownItalic', 'snow', '', 'bold')
+call s:HL('markdownItalic', 'snow', '', 'italic')
 call s:HL('markdownBold', 'snow', '', 'bold')
 call s:HL('markdownH1', 'orange', '', 'bold')
 call s:HL('markdownH2', 'lime', '', 'bold')
@@ -641,7 +637,7 @@ call s:HL('mysqlSpecial', 'dress', '', 'bold')
 " }}}
 " Python {{{
 
-hi def link pythonOperator Operator
+call s:HL('pythonOperator',    'taffy', '', 'none')
 call s:HL('pythonBuiltin',     'dress')
 call s:HL('pythonBuiltinObj',  'dress')
 call s:HL('pythonBuiltinFunc', 'dress')
