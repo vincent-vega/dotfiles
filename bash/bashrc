@@ -16,14 +16,14 @@ shopt -s autocd cdspell checkwinsize histappend
 if ! command -v __git_ps1 &>/dev/null; then
     if [ -s /opt/local/share/git/git-prompt.sh ]; then
         # MacPorts
-        # shellcheck disable=SC1091
+        # shellcheck source=/dev/null
         source /opt/local/share/git/git-prompt.sh
     elif [ -s "/usr/share/git/completion/git-prompt.sh" ]; then
-        # shellcheck disable=SC1091
+        # shellcheck source=/dev/null
         source "/usr/share/git/completion/git-prompt.sh"
     elif [ -s /usr/lib/git-core/git-sh-prompt ]; then
         # Debian/Ubuntu
-        # shellcheck disable=SC1091
+        # shellcheck source=/dev/null
         source /usr/lib/git-core/git-sh-prompt
     fi
 fi
@@ -31,20 +31,17 @@ if command -v __git_ps1 &>/dev/null; then
     # shellcheck disable=SC2034
     GIT_PS1_SHOWCOLORHINTS=1 GIT_PS1_SHOWCONFLICTSTATE=1 GIT_PS1_SHOWDIRTYSTATE=1 GIT_PS1_SHOWSTASHSTATE=1 GIT_PS1_SHOWUNTRACKEDFILES=1
 else
-    __git_ps1() { PS1="$1$2"; }
+    __git_ps1() { :; }
 fi
+# git status is expanded at each prompt via $(__git_ps1), so tools that prepend to PS1 (venv, conda...) keep their
+# marker. Color hints need a git recent enough to support them in this mode: older git just shows plain text.
 # shellcheck disable=SC2154
 PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
-'"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${PaleGreen3}"'\
-\w\r\n'"${ResetColor}"'#'
+'"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${SpringGreen5}"'\
+\w\r\n'"${ResetColor}"'#$(__git_ps1) '
 
 # shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/env" ]] && source "$HOME/dotfiles/bash/env"
-
-# GIT_PS1_SHOWCOLORHINTS only works in PROMPT_COMMAND mode (`__git_ps1 pre post` sets PS1) on Ubuntu's older git,
-# not with `$(__git_ps1)` in PS1. Capture PS1 as the prefix after env, which may prepend a [ranger] marker to it.
-__ps1_pre=$PS1
-[[ "$PROMPT_COMMAND" == *__git_ps1* ]] || PROMPT_COMMAND="__git_ps1 \"\$__ps1_pre\" ' '${PROMPT_COMMAND:+; $PROMPT_COMMAND}"
 
 # bash-completion must load after env: its _comp_expand_glob derives a local LC_CTYPE from LANG,
 # and an unset LANG makes bash 5.3 warn "setlocale: LC_COLLATE: cannot change locale ()" three times
@@ -57,15 +54,9 @@ if ! shopt -oq posix; then
         # shellcheck source=/dev/null
         source /etc/bash_completion
     elif [ -r /opt/local/etc/profile.d/bash_completion.sh ]; then
-        # MacPorts. The azure-cli port ships a broken az completion (calls a non-existent argcomplete module,
-        # prints an error at every shell start): skip that file and register az the way argcomplete intends.
-        BASH_COMPLETION_COMPAT_IGNORE="az"
+        # MacPorts
         # shellcheck source=/dev/null
         source /opt/local/etc/profile.d/bash_completion.sh
-        for __rpa in /opt/local/bin/register-python-argcomplete-3.*; do
-            [ -x "$__rpa" ] && eval "$("$__rpa" --shell bash az)" && break
-        done
-        unset __rpa
     fi
 fi
 
