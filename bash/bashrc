@@ -1,4 +1,6 @@
 # shellcheck shell=bash
+# shellcheck disable=SC1091
+
 [ -z "$PS1" ] && return
 
 case $(uname -s) in
@@ -10,20 +12,16 @@ esac
 
 shopt -s autocd cdspell checkwinsize histappend
 
-# shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/ps1_colors" ]] && source "$HOME/dotfiles/bash/ps1_colors"
 
 if ! command -v __git_ps1 &>/dev/null; then
     if [ -s /opt/local/share/git/git-prompt.sh ]; then
         # MacPorts
-        # shellcheck source=/dev/null
         source /opt/local/share/git/git-prompt.sh
     elif [ -s "/usr/share/git/completion/git-prompt.sh" ]; then
-        # shellcheck source=/dev/null
         source "/usr/share/git/completion/git-prompt.sh"
     elif [ -s /usr/lib/git-core/git-sh-prompt ]; then
         # Debian/Ubuntu
-        # shellcheck source=/dev/null
         source /usr/lib/git-core/git-sh-prompt
     fi
 fi
@@ -40,7 +38,6 @@ PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 '"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${SpringGreen5}"'\
 \w\r\n'"${ResetColor}"'#$(__git_ps1) '
 
-# shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/env" ]] && source "$HOME/dotfiles/bash/env"
 
 # bash-completion must load after env: its _comp_expand_glob derives a local LC_CTYPE from LANG,
@@ -48,14 +45,11 @@ PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
 # enable bash completion in interactive shells
 if ! shopt -oq posix; then
     if [ -s /usr/share/bash-completion/bash_completion ]; then
-        # shellcheck source=/dev/null
         source /usr/share/bash-completion/bash_completion
     elif [ -s /etc/bash_completion ]; then
-        # shellcheck source=/dev/null
         source /etc/bash_completion
     elif [ -r /opt/local/etc/profile.d/bash_completion.sh ]; then
         # MacPorts
-        # shellcheck source=/dev/null
         source /opt/local/etc/profile.d/bash_completion.sh
     fi
 fi
@@ -64,16 +58,13 @@ fi
 # subcommands); registering `complete -cf sudo` ourselves would override that, so only do it without it
 [ -n "${BASH_COMPLETION_VERSINFO+x}" ] || complete -cf sudo
 
-# shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/bash_aliases" ]] && source "$HOME/dotfiles/bash/bash_aliases"
 
 if command -v fzf &>/dev/null; then
     if __fzf_bash=$(fzf --bash 2>/dev/null); then
         eval "$__fzf_bash"
     else # fzf < 0.48 (e.g. debian/ubuntu packages)
-        # shellcheck source=/dev/null
         [ -s /usr/share/doc/fzf/examples/key-bindings.bash ] && source /usr/share/doc/fzf/examples/key-bindings.bash
-        # shellcheck source=/dev/null
         [ -s /usr/share/doc/fzf/examples/completion.bash ] && source /usr/share/doc/fzf/examples/completion.bash
     fi
     unset __fzf_bash
@@ -98,15 +89,12 @@ if [ "$__os_family" = "Cygwin" ]; then
     complete -F __ssh_host_completion ssh
 fi
 
-# shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/functions" ]] && source "$HOME/dotfiles/bash/functions"
-# shellcheck source=/dev/null
 [[ -s "$HOME/dotfiles/bash/obsopen" ]] && source "$HOME/dotfiles/bash/obsopen"
 
 # SDKMAN defines `sdk` as a shell function, so it has to be sourced by every interactive shell, including the
 # non-login ones tmux opens (bash_profile would only cover login shells). Keep it last: it prepends to PATH.
 if [[ -s "$HOME/.sdkman/bin/sdkman-init.sh" ]]; then
     export SDKMAN_DIR="$HOME/.sdkman"
-    # shellcheck source=/dev/null
     source "$HOME/.sdkman/bin/sdkman-init.sh"
 fi

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2154
 
 open() {
+    # shellcheck disable=SC2154
     if [ "$__os_family" = "Cygwin" ]; then
         #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
         cygstart "$@"
@@ -435,24 +435,34 @@ if [ "$__os_family" = "Mac" ]; then
             sudo port selfupdate
             echo -e "\\033[34m==>\\033[0m \\033[1mOutdated\\033[0m"
             port outdated
-            echo -e "\\033[34m==>\\033[0m \\033[1mCleaning up...\\033[0m"
-            sudo port reclaim
         else
-            echo "port not found. Skip update"
+            echo "MacPorts not found. Skip update"
         fi
         if command -v npm &>/dev/null; then
             echo -e "\\033[34m==>\\033[0m \\033[1mnpm outdated (global)\\033[0m"
             npm outdated -g
+        else
+            echo "npm not found. Skip check outdated"
         fi
         if command -v sdk &>/dev/null; then
             echo -e "\\033[34m==>\\033[0m \\033[1msdk update...\\033[0m"
             sdk update
+        else
+            echo "sdk not found. Skip update"
         fi
             echo -e "\\033[34m==>\\033[0m \\033[1mMacOS check update...\\033[0m"
         softwareupdate --list
+        if command -v uv &>/dev/null; then
+            echo -e "\\033[34m==>\\033[0m \\033[1mOutdated uv\\033[0m"
+            uv tool list --outdated
+        else
+            echo "uv not found. Skip check outdated"
+        fi
         if command -v claude &>/dev/null; then
             echo -e "\\033[34m==>\\033[0m \\033[1mclaude update...\\033[0m"
             claude update
+        else
+            echo "claude not found. Skip update"
         fi
     }
 fi

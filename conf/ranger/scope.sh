@@ -116,6 +116,11 @@ handle_extension() {
             python -m json.tool -- "${FILE_PATH}" && exit 5
             ;;
 
+        ## Diff
+        diff|patch)
+            delta --paging=never --true-color=never --width="${PV_WIDTH}" < "${FILE_PATH}" 2>/dev/null && exit 5
+            ;;
+
         ## Markdown
         md|markdown)
             glow -s dark -w "${PV_WIDTH}" -- "${FILE_PATH}" && exit 5
@@ -155,10 +160,10 @@ handle_image() {
             exit 1;;
 
         ## DjVu
-        # image/vnd.djvu)
-        #     ddjvu -format=tiff -quality=90 -page=1 -size="${DEFAULT_SIZE}" \
-        #           - "${IMAGE_CACHE_PATH}" < "${FILE_PATH}" \
-        #           && exit 6 || exit 1;;
+        image/vnd.djvu)
+            ddjvu -format=tiff -quality=90 -page=1 -size="${DEFAULT_SIZE}" \
+                  - "${IMAGE_CACHE_PATH}" < "${FILE_PATH}" \
+                  && exit 6 || exit 1;;
 
         ## Image
         image/*)

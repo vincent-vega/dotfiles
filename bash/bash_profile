@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# shellcheck source=/dev/null
+# shellcheck disable=SC1091
 
 # MacPorts
 [ -x /opt/local/bin/port ] && export PATH="/opt/local/bin:/opt/local/sbin:$PATH"

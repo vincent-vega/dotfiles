@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-# shellcheck shell=bash disable=SC2154
+
+# shellcheck disable=SC2154
 if [ "$__os_family" = "Mac" ]; then
     alias df='df -H'
     alias du='du --si -c -A -B 1'
@@ -17,7 +18,8 @@ if [ "$__os_family" = "Mac" ]; then
     fi
     command -v gnutar &>/dev/null && alias tar='gnutar'
     command -v gtelnet &>/dev/null && alias telnet='gtelnet'   # MacPorts inetutils prefixes everything with g
-    command -v graphping &>/dev/null && alias ping='graphping --clear'
+    command -v gping &>/dev/null && alias ping='gping'
+    command -v graphping &>/dev/null && alias graphping='graphping --clear'
 else
     alias df='df -TkH'
     alias du='du -bc --si'
