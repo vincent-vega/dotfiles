@@ -2,10 +2,7 @@
 
 open() {
     # shellcheck disable=SC2154
-    if [ "$__os_family" = "Cygwin" ]; then
-        #/cygdrive/c/WINDOWS/explorer.exe /e, `cygpath -w "$1"`
-        cygstart "$@"
-    elif [ "$__os_family" = "Linux" ]; then
+    if [ "$__os_family" = "Linux" ]; then
         if command -v rifle &>/dev/null; then
             local text_files=()
             for x in "$@"; do

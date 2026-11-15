@@ -6,7 +6,6 @@
 case $(uname -s) in
     Darwin*) __os_family=Mac;;
     Linux*)  __os_family=Linux;;
-    CYGWIN*) __os_family=Cygwin;;
     *)       __os_family=Linux;;
 esac
 
@@ -75,18 +74,6 @@ if command -v fzf &>/dev/null; then
             _fzf_setup_completion 'path' pbcopy
         fi
     fi
-fi
-
-if [ "$__os_family" = "Cygwin" ]; then
-    __ssh_host_completion() {
-        local cur opts
-        cur="${COMP_WORDS[COMP_CWORD]}"
-        opts=$(grep '^Host' "$HOME/.ssh/config" "$HOME/.ssh/config.d"/* 2>/dev/null | grep -v '[?*]' | cut -d ' ' -f 2-)
-        #COMPREPLY=( $(compgen -W "$opts" -- "$cur") )
-        mapfile -t COMPREPLY < <( compgen -W "$opts" -- "$cur" )
-        return 0
-    }
-    complete -F __ssh_host_completion ssh
 fi
 
 [[ -s "$HOME/dotfiles/bash/functions" ]] && source "$HOME/dotfiles/bash/functions"
