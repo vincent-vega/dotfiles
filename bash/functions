@@ -118,15 +118,7 @@ svnhistory() {
     }
 }
 
-ssvnhistory() {
-    local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
-          rev="[1;38;5;244m" reset="[0m" esc
-    esc=$(printf '\033')
-    svnhistory "$@" | sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
-                             -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
-                             -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
-                             -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/"
-}
+ssvnhistory() { svnhistory "$@" | colordiff; }
 
 svnhistoryr() {
     if [ "$#" -ne 1 ]; then
@@ -153,15 +145,7 @@ svnhistoryr() {
     }
 }
 
-ssvnhistoryr() {
-    local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
-          rev="[1;38;5;244m" reset="[0m" esc
-    esc=$(printf '\033')
-    svnhistoryr "$@" | sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
-                              -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
-                              -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
-                              -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/"
-}
+ssvnhistoryr() { svnhistoryr "$@" | colordiff; }
 
 svnactivity() {
     if [ "$#" -lt 2 ] || [ "$#" -gt 3 ]; then
@@ -169,47 +153,19 @@ svnactivity() {
         echo 1>&2 "Usage: ${FUNCNAME[0]} USERNAME NUM [PATH]"
         return 1
     fi
-    local committername="$1" numcommit="$2" pagesize=200 svnpath revisions \
-          high low
-    svnpath=$(pwd)
-    if [ "$#" -eq 3 ]; then
-        svnpath="$3"
-    fi
+    local svnpath="${3:-.}" c
     local -a commits
-    high=$(svn info "$svnpath" | "grep" "Last Changed Rev" | "grep" -E -o '[0-9]+')
-    if [ ! "$high" ]; then
-        return 1
-    fi
-    while [ ${#commits[@]} -lt "$numcommit" ] && [ "$high" -ge 0 ]; do
-        low=$((high - pagesize))
-        if [ $low -lt 0 ]; then # TODO check lower than 0
-            low=0
-        fi
-        revisions=$(svn log -q -r "$high":"$low" "$svnpath" | "grep" "$committername" | "grep" -E -o '^r[0-9]+')
-        for r in $revisions; do
-            commits+=("$r")
-        done
-        high=$((low - 1))
-    done
-    for i in $(seq "$numcommit" 1 ${#commits[@]}); do
-        unset "commits[$i]"
-    done
-    # TODO reverse commit array
+    # newest first; head stops svn log as soon as NUM commits are found
+    mapfile -t commits < <(svn log -q "$svnpath" \
+        | awk -F' [|] ' -v user="$1" '$2 == user { print $1 }' | head -n "$2")
     echo 1>&2 "Found commits: ${commits[*]}"
-    # shellcheck disable=SC2048
-    for c in ${commits[*]}; do
+    (( ${#commits[@]} )) || return 1
+    for c in "${commits[@]}"; do
         svn log -"$c" --diff "$svnpath"
     done
 }
 
-ssvnactivity() {
-    local add="\o33\[0;38;5;110m" rem="\o33\[0;38;5;167m" \
-          head="\o33\[0;38;5;228m" rev="\o33\[1;38;5;244m" reset="\o33[0m"
-    svnactivity "$@" | sed -r -e "s/^(\+([^+].*|))$/$add\1$reset/" \
-                              -e "s/^(-([^-].*|))$/$rem\1$reset/" \
-                              -e "s/^(@@ .+ @@)(.*)$/$rev\1$reset\2/" \
-                              -e "s/^([+-]{3} .+|-{4,}|=+)$/$head\1$reset/"
-}
+ssvnactivity() { svnactivity "$@" | colordiff; }
 
 # }}}
 
@@ -322,65 +278,12 @@ xml() {
     xmllint --format "$1" | pygmentize -l xml | less
 }
 
-colortest() {
-    local clbg attr
-    for clbg in {40..47} {100..107} 49 ; do
-        # foreground
-        for clfg in {30..37} {90..97} 39 ; do
-            # formatting
-            for attr in 0 1 2 4 5 7 ; do
-                # print the result
-                echo -en "\e[${attr};${clbg};${clfg}m ^[${attr};${clbg};${clfg}m \e[0m"
-            done
-            echo
-        done
-    done
-}
-
-colortest256() {
-    local fgbg color idx count
-    for fgbg in 38 48; do
-        idx=0 count=8
-        for color in {0..255}; do
-            # TODO fix fg if color in 7,15,[190,195],[226,231],[254,255]
-            echo -en "\e[${fgbg};5;${color}m ${color} "
-            printf '%*s' $((3 - ${#color})) ''
-            echo -en "\e[0m "
-            if (( color > 15 )); then
-                count=12
-            fi
-            if [ $(((idx + 1) % count)) == 0 ]; then
-                echo
-            fi
-            case $color in
-                15|231)
-                    echo;
-                    idx=0
-                    ;;
-                *)
-                    idx=$((idx + 1))
-            esac
-        done
-        if [ $fgbg -eq 38 ]; then
-            printf '\n\n'
-        elif (( fgbg != 48 || color != 255 )); then
-            echo
-        fi
-    done
-}
-
 colordiff() {
-    local add="[0;38;5;74m" rem="[0;38;5;167m" head="[1;38;5;228m" \
-          rev="[1;38;5;244m" reset="[0m" diff esc separator
-    esc=$(printf '\033')
-    while read -r line; do
-        diff=$diff$separator$(sed -r -e "s/^(\+([^+].*))$/$esc$add\1$esc$reset/" \
-                                     -e "s/^(-([^-].*))$/$esc$rem\1$esc$reset/" \
-                                     -e "s/^(@@ .+ @@)(.*)$/$esc$rev\1$esc$reset\2/" \
-                                     -e "s/^([+-]{3} .+|-{4,}|=+)$/$esc$head\1$esc$reset/" <<< "$line")
-        separator="\n"
-    done
-    echo -e "$diff"
+    local e=$'\e'
+    sed -E -e "s/^(\+\+\+ .+|--- .+|-{4,}|=+)$/${e}[1;38;5;74m&${e}[0m/" -e t \
+           -e "s/^\+.*/${e}[0;38;5;36m&${e}[0m/" -e t \
+           -e "s/^-.*/${e}[0;38;5;167m&${e}[0m/" -e t \
+           -e "s/^(@@ .+ @@)(.*)$/${e}[1;38;5;244m\1${e}[0m\2/"
 }
 
 gradle_dependencies() {
@@ -426,40 +329,65 @@ urldecode() {
     python3 -c "import urllib.parse;print(urllib.parse.unquote('${1//\'/\\\'}'))"
 }
 
+# Section header: ━━ TITLE ╶╶╶╶╶╶╶╶  [COUNTER]
+_section() {
+    local blue b_white dim reset
+    [[ -t 1 ]] && { blue=$'\e[34m'; b_white=$'\e[1;97m'; dim=$'\e[2m'; reset=$'\e[0m'; }
+    printf '%s━━ %s%s%s %s╶╶╶╶╶╶╶╶%s\n' "$blue" "$b_white" "$1" "$reset" "$dim" "${2:+  $2}$reset"
+}
+
 if [ "$__os_family" = "Mac" ]; then
     instupdate() {
-        if command -v port &>/dev/null; then
-            sudo port selfupdate
-            echo -e "\\033[34m==>\\033[0m \\033[1mOutdated\\033[0m"
-            port outdated
-        else
-            echo "MacPorts not found. Skip update"
+        local green yellow red reset
+        if [[ -t 1 ]]; then
+            green=$'\e[32m'; yellow=$'\e[33m'; red=$'\e[31m'; reset=$'\e[0m'
         fi
-        if command -v npm &>/dev/null; then
-            echo -e "\\033[34m==>\\033[0m \\033[1mnpm outdated (global)\\033[0m"
-            npm outdated -g
-        else
-            echo "npm not found. Skip check outdated"
-        fi
-        if command -v sdk &>/dev/null; then
-            echo -e "\\033[34m==>\\033[0m \\033[1msdk update...\\033[0m"
-            sdk update
-        else
-            echo "sdk not found. Skip update"
-        fi
-            echo -e "\\033[34m==>\\033[0m \\033[1mMacOS check update...\\033[0m"
-        softwareupdate --list
-        if command -v uv &>/dev/null; then
-            echo -e "\\033[34m==>\\033[0m \\033[1mOutdated uv\\033[0m"
-            uv tool list --outdated
-        else
-            echo "uv not found. Skip check outdated"
-        fi
-        if command -v claude &>/dev/null; then
-            echo -e "\\033[34m==>\\033[0m \\033[1mclaude update...\\033[0m"
-            claude update
-        else
-            echo "claude not found. Skip update"
-        fi
+        # label|required command|command line
+        local steps=(
+            'MacPorts|port|sudo port selfupdate && port outdated'
+            'npm (global)|npm|npm outdated -g'
+            'sdk|sdk|sdk update'
+            'macOS|softwareupdate|softwareupdate --list'
+            'uv tools|uv|uv tool list --outdated'
+            'claude|claude|claude update'
+        )
+        local step label bin cmd row icon note el rc us t0 i=0
+        local start=${EPOCHREALTIME/[.,]/} summary=()
+
+        # ask for the password now rather than in the middle of the run
+        command -v port &>/dev/null && { sudo -v || return; }
+
+        for step in "${steps[@]}"; do
+            IFS='|' read -r label bin cmd <<< "$step"
+            _section "$label" "$(( ++i ))/${#steps[@]}"
+            if ! command -v "$bin" &>/dev/null; then
+                icon="${yellow}⊘${reset}" el='' note='not found'
+            else
+                t0=${EPOCHREALTIME/[.,]/}
+                eval "$cmd"
+                rc=$?
+                us=$(( ${EPOCHREALTIME/[.,]/} - t0 ))
+                if (( rc == 0 )); then
+                    icon="${green}✔${reset}" note=''
+                elif [[ $bin == npm ]] && (( rc == 1 )); then
+                    # npm outdated exits 1 when it finds something
+                    icon="${yellow}●${reset}" note='outdated packages'
+                else
+                    icon="${red}✖${reset}" note="exit $rc"
+                fi
+                printf -v el '%d.%ds' "$(( us / 1000000 ))" "$(( us / 100000 % 10 ))"
+            fi
+            # footer only: the command's own output is never piped, so it keeps its tty
+            printf '└ %s %s%s\n\n' "$icon" "${el:+$el  }" "$note"
+            printf -v row '  %s  %-14s %7s  %s' "$icon" "$label" "${el:--}" "$note"
+            summary+=("$row")
+        done
+
+        _section "summary"
+        printf '%s\n' "${summary[@]}"
+        us=$(( ${EPOCHREALTIME/[.,]/} - start ))
+        printf '     %-14s %4d.%ds\n' total "$(( us / 1000000 ))" "$(( us / 100000 % 10 ))"
     }
 fi
+
+mdfind() { command mdfind -0 "$@" 2>/dev/null | xargs -0 ls -dG; }

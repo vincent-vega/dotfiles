@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+#
+# colorcodes - print every terminal colour next to the code that produces it.
+#
+# Source this file, then run `colorcodes`. Each colour is a swatch followed by
+# its code in the default colours, so the text is readable on any theme.
+
+# $1 = SGR codes, $2 = text: print the command and what it renders
+_colorcodes_example() {
+    printf 'Example: printf \047\\e[%sm%s\\e[0m\\n\047  ->  \e[%sm%s\e[0m\n' "$1" "$2" "$1" "$2"
+}
+
+colorcodes() {
+    local n fg name x
+    local names=(black red green yellow blue magenta cyan white)
+
+    printf '%s\n' \
+        'Escape character: \e = \033 = \x1b       reset everything: \e[0m' \
+        "Use with: printf '\\e[31mred\\e[0m\\n'   echo -e '\\e[31mred\\e[0m'   \$'\\e[31m'" \
+        'Combine codes with ";": \e[1;31;44m = bold, red text, blue background' \
+        'In PS1 wrap codes in \[ \] so bash can measure the prompt' \
+        "In scripts keep codes in variables: red=\$'\\e[31m' reset=\$'\\e[0m'; echo \"\${red}error\${reset}\"" \
+        'and colour only when writing to a terminal: [[ -t 1 && -z $NO_COLOR ]] || red= reset=' \
+        '' \
+        '16 COLOURS (follow the terminal theme)   default fg \e[39m, default bg \e[49m' \
+        '     name            foreground  background  256-colour    tput'
+    for n in {0..15}; do
+        (( fg = n < 8 ? 30 + n : 82 + n ))
+        name=${names[n % 8]}
+        (( n > 7 )) && name="bright $name"
+        printf '\e[%dm    \e[0m %-15s %-11s %-11s %-13s tput setaf %d\n' \
+            $((fg + 10)) "$name" "\\e[${fg}m" "\\e[$((fg + 10))m" "\\e[38;5;${n}m" "$n"
+    done
+    _colorcodes_example '31;43' 'red on yellow'
+
+    printf '%s\n' \
+        '' \
+        '256 COLOURS   fg \e[38;5;Nm   bg \e[48;5;Nm   tput setaf N / setab N' \
+        'N: 0-15 as above, 16-231 cube (16 + 36*r + 6*g + b, each 0-5), 232-255 greys'
+    for n in {16..255}; do
+        printf '\e[48;5;%dm  \e[0m %-4d' "$n" "$n"
+        (( (n - 15) % 12 == 0 )) && echo
+        (( n == 231 )) && echo
+    done
+    _colorcodes_example '38;5;208' 'orange'
+
+    printf '%s\n' \
+        '' \
+        'TRUECOLOR   fg \e[38;2;R;G;Bm   bg \e[48;2;R;G;Bm   (R, G, B: 0-255)' \
+        'A smooth ramp means the terminal supports it; visible bands mean it does not'
+    for n in {0..77}; do
+        (( x = n * 255 / 77 ))
+        printf '\e[48;2;%d;%d;%dm ' $((255 - x)) $(( x < 128 ? 2 * x : 510 - 2 * x )) "$x"
+    done
+    printf '\e[0m\n'
+    _colorcodes_example '38;2;255;105;180' 'hot pink'
+
+    printf '%s\n' \
+        '' \
+        'TEXT ATTRIBUTES   reset all: \e[0m, tput sgr0' \
+        'sample  name           on      off      tput'
+    # on-code off-code name tput-capability
+    for x in '1 22 bold bold' '2 22 dim dim' '3 23 italic sitm' '4 24 underline smul' \
+             '5 25 blink blink' '7 27 reverse rev' '8 28 hidden invis' '9 29 strikethrough smxx'; do
+        set -- $x
+        printf '\e[%dm%s\e[0m  %-14s %-7s %-8s tput %s\n' \
+            "$1" sample "$3" "\\e[$1m" "\\e[$2m" "$4"
+    done
+    _colorcodes_example '1;4;31' 'bold underlined red'
+}

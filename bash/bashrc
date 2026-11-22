@@ -5,7 +5,6 @@
 
 case $(uname -s) in
     Darwin*) __os_family=Mac;;
-    Linux*)  __os_family=Linux;;
     *)       __os_family=Linux;;
 esac
 
@@ -77,6 +76,7 @@ if command -v fzf &>/dev/null; then
 fi
 
 [[ -s "$HOME/dotfiles/bash/functions" ]] && source "$HOME/dotfiles/bash/functions"
+[[ -s "$HOME/dotfiles/bash/colorcodes" ]] && source "$HOME/dotfiles/bash/colorcodes"
 [[ -s "$HOME/dotfiles/bash/obsopen" ]] && source "$HOME/dotfiles/bash/obsopen"
 
 # SDKMAN defines `sdk` as a shell function, so it has to be sourced by every interactive shell, including the
