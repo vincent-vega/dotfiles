@@ -33,7 +33,7 @@ fi
 # marker. Color hints need a git recent enough to support them in this mode: older git just shows plain text.
 # shellcheck disable=SC2154
 PS1="${BGrey27}"'['"${DodgerBlue1}"'\u'"${BGrey27}"']'"${White}"'@\
-'"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${SpringGreen5}"'\
+'"${BGrey27}"'['"${Red}"'\h'"${BGrey27}"']'"${White}"' \A '"${PaleGreen3}"'\
 \w\r\n'"${ResetColor}"'#$(__git_ps1) '
 
 [[ -s "$HOME/dotfiles/bash/env" ]] && source "$HOME/dotfiles/bash/env"
